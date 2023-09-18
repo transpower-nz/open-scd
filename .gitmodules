@@ -1,0 +1,52 @@
+[submodule "open-scd-core"]
+	path = open-scd-core
+	url = https://www.github.com/openenergytools/open-scd-core
+	branch = gh-pages
+[submodule "plugins/scl-editor-landing"]
+	path = plugins/scl-editor-landing
+	url = https://www.github.com/openenergytools/scl-editor-landing
+	branch = gh-pages
+[submodule "plugins/oscd-open"]
+	path = plugins/oscd-open
+	url = https://www.github.com/openenergytools/oscd-open
+	branch = gh-pages
+[submodule "plugins/oscd-save"]
+	path = plugins/oscd-save
+	url = https://www.github.com/openenergytools/oscd-save
+	branch = gh-pages
+[submodule "plugins/scl-validating"]
+	path = plugins/scl-validating
+	url = https://www.github.com/openenergytools/scl-validating
+	branch = gh-pages
+[submodule "plugins/subscriber-later-binding"]
+	path = plugins/subscriber-later-binding
+	url = https://github.com/openenergytools/oscd-subscriber-later-binding/
+	branch = gh-pages
+[submodule "plugins/oscd-publisher"]
+	path = plugins/oscd-publisher
+	url = https://github.com/openenergytools/oscd-publisher
+	branch = gh-pages
+[submodule "plugins/scl-import-ied"]
+	path = plugins/scl-import-ied
+	url = https://github.com/openenergytools/scl-import-ied
+	branch = gh-pages
+[submodule "plugins/oscd-template-generator"]
+	path = plugins/oscd-template-generator
+	url = https://github.com/OpenEnergyTools/oscd-template-generator
+	branch = gh-pages
+[submodule "plugins/scl-substation-editor"]
+	path = plugins/scl-substation-editor
+	url = https://github.com/OpenEnergyTools/scl-substation-editor
+	branch = gh-pages
+[submodule "plugins/scl-wizarding"]
+	path = plugins/scl-wizarding
+	url = https://github.com/openenergytools/scl-wizarding
+	branch = gh-pages
+[submodule "plugins/oscd-communication"]
+	path = plugins/oscd-communication
+	url = https://github.com/openenergytools/oscd-communication
+	branch = gh-pages
+[submodule "plugins/scl-template"]
+	path = plugins/scl-template
+	url = https://github.com/openenergytools/scl-template
+	branch = gh-pages
