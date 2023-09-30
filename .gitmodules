@@ -18,10 +18,6 @@
 	path = plugins/scl-validating
 	url = https://www.github.com/openenergytools/scl-validating
 	branch = gh-pages
-[submodule "plugins/subscriber-later-binding"]
-	path = plugins/subscriber-later-binding
-	url = https://github.com/openenergytools/oscd-subscriber-later-binding/
-	branch = gh-pages
 [submodule "plugins/oscd-publisher"]
 	path = plugins/oscd-publisher
 	url = https://github.com/openenergytools/oscd-publisher
@@ -49,4 +45,32 @@
 [submodule "plugins/scl-template"]
 	path = plugins/scl-template
 	url = https://github.com/openenergytools/scl-template
+	branch = gh-pages
+[submodule "plugins/oscd-subscriber-later-binding"]
+	path = plugins/oscd-subscriber-later-binding
+	url = https://github.com/danyill/oscd-subscriber-later-binding
+	branch = gh-pages	
+[submodule "plugins/oscd-supervision"]
+	path = plugins/oscd-supervision
+	url = https://github.com/danyill/oscd-supervision
+	branch = gh-pages
+[submodule "plugins/oscd-tp-multicast-naming"]
+	path = plugins/oscd-tp-multicast-naming
+	url = https://github.com/danyill/oscd-tp-multicast-naming
+	branch = gh-pages
+[submodule "plugins/oscd-network-data"]
+	path = plugins/oscd-network-data
+	url = https://github.com/danyill/oscd-network-data
+	branch = gh-pages
+[submodule "plugins/oscd-subscriber-lb-siemens"]
+	path = plugins/oscd-subscriber-lb-siemens
+	url = https://github.com/danyill/oscd-subscriber-lb-siemens
+	branch = gh-pages
+[submodule "plugins/oscd-subscriber-lb-sel"]
+	path = plugins/oscd-subscriber-lb-sel
+	url = https://github.com/danyill/oscd-subscriber-lb-sel
+	branch = gh-pages
+[submodule "plugins/oscd-subscriber-lb-nr"]
+	path = plugins/oscd-subscriber-lb-nr
+	url = https://github.com/danyill/oscd-subscriber-lb-nr
 	branch = gh-pages

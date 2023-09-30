@@ -40,7 +40,7 @@
       "src": "plugins/scl-validating/scl-validating.js"
     },
     {
-      "name": "Wiazrding",
+      "name": "Wizarding",
       "translation": {
         "de": "Wizarding"
       },
@@ -48,6 +48,34 @@
       "active": true,
       "requireDoc": true,
       "src": "plugins/scl-wizarding/scl-wizarding.js"
+    },
+    {
+      "name": "Network Data",
+      "icon": "hub",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-network-data/oscd-network-data.js"
+    },
+    {
+      "name": "Subscriber LB (Siemens)",
+      "icon": "autorenew",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-subscriber-lb-siemens/oscd-subscriber-lb-siemens.js"
+    },
+    {
+      "name": "Subscriber LB (SEL)",
+      "icon": "autorenew",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-subscriber-lb-sel/oscd-subscriber-lb-sel.js"
+    },
+    {
+      "name": "Subscriber LB (NR)",
+      "icon": "autorenew",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-subscriber-lb-nr/oscd-subscriber-lb-nr.js"
     }
   ],
   "editor": [
@@ -75,7 +103,17 @@
       "icon": "link",
       "active": true,
       "requireDoc": true,
-      "src": "plugins/subscriber-later-binding/oscd-subscriber-later-binding.js"
+      "src": "plugins/oscd-subscriber-later-binding/oscd-subscriber-later-binding.js"
+    },
+    {
+      "name": "Supervision",
+      "translations": {
+        "de": "Supervision"
+      },
+      "icon": "ecg",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-supervision/oscd-supervision.js"
     },
     {
       "name": "Communication",
@@ -83,6 +121,13 @@
       "active": true,
       "requireDoc": true,
       "src": "plugins/oscd-communication/oscd-communication.js"
+    },
+    {
+      "name": "TP Multicast Naming",
+      "icon": "auto_fix_normal",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-tp-multicast-naming/oscd-tp-multicast-naming.js"
     },
     {
       "name": "Substation",
