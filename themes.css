@@ -1,16 +1,16 @@
 * {
-  --oscd-theme-primary: #2aa198;
-  --oscd-theme-secondary: #6c71c4;
-  --oscd-theme-error: #dc322f;
+  --oscd-theme-primary: #0295db;
+  --oscd-theme-secondary: #85c700;
+  --oscd-theme-error: #dc3545;
 
-  --oscd-theme-base03: #002b36;
-  --oscd-theme-base02: #073642;
-  --oscd-theme-base01: #586e75;
-  --oscd-theme-base00: hsl(196, 13%, 45%);
-  --oscd-theme-base0: #839496;
-  --oscd-theme-base1: #93a1a1;
-  --oscd-theme-base2: #eee8d5;
-  --oscd-theme-base3: #fdf6e3;
+  --oscd-theme-base03: #443f5c;
+  --oscd-theme-base02: #474263;
+  --oscd-theme-base01: #30295a;
+  --oscd-theme-base00: #4d476b;
+  --oscd-theme-base0: #0b3569;
+  --oscd-theme-base1: #193e6a;
+  --oscd-theme-base2: #e6f5fd;
+  --oscd-theme-base3: #f6fbff;
 
   --oscd-theme-text-font: 'Roboto';
   --oscd-theme-icon-font: "Material Symbols Outlined";
