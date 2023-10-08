@@ -30,6 +30,14 @@
       "src": "plugins/scl-import-ied/scl-import-ied.js"
     },
     {
+      "name": "Import Templates",
+      "translations": { "de": "Importvorlagen", "pt": "Modelos de Importação" },
+      "icon": "package_2",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-import-templates/oscd-import-templates.js"
+    },
+    {
       "name": "Validating",
       "translation": {
         "de": "Validieren"
