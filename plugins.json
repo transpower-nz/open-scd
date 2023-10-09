@@ -157,6 +157,14 @@
       "active": true,
       "requireDoc": true,
       "src": "plugins/oscd-template-generator/oscd-template-generator.js"
+    },
+
+    {
+      "name": "Description",
+      "icon": "description",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-description/oscd-description.js"
     }
   ]
 }

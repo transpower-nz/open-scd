@@ -78,3 +78,7 @@
 	path = plugins/oscd-import-templates
 	url = https://github.com/danyill/oscd-import-templates
 	branch = gh-pages
+[submodule "plugins/oscd-description"]
+	path = plugins/oscd-description
+	url = https://github.com/danyill/oscd-description
+	branch = gh-pages
