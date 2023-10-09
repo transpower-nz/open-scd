@@ -115,13 +115,17 @@
     },
     {
       "name": "Supervision",
-      "translations": {
-        "de": "Supervision"
-      },
       "icon": "ecg",
       "active": true,
       "requireDoc": true,
       "src": "plugins/oscd-supervision/oscd-supervision.js"
+    },
+    {
+      "name": "Communication Explorer",
+      "icon": "lan",
+      "active": true,
+      "requireDoc": true,
+      "src": "https://sprinteins.github.io/oscd-plugins/communication-explorer/0.0.29/index.js"
     },
     {
       "name": "Communication",
