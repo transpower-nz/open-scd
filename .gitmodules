@@ -82,3 +82,7 @@
 	path = plugins/oscd-description
 	url = https://github.com/danyill/oscd-description
 	branch = gh-pages
+[submodule "plugins/oscd-automatic-backup"]
+	path = plugins/oscd-automatic-backup
+	url = https://github.com/danyill/oscd-automatic-backup
+	branch = gh-pages

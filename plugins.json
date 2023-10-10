@@ -84,6 +84,13 @@
       "active": true,
       "requireDoc": true,
       "src": "plugins/oscd-subscriber-lb-nr/oscd-subscriber-lb-nr.js"
+    },
+    {
+      "name": "Automatic Backup",
+      "icon": "timelapse",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-automatic-backup/oscd-automatic-backup.js"
     }
   ],
   "editor": [
