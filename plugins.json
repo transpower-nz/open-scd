@@ -38,6 +38,13 @@
       "src": "plugins/oscd-import-templates/oscd-import-templates.js"
     },
     {
+      "name": "Rename IEDs",
+      "icon": "edit",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-rename-ieds/oscd-rename-ieds.js"
+    },
+    {
       "name": "Validating",
       "translation": {
         "de": "Validieren"
@@ -102,6 +109,14 @@
       "icon": "start",
       "active": true,
       "src": "plugins/scl-editor-landing/scl-editor-landing.js"
+    },
+    {
+      "name": "Designer",
+      "translations": { "de": "Designer" },
+      "icon": "add_box",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-designer/oscd-designer.js"
     },
     {
       "name": "Publisher",

@@ -86,3 +86,11 @@
 	path = plugins/oscd-automatic-backup
 	url = https://github.com/danyill/oscd-automatic-backup
 	branch = gh-pages
+[submodule "plugins/oscd-rename-ieds"]
+	path = plugins/oscd-rename-ieds
+	url = https://github.com/danyill/oscd-rename-ieds
+	branch = gh-pages
+[submodule "plugins/oscd-designer"]
+	path = plugins/oscd-designer
+	url = https://github.com/OMICRONEnergy/oscd-designer
+	branch = gh-pages
