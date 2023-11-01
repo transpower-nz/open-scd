@@ -31,7 +31,10 @@
     },
     {
       "name": "Import Templates",
-      "translations": { "de": "Importvorlagen", "pt": "Modelos de Importação" },
+      "translations": {
+        "de": "Importvorlagen",
+        "pt": "Modelos de Importação"
+      },
       "icon": "package_2",
       "active": true,
       "requireDoc": true,
@@ -112,7 +115,9 @@
     },
     {
       "name": "Designer",
-      "translations": { "de": "Designer" },
+      "translations": {
+        "de": "Designer"
+      },
       "icon": "add_box",
       "active": true,
       "requireDoc": true,
@@ -164,6 +169,13 @@
       "src": "plugins/oscd-tp-multicast-naming/oscd-tp-multicast-naming.js"
     },
     {
+      "name": "Cisco Switch Config",
+      "icon": "news",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-network-config/oscd-network-config.js"
+    },
+    {
       "name": "Substation",
       "icon": "margin",
       "active": true,
@@ -184,7 +196,6 @@
       "requireDoc": true,
       "src": "plugins/oscd-template-generator/oscd-template-generator.js"
     },
-
     {
       "name": "Description",
       "icon": "description",
