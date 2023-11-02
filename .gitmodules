@@ -90,10 +90,6 @@
 	path = plugins/oscd-rename-ieds
 	url = https://github.com/danyill/oscd-rename-ieds
 	branch = gh-pages
-[submodule "plugins/oscd-designer"]
-	path = plugins/oscd-designer
-	url = https://github.com/OMICRONEnergy/oscd-designer
-	branch = gh-pages
 [submodule "plugins/oscd-network-config"]
 	path = plugins/oscd-network-config
 	url = https://github.com/danyill/oscd-network-config
