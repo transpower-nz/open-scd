@@ -121,7 +121,7 @@
       "icon": "add_box",
       "active": true,
       "requireDoc": true,
-      "src": "https://omicronenergy.github.io/oscd-designer/oscd-designer.js"
+      "src": "https://ca-d.github.io/oscd-designer/oscd-designer.js"
     },
     {
       "name": "Publisher",

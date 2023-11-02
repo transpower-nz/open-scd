@@ -94,3 +94,7 @@
 	path = plugins/oscd-network-config
 	url = https://github.com/danyill/oscd-network-config
 	branch = gh-pages
+[submodule "plugins/oscd-designer"]
+	path = plugins/oscd-designer
+	url = https://github.com/ca-d/oscd-designer
+	branch = gh-pages
