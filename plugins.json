@@ -152,7 +152,7 @@
       "icon": "lan",
       "active": true,
       "requireDoc": true,
-      "src": "https://sprinteins.github.io/oscd-plugins/communication-explorer/0.0.29/index.js"
+      "src": "https://sprinteins.github.io/oscd-plugins/communication-explorer/0.0.30/index.js"
     },
     {
       "name": "Communication",
