@@ -38,9 +38,9 @@
 	path = plugins/scl-wizarding
 	url = https://github.com/openenergytools/scl-wizarding
 	branch = gh-pages
-[submodule "plugins/oscd-communication"]
-	path = plugins/oscd-communication
-	url = https://github.com/openenergytools/oscd-communication
+[submodule "plugins/scl-communication"]
+	path = plugins/scl-communication
+	url = https://github.com/openenergytools/scl-communication
 	branch = gh-pages
 [submodule "plugins/scl-template"]
 	path = plugins/scl-template
@@ -99,4 +99,7 @@
 	url = https://github.com/ca-d/oscd-designer
 	branch = gh-pages
 [submodule "oscd-communication"]
+	url = https://github.com/OpenEnergyTools/scl-communication
+[submodule "scl-communication"]
+	path = scl-communication
 	url = https://github.com/OpenEnergyTools/scl-communication
