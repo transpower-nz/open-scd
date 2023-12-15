@@ -124,6 +124,13 @@
       "src": "https://ca-d.github.io/oscd-designer/oscd-designer.js"
     },
     {
+      "name": "Substation",
+      "icon": "margin",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/scl-substation-editor/scl-substation-editor.js"
+    },
+    {
       "name": "Publisher",
       "icon": "publish",
       "active": true,
@@ -159,7 +166,7 @@
       "icon": "settings_ethernet",
       "active": true,
       "requireDoc": true,
-      "src": "plugins/oscd-communication/oscd-communication.js"
+      "src": "plugins/scl-communication/scl-communication.js"
     },
     {
       "name": "TP Multicast Naming",
@@ -174,13 +181,6 @@
       "active": true,
       "requireDoc": true,
       "src": "plugins/oscd-network-config/oscd-network-config.js"
-    },
-    {
-      "name": "Substation",
-      "icon": "margin",
-      "active": true,
-      "requireDoc": true,
-      "src": "plugins/scl-substation-editor/scl-substation-editor.js"
     },
     {
       "name": "Template Editor",
