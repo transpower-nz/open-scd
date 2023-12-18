@@ -121,7 +121,7 @@
       "icon": "add_box",
       "active": true,
       "requireDoc": true,
-      "src": "https://ca-d.github.io/oscd-designer/oscd-designer.js"
+      "src": "plugins/oscd-designer/oscd-designer.js"
     },
     {
       "name": "Substation",
@@ -159,7 +159,7 @@
       "icon": "lan",
       "active": true,
       "requireDoc": true,
-      "src": "https://sprinteins.github.io/oscd-plugins/communication-explorer/0.0.30/index.js"
+      "src": "plugins/oscd-plugins/communication-explorer/0.0.30/index.js"
     },
     {
       "name": "Communication",

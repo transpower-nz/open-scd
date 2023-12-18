@@ -103,3 +103,11 @@
 [submodule "scl-communication"]
 	path = scl-communication
 	url = https://github.com/OpenEnergyTools/scl-communication
+[submodule "oscd-plugins"]
+	path = oscd-plugins
+	url = https://github.com/sprinteins/oscd-plugins
+	branch = gh-pages
+[submodule "plugins/oscd-plugins"]
+	path = plugins/oscd-plugins
+	url = https://github.com/sprinteins/oscd-plugins
+	branch = gh-pages
