@@ -21,13 +21,17 @@
     },
     {
       "name": "Import IED",
-      "translation": {
-        "de": "Projekt speichern"
-      },
       "icon": "snippet_folder",
       "active": true,
       "requireDoc": true,
       "src": "plugins/scl-import-ied/scl-import-ied.js"
+    },
+    {
+      "name": "Import IEDs",
+      "icon": "queue",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-import-ied/oscd-import-ied.js"
     },
     {
       "name": "Import Templates",

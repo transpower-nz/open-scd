@@ -111,3 +111,7 @@
 	path = plugins/oscd-plugins
 	url = https://github.com/sprinteins/oscd-plugins
 	branch = gh-pages
+[submodule "plugins/oscd-import-ieds"]
+	path = plugins/oscd-import-ieds
+	url = https://github.com/danyill/oscd-import-ieds
+	branch = gh-pages
