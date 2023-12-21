@@ -31,7 +31,7 @@
       "icon": "queue",
       "active": true,
       "requireDoc": true,
-      "src": "plugins/oscd-import-ied/oscd-import-ied.js"
+      "src": "plugins/oscd-import-ieds/oscd-import-ieds.js"
     },
     {
       "name": "Import Templates",
