@@ -9,6 +9,7 @@
     "build": "rimraf dist && rollup -c rollup.config.js && cp favicon.ico dist",
     "deploy": "npm run preinstall && npm run build && gh-pages -d dist",
     "deploy:nobuild": "gh-pages -d dist",
+    "deploy:prod": "gh-pages -d dist -o prod",
     "start:build": "web-dev-server --root-dir dist --app-index index.html --open",
     "start": "web-dev-server"
   },
