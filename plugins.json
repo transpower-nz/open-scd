@@ -1,0 +1,211 @@
+{
+  "menu": [
+    {
+      "name": "Open project",
+      "translation": {
+        "de": "Project öffnen"
+      },
+      "icon": "folder_open",
+      "active": true,
+      "src": "plugins/oscd-open/oscd-open.js"
+    },
+    {
+      "name": "Save project",
+      "translation": {
+        "de": "Projekt speichern"
+      },
+      "icon": "save",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-save/oscd-save.js"
+    },
+    {
+      "name": "Import IED",
+      "icon": "snippet_folder",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/scl-import-ied/scl-import-ied.js"
+    },
+    {
+      "name": "Import IEDs",
+      "icon": "queue",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-import-ieds/oscd-import-ieds.js"
+    },
+    {
+      "name": "Import Templates",
+      "translations": {
+        "de": "Importvorlagen",
+        "pt": "Modelos de Importação"
+      },
+      "icon": "package_2",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-import-templates/oscd-import-templates.js"
+    },
+    {
+      "name": "Rename IEDs",
+      "icon": "edit",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-rename-ieds/oscd-rename-ieds.js"
+    },
+    {
+      "name": "Validating",
+      "translation": {
+        "de": "Validieren"
+      },
+      "icon": "rule_folder",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/scl-validating/scl-validating.js"
+    },
+    {
+      "name": "Wizarding",
+      "translation": {
+        "de": "Wizarding"
+      },
+      "icon": "edit",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/scl-wizarding/scl-wizarding.js"
+    },
+    {
+      "name": "Network Data",
+      "icon": "hub",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-network-data/oscd-network-data.js"
+    },
+    {
+      "name": "Subscriber LB (Siemens)",
+      "icon": "autorenew",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-subscriber-lb-siemens/oscd-subscriber-lb-siemens.js"
+    },
+    {
+      "name": "Subscriber LB (SEL)",
+      "icon": "autorenew",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-subscriber-lb-sel/oscd-subscriber-lb-sel.js"
+    },
+    {
+      "name": "Subscriber LB (NR)",
+      "icon": "autorenew",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-subscriber-lb-nr/oscd-subscriber-lb-nr.js"
+    },
+    {
+      "name": "Automatic Backup",
+      "icon": "timelapse",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-automatic-backup/oscd-automatic-backup.js"
+    }
+  ],
+  "editor": [
+    {
+      "name": "Start",
+      "translations": {
+        "de": "Start"
+      },
+      "icon": "start",
+      "active": true,
+      "src": "plugins/scl-editor-landing/scl-editor-landing.js"
+    },
+    {
+      "name": "Designer",
+      "translations": {
+        "de": "Designer"
+      },
+      "icon": "add_box",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-designer/oscd-designer.js"
+    },
+    {
+      "name": "Substation",
+      "icon": "margin",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/scl-substation-editor/scl-substation-editor.js"
+    },
+    {
+      "name": "Publisher",
+      "icon": "publish",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-publisher/oscd-publisher.js"
+    },
+    {
+      "name": "Subscriber (Later Binding)",
+      "translations": {
+        "de": "Subscriber (Later Binding)"
+      },
+      "icon": "link",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-subscriber-later-binding/oscd-subscriber-later-binding.js"
+    },
+    {
+      "name": "Supervision",
+      "icon": "ecg",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-supervision/oscd-supervision.js"
+    },
+    {
+      "name": "Communication Explorer",
+      "icon": "lan",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-plugins/communication-explorer/0.0.30/index.js"
+    },
+    {
+      "name": "Communication",
+      "icon": "settings_ethernet",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/scl-communication/scl-communication.js"
+    },
+    {
+      "name": "TP Multicast Naming",
+      "icon": "auto_fix_normal",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-tp-multicast-naming/oscd-tp-multicast-naming.js"
+    },
+    {
+      "name": "Cisco Switch Config",
+      "icon": "news",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-network-config/oscd-network-config.js"
+    },
+    {
+      "name": "Template Editor",
+      "icon": "copy_all",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/scl-template/scl-template.js"
+    },
+    {
+      "name": "Template Generator",
+      "icon": "copy_all",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-template-generator/oscd-template-generator.js"
+    },
+    {
+      "name": "Description",
+      "icon": "description",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-description/oscd-description.js"
+    }
+  ]
+}

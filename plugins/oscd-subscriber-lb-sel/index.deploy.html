@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<title>oscd-subscriber-lb-sel Demo</title>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&family=Roboto:wght@300;400;500&display=swap"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Material+Icons&display=block"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+  rel="stylesheet"
+/>
+<!-- tag::plugins[] -->
+<open-scd
+  plugins='{
+  "menu": 
+  [
+    {"name": "Open File", "translations": {"de": "Datei öffnen"}, "icon": "folder_open", "active": true, "src": "https://openscd.github.io/oscd-open/oscd-open.js"}, 
+    {"name": "Save File", "translations": {"de": "Datei speichern"}, "icon": "save", "active": true, "src": "https://openscd.github.io/oscd-save/oscd-save.js"},
+    {"name": "Subscriber Later Binding - SEL", "translations": {"de": "Kommunikationsexport", "pt":"Exportação de Comunicações"}, "icon": "autorenew", "active": true, "requireDoc": true, "src": "oscd-subscriber-lb-sel.js"}
+  ],
+  "editor":
+  [
+    {"name": "Subscriber Later Binding", "translations": {"de": "Späte Bindung des Abonnenten", "pt": "Associação Tardia de Assinante"}, "icon": "link", "active": true, "requireDoc": true, "src": "https://danyill.github.io/oscd-subscriber-later-binding/oscd-subscriber-later-binding.js"}
+  ]
+}'
+></open-scd>
+<!-- end::plugins[] -->
+
+<script>
+  const _customElementsDefine = window.customElements.define;
+  window.customElements.define = (name, cl, conf) => {
+    if (!customElements.get(name)) {
+      try {
+        _customElementsDefine.call(window.customElements, name, cl, conf);
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+  };
+</script>
+
+<script type="module">
+  import 'https://openscd.github.io/open-scd-core/open-scd.js';
+  //   import 'open-scd-core/open-scd.js'
+  //   TODO: Could also use: jsdelivr or unpkg
+
+  const editor = document.querySelector('open-scd');
+  const params = new URL(document.location).searchParams;
+  for (const [name, value] of params) {
+    editor.setAttribute(name, value);
+  }
+</script>
+<style>
+  * {
+    margin: 0px;
+    padding: 0px;
+    --mdc-icon-font: 'Material Symbols Outlined';
+  }
+
+  body {
+    background: white;
+  }
+</style>

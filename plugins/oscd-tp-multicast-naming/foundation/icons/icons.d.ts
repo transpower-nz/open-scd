@@ -1,0 +1,37 @@
+import { SVGTemplateResult, TemplateResult } from 'lit';
+export type iconType = 'action' | 'dAIcon' | 'dOIcon' | 'enumIcon' | 'info' | 'warning' | 'error' | 'reset' | 'reportIcon' | 'smvIcon' | 'gooseIcon' | 'lNIcon' | 'logIcon';
+export declare const editIcon: TemplateResult<1>;
+export declare const gooseIcon: TemplateResult<2>;
+export declare const reportIcon: TemplateResult<2>;
+export declare const smvIcon: TemplateResult<2>;
+export declare const logIcon: TemplateResult<2>;
+export declare const controlBlockIcons: Partial<Record<string, SVGTemplateResult>>;
+export declare const inputIcon: TemplateResult<2>;
+export declare const clientIcon: TemplateResult<2>;
+export declare const disconnect: TemplateResult<2>;
+export type iconProperty = {
+    width: number;
+    height: number;
+};
+export declare const iconProperties: Partial<Record<iconType, iconProperty>>;
+export declare function getIcon(type: iconType): TemplateResult;
+export declare const dataTypeTemplateIcons: Partial<Record<string, TemplateResult>>;
+export declare const iconColors: {
+    [key: string]: string;
+};
+export declare function getFilterIcon(type: iconType, state: boolean): TemplateResult;
+export declare const networkConfigIcon: TemplateResult<1>;
+export declare const zeroLineIcon: TemplateResult<1>;
+export declare const voltageLevelIcon: TemplateResult<1>;
+export declare const bayIcon: TemplateResult<1>;
+export declare const disconnectorIcon: TemplateResult<1>;
+export declare const circuitBreakerIcon: TemplateResult<1>;
+export declare const currentTransformerIcon: TemplateResult<1>;
+export declare const voltageTransformerIcon: TemplateResult<1>;
+export declare const earthSwitchIcon: TemplateResult<1>;
+export declare const generalConductingEquipmentIcon: TemplateResult<1>;
+export declare const connectivityNodeIcon: TemplateResult<1>;
+export declare const powerTransformerTwoWindingIcon: TemplateResult<1>;
+export declare const openSCDIcon: TemplateResult<1>;
+export declare const sizableSmvIcon: TemplateResult<2>;
+export declare const sizableGooseIcon: TemplateResult<2>;

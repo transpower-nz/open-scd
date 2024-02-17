@@ -1,0 +1,21 @@
+export declare const templates: {
+    s074ad46563eaf3db: string;
+    s21340f1764775ba9: string;
+    s31b126d31226accd: string;
+    s55e247235f637dbd: string;
+    s5e8250fb85d64c23: string;
+    s965c503c3e42fdfe: string;
+    s2813c0cd17e8a982: string;
+    s4f6ee3d82fa77aae: string;
+    sbcdf43ebad9c5a3a: string;
+    s62b4f83c9503e1af: import("@lit/localize").StrResult;
+    s0731afca1ab76175: import("@lit/localize").StrResult;
+    s83eaab546be4bfb9: import("@lit/localize").StrResult;
+    s0f8217f07c54b541: import("@lit/localize").StrResult;
+    s85a55e7007003cc2: import("@lit/localize").StrResult;
+    s8f4be9f086eb530f: string;
+    s7417792bbe720149: string;
+    s90c6a2fed2796c07: string;
+    s6d8c02aee480af7a: string;
+    sfb0e98cb12fe463c: string;
+};
