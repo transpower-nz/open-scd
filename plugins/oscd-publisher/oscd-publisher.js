@@ -22773,14 +22773,7 @@ let GseControlElementEditor = class GseControlElementEditor extends s$3 {
         this.gSEControlDiff = false;
     }
     get gSE() {
-        var _a, _b, _c;
-        const cbName = this.element.getAttribute('name');
-        const iedName = (_a = this.element.closest('IED')) === null || _a === void 0 ? void 0 : _a.getAttribute('name');
-        const apName = (_b = this.element.closest('AccessPoint')) === null || _b === void 0 ? void 0 : _b.getAttribute('name');
-        const ldInst = (_c = this.element.closest('LDevice')) === null || _c === void 0 ? void 0 : _c.getAttribute('inst');
-        return this.element.ownerDocument.querySelector(`:root > Communication > SubNetwork > ` +
-            `ConnectedAP[iedName="${iedName}"][apName="${apName}"] > ` +
-            `GSE[ldInst="${ldInst}"][cbName="${cbName}"]`);
+        return controlBlockGseOrSmv(this.element);
     }
     resetInputs() {
         for (const input of this.gSEControlInputs)
@@ -23435,14 +23428,7 @@ let SampledValueControlElementEditor = class SampledValueControlElementEditor ex
         this.sampledValueControlDiff = false;
     }
     get sMV() {
-        var _a, _b, _c;
-        const cbName = this.element.getAttribute('name');
-        const iedName = (_a = this.element.closest('IED')) === null || _a === void 0 ? void 0 : _a.getAttribute('name');
-        const apName = (_b = this.element.closest('AccessPoint')) === null || _b === void 0 ? void 0 : _b.getAttribute('name');
-        const ldInst = (_c = this.element.closest('LDevice')) === null || _c === void 0 ? void 0 : _c.getAttribute('inst');
-        return this.element.ownerDocument.querySelector(`:root > Communication > SubNetwork 
-      > ConnectedAP[iedName="${iedName}"][apName="${apName}"] 
-      > SMV[ldInst="${ldInst}"][cbName="${cbName}"]`);
+        return controlBlockGseOrSmv(this.element);
     }
     resetInputs() {
         for (const input of this.sampledValueControlInputs)
