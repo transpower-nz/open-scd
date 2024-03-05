@@ -1032,6 +1032,47 @@ function controlBlockObjRef(ctrlBlock) {
     return `${iedName}${ldInst}/${prefix}${lnClass}${lnInst}.${cbName}`;
 }
 
+const serviceType = {
+    GSEControl: "GOOSE",
+    SampledValueControl: "SMV",
+    ReportControl: "Report",
+};
+/** @returns Whether src... type ExtRef attributes match Control element*/
+function matchSrcAttributes(extRef, control) {
+    const cbName = control.getAttribute("name");
+    const srcLDInst = control.closest("LDevice")?.getAttribute("inst");
+    const srcPrefix = control.closest("LN0, LN")?.getAttribute("prefix") ?? "";
+    const srcLNClass = control.closest("LN0, LN")?.getAttribute("lnClass");
+    const srcLNInst = control.closest("LN0, LN")?.getAttribute("inst");
+    const extRefSrcLNClass = extRef.getAttribute("srcLNClass");
+    const srcLnClassCheck = !extRefSrcLNClass || extRefSrcLNClass === ""
+        ? "LLN0" === srcLNClass
+        : extRefSrcLNClass === srcLNClass;
+    const extRefSrcLDInst = extRef.getAttribute("srcLDInst");
+    const srcLdInstCheck = !extRefSrcLDInst || extRefSrcLDInst === ""
+        ? extRef.getAttribute("ldInst") === srcLDInst
+        : extRefSrcLDInst === srcLDInst;
+    return (extRef.getAttribute("srcCBName") === cbName &&
+        srcLdInstCheck &&
+        (extRef.getAttribute("srcPrefix") ?? "") === srcPrefix &&
+        (extRef.getAttribute("srcLNInst") ?? "") === srcLNInst &&
+        srcLnClassCheck &&
+        extRef.getAttribute("serviceType") === serviceType[control.tagName]);
+}
+
+/** @returns Whether a ExtRef to FCDA reference match */
+function matchDataAttributes(extRef, fcda) {
+    return (extRef.getAttribute("ldInst") === fcda.getAttribute("ldInst") &&
+        (extRef.getAttribute("prefix") ?? "") ===
+            (fcda.getAttribute("prefix") ?? "") &&
+        extRef.getAttribute("lnClass") === fcda.getAttribute("lnClass") &&
+        (extRef.getAttribute("lnInst") ?? "") ===
+            (fcda.getAttribute("lnInst") ?? "") &&
+        extRef.getAttribute("doName") === fcda.getAttribute("doName") &&
+        (extRef.getAttribute("daName") ?? "") ===
+            (fcda.getAttribute("daName") ?? ""));
+}
+
 function isInputLeaf(input, allInputs) {
     let sameInputs = 0;
     for (const value of allInputs)
@@ -1108,6 +1149,89 @@ function sourceControlBlock(extRef) {
         .join(","));
 }
 
+function getChildElementsByTagName(element, tag) {
+    return Array.from(element.children).filter((element) => element.tagName === tag);
+}
+/** maximum value for `lnInst` attribute */
+const maxLnInst = 99;
+const lnInstRange = Array(maxLnInst)
+    .fill(1)
+    .map((_, i) => `${i + 1}`);
+/**
+ * Generator function returning unique `inst` or `lnInst` attribute for element
+ * [[`tagName`]] within [[`parent`]].
+ * ```md
+ * Valid range for both `inst` and `lnInst` is between 1 and 99
+ * ```
+ * @param parent - The parent element to be scanned for `inst` or `lnInst`
+ * values already in use. Be sure to create a new generator every time the
+ * children of this element change in SCL.
+ * @param tagName - Tag name of the child elements containing the
+ * `lnInst` or `inst` attribute
+ * @returns a function generating increasing unused `inst` or `lnInst` values
+ * element with [[`tagName`]] within [[`parent`]] on subsequent invocations
+ */
+function lnInstGenerator(parent, tagName) {
+    const generators = new Map();
+    const generatedAttribute = tagName === "LN" ? "inst" : "lnInst";
+    return (lnClass) => {
+        if (!generators.has(lnClass)) {
+            const lnInstOrInst = new Set(getChildElementsByTagName(parent, tagName)
+                .filter((element) => element.getAttribute("lnClass") === lnClass)
+                .map((element) => element.getAttribute(generatedAttribute)));
+            generators.set(lnClass, () => {
+                const uniqueLnInstOrInst = lnInstRange.find((lnInst) => !lnInstOrInst.has(lnInst));
+                if (uniqueLnInstOrInst)
+                    lnInstOrInst.add(uniqueLnInstOrInst);
+                return uniqueLnInstOrInst;
+            });
+        }
+        return generators.get(lnClass)();
+    };
+}
+
+function type(supervision) {
+    const serviceType = supervision.sourceControlBlock.tagName;
+    return serviceType === "GSEControl" ? "GoCBRef" : "SvCBRef";
+}
+function supervisionLnClass(supervision) {
+    const serviceType = supervision.sourceControlBlock.tagName;
+    return serviceType === "GSEControl" ? "LGOS" : "LSVS";
+}
+/** @returns Unique attribute `inst` for supervision logical nodes. */
+function globalLnInstGenerator() {
+    const lnInstGenerators = new Map();
+    return (supervision) => {
+        const ied = supervision.subscriberIedOrLn;
+        const lnClass = supervisionLnClass(supervision);
+        const formLn = ied.querySelector(`LN[lnClass="${lnClass}"]`);
+        const lDevice = formLn.parentElement;
+        const iedName = `${ied.getAttribute("name")}`;
+        if (!lnInstGenerators.has(iedName))
+            lnInstGenerators.set(iedName, lnInstGenerator(lDevice, "LN"));
+        return lnInstGenerators.get(iedName)(lnClass);
+    };
+}
+/** @returns Whether child `DA` with name `setSrcRef` can edited by SCL editor */
+function isSrcRefEditable$1(supervisionLn) {
+    const lnClass = supervisionLn.getAttribute("lnClass");
+    const cbRefType = lnClass === "LGOS" ? "GoCBRef" : "SvCBRef";
+    if (supervisionLn.querySelector(`:scope > DOI[name="${cbRefType}"] > 
+        DAI[name="setSrcRef"][valImport="true"][valKind="RO"],
+       :scope > DOI[name="${cbRefType}"] > 
+        DAI[name="setSrcRef"][valImport="true"][valKind="Conf"]`))
+        return true;
+    const rootNode = supervisionLn.ownerDocument;
+    const lnType = supervisionLn.getAttribute("lnType");
+    const goOrSvCBRef = rootNode.querySelector(`DataTypeTemplates > 
+        LNodeType[id="${lnType}"][lnClass="${lnClass}"] > DO[name="${cbRefType}"]`);
+    const cbRefId = goOrSvCBRef?.getAttribute("type");
+    const setSrcRef = rootNode.querySelector(`DataTypeTemplates > DOType[id="${cbRefId}"] > DA[name="setSrcRef"]`);
+    return ((setSrcRef?.getAttribute("valKind") === "Conf" ||
+        setSrcRef?.getAttribute("valKind") === "RO") &&
+        setSrcRef.getAttribute("valImport") === "true");
+}
+
 /** @returns Element to remove the subscription supervision */
 function removableSupervisionElement(ctrlBlock, subscriberIed) {
     const supervisionType = ctrlBlock.tagName === "GSEControl" ? "LGOS" : "LSVS";
@@ -1120,26 +1244,13 @@ function removableSupervisionElement(ctrlBlock, subscriberIed) {
     const canRemoveLn = ln.querySelector(':scope > Private[type="OpenSCD.create"]');
     return canRemoveLn ? ln : doi;
 }
-/** @returns Whether `DA` with name `setSrcRef`  can edited by SCL editor */
-function isSrcRefEditable$1(ctrlBlock, subscriberIed) {
+/** @returns Whether `DA` with name `setSrcRef` can edited by SCL editor */
+function isSupervisionEditable(ctrlBlock, subscriberIed) {
     const supervisionElement = removableSupervisionElement(ctrlBlock, subscriberIed);
-    const ln = supervisionElement?.closest("LN") ?? null;
-    if (!ln)
+    const supervisionLn = supervisionElement?.closest("LN") ?? null;
+    if (!supervisionLn)
         return false;
-    if (supervisionElement?.querySelector(':scope DAI[name="setSrcRef"][valImport="true"][valKind="RO"],' +
-        ' :scope DAI[name="setSrcRef"][valImport="true"][valKind="Conf"]'))
-        return true;
-    const rootNode = ln.ownerDocument;
-    const lnClass = ln.getAttribute("lnClass");
-    const cbRefType = lnClass === "LGOS" ? "GoCBRef" : "SvCBRef";
-    const lnType = ln.getAttribute("lnType");
-    const goOrSvCBRef = rootNode.querySelector(`DataTypeTemplates > 
-        LNodeType[id="${lnType}"][lnClass="${lnClass}"] > DO[name="${cbRefType}"]`);
-    const cbRefId = goOrSvCBRef?.getAttribute("type");
-    const setSrcRef = rootNode.querySelector(`DataTypeTemplates > DOType[id="${cbRefId}"] > DA[name="setSrcRef"]`);
-    return ((setSrcRef?.getAttribute("valKind") === "Conf" ||
-        setSrcRef?.getAttribute("valKind") === "RO") &&
-        setSrcRef.getAttribute("valImport") === "true");
+    return isSrcRefEditable$1(supervisionLn);
 }
 /** @returns Whether other subscribed ExtRef of the same control block exist */
 function isControlBlockSubscribed(extRefs) {
@@ -1164,7 +1275,7 @@ function isControlBlockSubscribed(extRefs) {
 }
 function cannotRemoveSupervision(extRefGroup) {
     return (isControlBlockSubscribed(extRefGroup.extRefs) ||
-        !isSrcRefEditable$1(extRefGroup.ctrlBlock, extRefGroup.subscriberIed));
+        !isSupervisionEditable(extRefGroup.ctrlBlock, extRefGroup.subscriberIed));
 }
 function groupPerControlBlock(extRefs) {
     const groupedExtRefs = {};
@@ -1288,47 +1399,6 @@ Array(maxSmvAppId - minSmvAppId)
     .fill(1)
     .map((_, i) => (minSmvAppId + i).toString(16).toUpperCase().padStart(4, "0"));
 
-function getChildElementsByTagName(element, tag) {
-    return Array.from(element.children).filter((element) => element.tagName === tag);
-}
-/** maximum value for `lnInst` attribute */
-const maxLnInst = 99;
-const lnInstRange = Array(maxLnInst)
-    .fill(1)
-    .map((_, i) => `${i + 1}`);
-/**
- * Generator function returning unique `inst` or `lnInst` attribute for element
- * [[`tagName`]] within [[`parent`]].
- * ```md
- * Valid range for both `inst` and `lnInst` is between 1 and 99
- * ```
- * @param parent - The parent element to be scanned for `inst` or `lnInst`
- * values already in use. Be sure to create a new generator every time the
- * children of this element change in SCL.
- * @param tagName - Tag name of the child elements containing the
- * `lnInst` or `inst` attribute
- * @returns a function generating increasing unused `inst` or `lnInst` values
- * element with [[`tagName`]] within [[`parent`]] on subsequent invocations
- */
-function lnInstGenerator(parent, tagName) {
-    const generators = new Map();
-    const generatedAttribute = tagName === "LN" ? "inst" : "lnInst";
-    return (lnClass) => {
-        if (!generators.has(lnClass)) {
-            const lnInstOrInst = new Set(getChildElementsByTagName(parent, tagName)
-                .filter((element) => element.getAttribute("lnClass") === lnClass)
-                .map((element) => element.getAttribute(generatedAttribute)));
-            generators.set(lnClass, () => {
-                const uniqueLnInstOrInst = lnInstRange.find((lnInst) => !lnInstOrInst.has(lnInst));
-                if (uniqueLnInstOrInst)
-                    lnInstOrInst.add(uniqueLnInstOrInst);
-                return uniqueLnInstOrInst;
-            });
-        }
-        return generators.get(lnClass)();
-    };
-}
-
 /** @returns control block or null for a set of ExtRef attributes */
 function findControlBlockBySrcAttributes(doc, extRefSrc) {
     return (Array.from(doc.querySelectorAll(`:root > IED[name="${extRefSrc.iedName}"] ReportControl, 
@@ -1340,29 +1410,6 @@ function findControlBlockBySrcAttributes(doc, extRefSrc) {
             extRefSrc.lnClass &&
         cBlock.closest("LN, LN0").getAttribute("inst") === extRefSrc.lnInst &&
         cBlock.getAttribute("name") === extRefSrc.cbName) ?? null);
-}
-
-function type(supervision) {
-    const serviceType = supervision.sourceControlBlock.tagName;
-    return serviceType === "GSEControl" ? "GoCBRef" : "SvCBRef";
-}
-function supervisionLnClass(supervision) {
-    const serviceType = supervision.sourceControlBlock.tagName;
-    return serviceType === "GSEControl" ? "LGOS" : "LSVS";
-}
-/** @returns Unique attribute `inst` for supervision logical nodes. */
-function globalLnInstGenerator() {
-    const lnInstGenerators = new Map();
-    return (supervision) => {
-        const ied = supervision.subscriberIedOrLn;
-        const lnClass = supervisionLnClass(supervision);
-        const formLn = ied.querySelector(`LN[lnClass="${lnClass}"]`);
-        const lDevice = formLn.parentElement;
-        const iedName = `${ied.getAttribute("name")}`;
-        if (!lnInstGenerators.has(iedName))
-            lnInstGenerators.set(iedName, lnInstGenerator(lDevice, "LN"));
-        return lnInstGenerators.get(iedName)(lnClass);
-    };
 }
 
 /** @returns Whether a supervision LN holds a valid control block object ref */
@@ -1819,7 +1866,7 @@ function doesFcdaMeetExtRefRestrictions(extRef, fcda, options = { checkOnlyBType
     return true;
 }
 
-const serviceTypes$1 = {
+const serviceTypes = {
     ReportControl: "Report",
     GSEControl: "GOOSE",
     SampledValueControl: "SMV",
@@ -1831,7 +1878,7 @@ function srcAttributes(controlBlock) {
     const srcLNInst = controlBlock?.closest("LN0,LN")?.getAttribute("inst") || null;
     const srcCBName = controlBlock?.getAttribute("name") || null;
     if (!controlBlock ||
-        !serviceTypes$1[controlBlock.tagName] ||
+        !serviceTypes[controlBlock.tagName] ||
         !srcLDInst ||
         !srcLNClass ||
         !srcCBName)
@@ -1849,7 +1896,7 @@ function srcAttributes(controlBlock) {
         srcLNClass,
         srcLNInst,
         srcCBName,
-        serviceType: serviceTypes$1[controlBlock.tagName],
+        serviceType: serviceTypes[controlBlock.tagName],
     };
 }
 function getDataAttributes(fcda) {
@@ -1943,18 +1990,19 @@ function invalidSink(sink) {
         sink.tagName === "LN0" ||
         sink.tagName === "Inputs");
 }
-function validSubscribeConditions(connection) {
+function validSubscribeConditions(connection, options = { checkOnlyBType: false }) {
     if (invalidSink(connection.sink))
         return false;
     //TODO: check connection via Communication section
     const fcda = connection.source.fcda;
     const controlBlock = connection.source.controlBlock;
     const serviceType = controlBlock
-        ? serviceTypes$1[controlBlock.tagName]
+        ? serviceTypes[controlBlock.tagName]
         : "Poll";
     if (connection.sink.tagName === "ExtRef" &&
         !doesFcdaMeetExtRefRestrictions(connection.sink, fcda, {
             controlBlockType: serviceType,
+            checkOnlyBType: options.checkOnlyBType,
         }))
         return false;
     return true;
@@ -1982,13 +2030,19 @@ function validSubscribeConditions(connection) {
  * @param source.controlBlock - The control block carrying the [[`source.fcda`]]
  * @returns An array of edits to do a valid subscription
  */
-function subscribe(connectionOrConnections, options = { force: false, ignoreSupervision: false }) {
+function subscribe(connectionOrConnections, options = {
+    force: false,
+    ignoreSupervision: false,
+    checkOnlyBType: false,
+}) {
     const connections = Array.isArray(connectionOrConnections)
         ? connectionOrConnections
         : [connectionOrConnections];
     const validConnections = options.force
         ? connections
-        : connections.filter(validSubscribeConditions);
+        : connections.filter((conn) => validSubscribeConditions(conn, {
+            checkOnlyBType: options.checkOnlyBType,
+        }));
     const extRefEdits = createSubscribeEdits(validConnections);
     if (options.ignoreSupervision)
         return [...extRefEdits];
@@ -11131,11 +11185,6 @@ function newEditEvent(edit) {
     });
 }
 
-const serviceTypes = {
-    ReportControl: 'Report',
-    GSEControl: 'GOOSE',
-    SampledValueControl: 'SMV'
-};
 /**
  * Extract the 'name' attribute from the given XML element.
  * @param element - The element to extract name from.
@@ -11210,66 +11259,22 @@ function getExtRefElements(rootElement, fcdaElement, includeLaterBinding) {
         .filter(element => element.closest('IED') !== (fcdaElement === null || fcdaElement === void 0 ? void 0 : fcdaElement.closest('IED')));
 }
 /**
- * Simple function to check if the attribute of the Left Side has the same value as the attribute of the Right Element.
- *
- * @param leftElement   - The Left Element to check against.
- * @param rightElement  - The Right Element to check.
- * @param attributeName - The name of the attribute to check.
- */
-function sameAttributeValue(leftElement, rightElement, attributeName) {
-    var _a, _b;
-    return (((_a = leftElement === null || leftElement === void 0 ? void 0 : leftElement.getAttribute(attributeName)) !== null && _a !== void 0 ? _a : '') ===
-        ((_b = rightElement === null || rightElement === void 0 ? void 0 : rightElement.getAttribute(attributeName)) !== null && _b !== void 0 ? _b : ''));
-}
-// Taken from scl-lib function of the same name.
-// Can be removed when this is exported:
-// https://github.com/OpenEnergyTools/scl-lib/issues/87
-/** @returns Whether src... type ExtRef attributes match Control element */
-function matchSrcAttributes(extRef, control) {
-    var _a, _b, _c, _d, _e, _f, _g;
-    const cbName = control.getAttribute('name');
-    const srcLDInst = (_a = control.closest('LDevice')) === null || _a === void 0 ? void 0 : _a.getAttribute('inst');
-    const srcPrefix = (_c = (_b = control.closest('LN0, LN')) === null || _b === void 0 ? void 0 : _b.getAttribute('prefix')) !== null && _c !== void 0 ? _c : '';
-    const srcLNClass = (_d = control.closest('LN0, LN')) === null || _d === void 0 ? void 0 : _d.getAttribute('lnClass');
-    const srcLNInst = (_e = control.closest('LN0, LN')) === null || _e === void 0 ? void 0 : _e.getAttribute('inst');
-    const extRefSrcLNClass = extRef.getAttribute('srcLNClass');
-    const srcLnClassCheck = !extRefSrcLNClass || extRefSrcLNClass === ''
-        ? srcLNClass === 'LLN0'
-        : extRefSrcLNClass === srcLNClass;
-    const extRefSrcLDInst = extRef.getAttribute('srcLDInst');
-    const srcLdInstCheck = !extRefSrcLDInst || extRefSrcLDInst === ''
-        ? extRef.getAttribute('ldInst') === srcLDInst
-        : extRefSrcLDInst === srcLDInst;
-    return (extRef.getAttribute('srcCBName') === cbName &&
-        srcLdInstCheck &&
-        ((_f = extRef.getAttribute('srcPrefix')) !== null && _f !== void 0 ? _f : '') === srcPrefix &&
-        ((_g = extRef.getAttribute('srcLNInst')) !== null && _g !== void 0 ? _g : '') === srcLNInst &&
-        srcLnClassCheck &&
-        extRef.getAttribute('serviceType') === serviceTypes[control.tagName]);
-}
-// Can be removed when isSubscribed is improved and exported
-// https://github.com/OpenEnergyTools/scl-lib/issues/78
-/**
  * Check if specific attributes from the ExtRef Element are the same as the ones from the FCDA Element
  * and also if the IED Name is the same. If that is the case this ExtRef subscribes to the selected FCDA
  * Element.
  *
- * @param controlTag     - Indicates which type of control element.
- * @param controlElement - The Control Element to check against.
- * @param fcdaElement    - The FCDA Element to check against.
- * @param extRefElement  - The Ext Ref Element to check.
+ * @param control - The Control Element to check against.
+ * @param fcda    - The FCDA Element to check against.
+ * @param extRef  - The Ext Ref Element to check.
  */
-function isSubscribedTo(controlElement, fcdaElement, extRefElement) {
+function isSubscribedTo(control, fcda, extRef) {
     var _a;
-    return (extRefElement.getAttribute('iedName') ===
-        ((_a = fcdaElement === null || fcdaElement === void 0 ? void 0 : fcdaElement.closest('IED')) === null || _a === void 0 ? void 0 : _a.getAttribute('name')) &&
-        sameAttributeValue(fcdaElement, extRefElement, 'ldInst') &&
-        sameAttributeValue(fcdaElement, extRefElement, 'prefix') &&
-        sameAttributeValue(fcdaElement, extRefElement, 'lnClass') &&
-        sameAttributeValue(fcdaElement, extRefElement, 'lnInst') &&
-        sameAttributeValue(fcdaElement, extRefElement, 'doName') &&
-        sameAttributeValue(fcdaElement, extRefElement, 'daName') &&
-        matchSrcAttributes(extRefElement, controlElement));
+    if (!control || !fcda)
+        return false;
+    return (extRef.getAttribute('iedName') ===
+        ((_a = fcda === null || fcda === void 0 ? void 0 : fcda.closest('IED')) === null || _a === void 0 ? void 0 : _a.getAttribute('name')) &&
+        matchDataAttributes(extRef, fcda) &&
+        matchSrcAttributes(extRef, control));
 }
 function getSubscribedExtRefElements(rootElement, fcdaElement, controlElement, includeLaterBinding) {
     return getExtRefElements(rootElement, fcdaElement, includeLaterBinding).filter(extRefElement => isSubscribedTo(controlElement, fcdaElement, extRefElement));
@@ -12056,8 +12061,9 @@ class SubscriberLaterBinding extends s$h {
         if (isSubscribed(extRef) || isPartiallyConfigured(extRef))
             this.dispatchEvent(newEditEvent(unsubscribe([extRef], { ignoreSupervision: this.ignoreSupervision })));
         const subscribeEdits = subscribe({ sink: extRef, source: { fcda, controlBlock } }, {
-            force: this.checkOnlyPreferredBasicType,
-            ignoreSupervision: this.ignoreSupervision
+            force: false,
+            ignoreSupervision: this.ignoreSupervision,
+            checkOnlyBType: this.checkOnlyPreferredBasicType
         });
         this.dispatchEvent(newEditEvent(subscribeEdits));
     }

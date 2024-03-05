@@ -6,9 +6,9 @@ import type { Dialog } from '@material/mwc-dialog';
 import '@openscd/oscd-tree-grid';
 import type { TreeGrid } from '@openscd/oscd-tree-grid';
 import '@openenergytools/filterable-lists/dist/action-list.js';
+import '@openenergytools/scl-text-field';
 import type { ActionList } from '@openenergytools/filterable-lists/dist/action-list.js';
-import '../../foundation/components/scl-textfield.js';
-import type { SclTextfield } from '../../foundation/components/scl-textfield.js';
+import { SclTextField } from '@openenergytools/scl-text-field';
 export declare class DataSetElementEditor extends LitElement {
     /** The document being edited as provided to plugins by [[`OpenSCD`]]. */
     doc: XMLDocument;
@@ -20,7 +20,7 @@ export declare class DataSetElementEditor extends LitElement {
     private get desc();
     private get fcdaCount();
     private someDiffOnInputs;
-    inputs: SclTextfield[];
+    inputs: SclTextField[];
     saveButton: Button;
     fcdaList: ActionList;
     daPickerButton: Button;
@@ -29,6 +29,7 @@ export declare class DataSetElementEditor extends LitElement {
     doPickerButton: Button;
     doPickerDialog: Dialog;
     doPicker: TreeGrid;
+    private resetInputs;
     private onInputChange;
     private saveChanges;
     private saveDataObjects;

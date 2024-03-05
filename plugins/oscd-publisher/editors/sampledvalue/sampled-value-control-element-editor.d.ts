@@ -4,12 +4,12 @@ import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import type { Button } from '@material/mwc-button';
 import type { Checkbox } from '@material/mwc-checkbox';
-import '../../foundation/components/scl-checkbox.js';
-import '../../foundation/components/scl-select.js';
-import '../../foundation/components/scl-textfield.js';
-import type { SclCheckbox } from '../../foundation/components/scl-checkbox.js';
-import type { SclSelect } from '../../foundation/components/scl-select.js';
-import type { SclTextfield } from '../../foundation/components/scl-textfield.js';
+import '@openenergytools/scl-checkbox';
+import '@openenergytools/scl-select';
+import '@openenergytools/scl-text-field';
+import type { SclCheckbox } from '@openenergytools/scl-checkbox';
+import type { SclSelect } from '@openenergytools/scl-select';
+import { SclTextField } from '@openenergytools/scl-text-field';
 export declare class SampledValueControlElementEditor extends LitElement {
     /** The document being edited as provided to plugins by [[`OpenSCD`]]. */
     doc: XMLDocument;
@@ -21,13 +21,14 @@ export declare class SampledValueControlElementEditor extends LitElement {
     private sMVdiff;
     private smvOptsDiff;
     private sampledValueControlDiff;
-    sampledValueControlInputs: (SclTextfield | SclSelect | SclCheckbox)[];
+    sampledValueControlInputs: (SclTextField | SclSelect | SclCheckbox)[];
     smvControlSave: Button;
-    sMVInputs: SclTextfield[];
+    sMVInputs: SclTextField[];
     smvSave: Button;
     smvOptsInputs: SclCheckbox[];
     smvOptsSave: Button;
     instType?: Checkbox;
+    private resetInputs;
     private onSampledValueControlInputChange;
     private saveSampledValueControlChanges;
     private onSMVInputChange;

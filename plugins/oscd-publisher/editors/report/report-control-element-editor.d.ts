@@ -1,12 +1,12 @@
 import { LitElement, TemplateResult } from 'lit';
 import '@material/mwc-button';
 import type { Button } from '@material/mwc-button';
-import '../../foundation/components/scl-checkbox.js';
-import '../../foundation/components/scl-select.js';
-import '../../foundation/components/scl-textfield.js';
-import type { SclCheckbox } from '../../foundation/components/scl-checkbox.js';
-import type { SclSelect } from '../../foundation/components/scl-select.js';
-import type { SclTextfield } from '../../foundation/components/scl-textfield.js';
+import '@openenergytools/scl-checkbox';
+import '@openenergytools/scl-select';
+import '@openenergytools/scl-text-field';
+import type { SclCheckbox } from '@openenergytools/scl-checkbox';
+import type { SclSelect } from '@openenergytools/scl-select';
+import { SclTextField } from '@openenergytools/scl-text-field';
 export declare class ReportControlElementEditor extends LitElement {
     /** The document being edited as provided to plugins by [[`OpenSCD`]]. */
     doc: XMLDocument;
@@ -21,9 +21,10 @@ export declare class ReportControlElementEditor extends LitElement {
     optFieldsSave: Button;
     trgOpsInputs: SclCheckbox[];
     trgOpsSave: Button;
-    reportControlInputs: (SclTextfield | SclSelect | SclCheckbox)[];
+    reportControlInputs: (SclTextField | SclSelect | SclCheckbox)[];
     reportControlSave: Button;
-    rptEnabledInput: SclTextfield;
+    rptEnabledInput: SclTextField;
+    private resetInputs;
     private onOptFieldsInputChange;
     private saveOptFieldChanges;
     private onTrgOpsInputChange;

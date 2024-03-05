@@ -1,4 +1,3 @@
-export declare const serviceTypes: Partial<Record<string, string>>;
 /**
  * Extract the 'name' attribute from the given XML element.
  * @param element - The element to extract name from.

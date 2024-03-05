@@ -8,8 +8,6 @@ export type fcdaData = {
 };
 export declare function getFcdaOrExtRefTitle(fcdaElement: Element): string;
 export declare function getExtRefElements(rootElement: Element, fcdaElement: Element | undefined, includeLaterBinding: boolean): Element[];
-/** @returns Whether src... type ExtRef attributes match Control element */
-export declare function matchSrcAttributes(extRef: Element, control: Element): boolean;
 export declare function getSubscribedExtRefElements(rootElement: Element, fcdaElement: Element | undefined, controlElement: Element | undefined, includeLaterBinding: boolean): Element[];
 export declare function getCbReference(extRef: Element): string;
 /** Returns the subscriber's supervision LN for a given control block and extRef element
