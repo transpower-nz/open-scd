@@ -22775,10 +22775,15 @@ let GseControlElementEditor = class GseControlElementEditor extends s$3 {
     get gSE() {
         return controlBlockGseOrSmv(this.element);
     }
-    resetInputs() {
-        for (const input of this.gSEControlInputs)
-            if (input instanceof SclTextField)
-                input.reset();
+    resetInputs(type = 'GSEControl') {
+        if (type === 'GSEControl')
+            for (const input of this.gSEControlInputs)
+                if (input instanceof SclTextField)
+                    input.reset();
+        if (type === 'GSE')
+            for (const input of this.gSEInputs)
+                if (input instanceof SclTextField)
+                    input.reset();
     }
     onGSEControlInputChange() {
         var _a, _b, _c;
@@ -22841,6 +22846,7 @@ let GseControlElementEditor = class GseControlElementEditor extends s$3 {
         else if (((_c = this.instType) === null || _c === void 0 ? void 0 : _c.checked) === false)
             options.address.instType = false;
         this.dispatchEvent(newEditEvent(changeGSEContent(this.gSE, options)));
+        this.resetInputs('GSE');
         this.onGSEInputChange();
     }
     renderGseContent() {
@@ -23430,10 +23436,15 @@ let SampledValueControlElementEditor = class SampledValueControlElementEditor ex
     get sMV() {
         return controlBlockGseOrSmv(this.element);
     }
-    resetInputs() {
-        for (const input of this.sampledValueControlInputs)
-            if (input instanceof SclTextField)
-                input.reset();
+    resetInputs(type = 'SampledValueControl') {
+        if (type === 'SampledValueControl')
+            for (const input of this.sampledValueControlInputs)
+                if (input instanceof SclTextField)
+                    input.reset();
+        if (type === 'SMV')
+            for (const input of this.sMVInputs)
+                if (input instanceof SclTextField)
+                    input.reset();
     }
     onSampledValueControlInputChange() {
         if (Array.from(this.sampledValueControlInputs).some(input => !input.reportValidity())) {
@@ -23494,6 +23505,7 @@ let SampledValueControlElementEditor = class SampledValueControlElementEditor ex
         else if (((_b = this.instType) === null || _b === void 0 ? void 0 : _b.checked) === false)
             options.instType = false;
         this.dispatchEvent(newEditEvent(changeSMVContent(this.sMV, options)));
+        this.resetInputs('SMV');
         this.onSMVInputChange();
     }
     onSmvOptsInputChange() {
@@ -23532,7 +23544,7 @@ let SampledValueControlElementEditor = class SampledValueControlElementEditor ex
         <h3>Communication Settings (SMV)</h3>
         <mwc-formfield label="Add XMLSchema-instance type"
           ><mwc-checkbox
-            class="smv.insttype"
+            class="smv insttype"
             ?checked="${hasInstType}"
             @change=${this.onSMVInputChange}
           ></mwc-checkbox></mwc-formfield

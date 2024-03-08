@@ -18,7 +18,7 @@ export declare class GseControlElementEditor extends LitElement {
     get gSE(): Element | null;
     private gSEdiff;
     private gSEControlDiff;
-    gSEInputs?: SclTextField[];
+    gSEInputs: SclTextField[];
     gseSave: Button;
     gSEControlInputs: (SclTextField | SclSelect | SclCheckbox)[];
     gseControlSave: Button;
