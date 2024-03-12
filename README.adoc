@@ -1,10 +1,11 @@
-:uri-distribution-issues: https://github.com/danyill/scl-editor/issues
+:uri-distribution-issues: https://github.com/transpower-nz/open-scd/issues
 
 = SCL Editor - Transpower's OpenSCD Core Distribution
 
-The SCL editor is a light weight editor for substation configuration language as defined in the IEC 61850-6. This editor is been created with a focus on a general user that does want to be close to the process described in the standard and an easy to maintain distribution (for long term stability).
+The SCL editor is a light weight editor for substation configuration language as defined in the IEC 61850-6.
+This editor is been created with a focus on a general user that does want to be close to the process described in the standard and an easy to maintain distribution (for long term stability).
 
-Give it a try on https://danyill.github.io/scl-editor
+Give it a try on https://transpower-nz.github.io/open-scd
 
 == Scope
 
@@ -18,4 +19,7 @@ If you found a bug please share with us and write an {uri-distribution-issues}[i
 
 == Security
 
-We do NOT upload any information of any sort. You browser is only downloading never uploading anything. So when you connect to [SCL editor](https://openenergytools.github.io/scl-editor) you download/update all the JavaScript files to run the editor in your browser. That is why you can work offline one you have connected to the page once!
+We do NOT upload any information of any sort.
+You browser is only downloading never uploading anything.
+So when you connect to [SCL editor](https://transpower-nz.github.io/open-scd) you download/update all the JavaScript files to run the editor in your browser.
+That is why you can work offline one you have connected to the page once!
