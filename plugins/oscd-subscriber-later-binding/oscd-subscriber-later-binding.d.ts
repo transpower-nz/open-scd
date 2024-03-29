@@ -47,6 +47,7 @@ export default class SubscriberLaterBinding extends LitElement {
     identity: string;
     allowExternalPlugins: boolean;
     checkOnlyPreferredBasicType: boolean;
+    readOnlyView: boolean;
     controlTag: controlTagType;
     subscriberView: boolean;
     filterOutSubscribed: boolean;
@@ -60,6 +61,7 @@ export default class SubscriberLaterBinding extends LitElement {
     filterOutNotBound: boolean;
     strictServiceTypes: boolean;
     filterOutpDAq: boolean;
+    filterOutpDAt: boolean;
     sortExtRefPublisher: ExtRefSortOrder;
     sortExtRefSubscriber: ExtRefSortOrder;
     sortFcda: FcdaSortOrder;
