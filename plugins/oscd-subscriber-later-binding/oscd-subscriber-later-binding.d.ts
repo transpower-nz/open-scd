@@ -272,6 +272,7 @@ export default class SubscriberLaterBinding extends LitElement {
      * @returns A Lit template result for rendering.
      */
     renderFCDA(control: Element, fcda: Element): TemplateResult;
+    renderReadOnlyIcon(forceIcon: boolean): TemplateResult;
     renderFCDAListTitle(): TemplateResult;
     private sortFcdaSubscriberItems;
     /**
