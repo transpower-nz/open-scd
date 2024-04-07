@@ -5,7 +5,7 @@ import '@material/dialog';
 import '@material/mwc-button';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
-import './foundation/components/oscd-textfield.js';
+import '@material/mwc-textfield';
 export default class ImportTemplateIedPlugin extends LitElement {
     doc: XMLDocument;
     importDocs?: XMLDocument[];
@@ -25,7 +25,7 @@ export default class ImportTemplateIedPlugin extends LitElement {
     isImportValid(templateDoc: Document, filename: string): boolean;
     /** Loads the file `event.target.files[0]` into [[`src`]] as a `blob:...`. */
     protected onLoadFiles(event: Event): Promise<void>;
-    protected renderInput(): TemplateResult;
+    renderInput(): TemplateResult;
     protected renderIcdListItem(doc: Document): TemplateResult;
     protected getSumOfIedsToCreate(): void;
     protected renderIedSelection(): TemplateResult;

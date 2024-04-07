@@ -52,6 +52,13 @@
       "src": "plugins/oscd-rename-ieds/oscd-rename-ieds.js"
     },
     {
+      "name": "Remove IEDs",
+      "icon": "delete",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-remove-ieds/oscd-remove-ieds.js"
+    },
+    {
       "name": "Validating",
       "translation": {
         "de": "Validieren"

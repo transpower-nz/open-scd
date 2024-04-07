@@ -5228,14 +5228,9 @@ function newEditEvent(edit) {
     });
 }
 
-/** Utility function to create element with `tagName` and its`attributes` */
-function createElement(doc, tag, attrs) {
-    const element = doc.createElementNS(doc.documentElement.namespaceURI, tag);
-    Object.entries(attrs)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        .filter(([_, value]) => value !== null)
-        .forEach(([name, value]) => element.setAttribute(name, value));
-    return element;
+/** @returns the cartesian product of `arrays` */
+function crossProduct(...arrays) {
+    return arrays.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())), [[]]);
 }
 
 const tAbstractConductingEquipment = [
@@ -5422,7 +5417,7 @@ const tAbstractEqFuncSubFuncSequence = [
     "GeneralEquipment",
     "EqSubFunction",
 ];
-const tags = {
+({
     AccessControl: {
         parents: ["LDevice"],
         children: [],
@@ -6039,283 +6034,101 @@ const tags = {
         parents: ["Substation"],
         children: [...tEquipmentContainerSequence, "Voltage", "Bay", "Function"],
     },
-};
-const tagSet = new Set(sCLTags);
-function isSCLTag(tag) {
-    return tagSet.has(tag);
+});
+
+/** @returns object reference acc. IEC 61850-7-3 for control block elements */
+function controlBlockObjRef(ctrlBlock) {
+    const iedName = ctrlBlock.closest("IED")?.getAttribute("name");
+    const ldInst = ctrlBlock.closest("LDevice")?.getAttribute("inst");
+    const parentLn = ctrlBlock.closest("LN,LN0");
+    const prefix = parentLn?.getAttribute("prefix") ?? "";
+    const lnClass = parentLn?.getAttribute("lnClass");
+    const lnInst = parentLn?.getAttribute("inst") ?? "";
+    const cbName = ctrlBlock.getAttribute("name");
+    if (!iedName || !ldInst || !lnClass || !cbName)
+        return null;
+    return `${iedName}${ldInst}/${prefix}${lnClass}${lnInst}.${cbName}`;
+}
+
+/** @returns Whether a given element is within a Private section */
+function isPublic(element) {
+    return !element.closest("Private");
+}
+
+function isInputLeaf(input, allInputs) {
+    let sameInputs = 0;
+    for (const value of allInputs)
+        if (value === input)
+            sameInputs++;
+    return input.querySelectorAll("ExtRef").length === sameInputs;
+}
+/**
+ * Makes sure to not leave empty `Inputs` element after removing
+ * its child `ExtRef` elements using [[`extRefedits`]]
+ * @returns edits to remove `Inputs` when empty
+ * */
+function removeInputs(extRefs) {
+    const removeInputs = [];
+    const parentInputs = extRefs
+        .map((remove) => remove.node.parentElement)
+        .filter((input) => input);
+    parentInputs.forEach((input, _index, inputs) => {
+        const inputNotRemovedYet = !removeInputs.some((removeInput) => removeInput.node === input);
+        if (isInputLeaf(input, inputs) && inputNotRemovedYet)
+            removeInputs.push({ node: input });
+    });
+    return extRefs.concat(removeInputs);
 }
 
 /**
- * Helper function for to determine schema valid `reference` for OpenSCD
- * core Insert event.
- * !! only valid with Edition 2.1 projects (2007B4)
- * @param parent - The parent element the new child shall be added to
- * @param tag - The `tagName` of the new child
- * @returns Reference for new [[`tag`]] child within [[`parent`]]  or `null`
+ * Locates control block from an ExtRef element.
+ * NOTE: Only supports > Edition 2 using the srcXXX attributes.
+ * @param extRef - SCL ExtRef element.
+ * @returns Either ReportControl/GSEControl/SampledValueControl or null
+ * if not found.
  */
-function getReference(parent, tag) {
-    if (!isSCLTag(tag))
+function sourceControlBlock(extRef) {
+    const [iedName, srcPrefix, srcLNInst, srcCBName] = [
+        "iedName",
+        "srcPrefix",
+        "srcLNInst",
+        "srcCBName",
+    ].map((attr) => extRef.getAttribute(attr));
+    const doc = extRef.ownerDocument;
+    const srcLDInst = extRef.getAttribute("srcLDInst") ?? extRef.getAttribute("ldInst");
+    const srcLNClass = extRef.getAttribute("srcLNClass") ?? "LLN0";
+    const serviceType = extRef.getAttribute("serviceType") ?? extRef.getAttribute("pServT");
+    if (!iedName || !srcLDInst || !srcCBName || serviceType === "Poll")
         return null;
-    const parentTag = parent.tagName;
-    const children = Array.from(parent.children);
-    if (parentTag === "Services" ||
-        parentTag === "SettingGroups" ||
-        !isSCLTag(parentTag))
-        return children.find((child) => child.tagName === tag) ?? null;
-    const sequence = tags[parentTag].children;
-    let index = sequence.findIndex((element) => element === tag);
-    if (index < 0)
-        return null;
-    let nextSibling;
-    while (index < sequence.length && !nextSibling) {
-        // eslint-disable-next-line no-loop-func
-        nextSibling = children.find((child) => child.tagName === sequence[index]);
-        index += 1;
+    const lDevice = `:root > IED[name="${iedName}"] > AccessPoint > Server > LDevice[inst="${srcLDInst}"]`;
+    const maybeReport = !serviceType || serviceType === "Report";
+    const maybeGSE = !serviceType || serviceType === "GOOSE";
+    const maybeSMV = !serviceType || serviceType === "SMV";
+    const anyLN = srcLNClass === "LLN0" ? "LN0" : "LN";
+    const lnClass = `[lnClass="${srcLNClass}"]`;
+    let lnPrefixQualifiers;
+    if (anyLN === "LN") {
+        lnPrefixQualifiers =
+            srcPrefix && srcPrefix !== ""
+                ? [`[prefix="${srcPrefix}"]`]
+                : [":not([prefix])", '[prefix=""]'];
     }
-    return nextSibling ?? null;
-}
-
-/**
- * Copies an SCL SubNetwork element but without its ConnectedAP children.
- * @param subNetwork - SCL SubNetwork element.
- * @returns cloned SubNetwork without Element children.
- */
-function getNewSubNetwork(subNetwork) {
-    const newSubNetwork = subNetwork.cloneNode(true);
-    newSubNetwork.childNodes.forEach((childNode) => {
-        if (childNode.nodeType === Node.ELEMENT_NODE &&
-            childNode.nodeName === "ConnectedAP")
-            newSubNetwork.removeChild(childNode);
-    });
-    return newSubNetwork;
-}
-function addCommunicationElements(newIed, scl) {
-    const edits = [];
-    const existingCommunication = scl.querySelector(":root > Communication");
-    const communication = existingCommunication
-        ? existingCommunication
-        : createElement(scl.ownerDocument, "Communication", {});
-    if (!existingCommunication)
-        edits.push({
-            parent: scl,
-            node: communication,
-            reference: getReference(scl, "Communication"),
-        });
-    const subNetworks = Array.from(newIed.ownerDocument.querySelectorAll(":root > Communication > SubNetwork")).filter((subNetwork) => subNetwork.querySelector(`:scope > ConnectedAP[iedName="${newIed.getAttribute("name")}"]`));
-    subNetworks.forEach((subNetwork) => {
-        const connectedAps = Array.from(subNetwork.querySelectorAll(`:scope > ConnectedAP[iedName="${newIed.getAttribute("name")}"]`));
-        const existingSubNetwork = communication.querySelector(`:root > Communication > SubNetwork[name="${subNetwork?.getAttribute("name")}"]`);
-        const usedSubNetwork = existingSubNetwork
-            ? existingSubNetwork
-            : getNewSubNetwork(subNetwork);
-        if (!existingSubNetwork)
-            edits.push({
-                parent: communication,
-                node: usedSubNetwork,
-                reference: getReference(communication, "SubNetwork"),
-            });
-        connectedAps.forEach((connectedAp) => {
-            const iedName = newIed.getAttribute("name");
-            const apName = connectedAp.getAttribute("apName");
-            const existingConnectedAp = existingSubNetwork?.querySelector(`:scope > ConnectedAP[iedName="${iedName}"][apName="${apName}"]`);
-            if (!existingConnectedAp) {
-                const connectedAP = connectedAp.cloneNode(true);
-                edits.push({
-                    parent: usedSubNetwork,
-                    node: connectedAP,
-                    reference: getReference(usedSubNetwork, "ConnectedAP"),
-                });
-            }
-        });
-    });
-    return edits;
-}
-function isDataTypeConnectionToIed(dataType, newIed) {
-    const dataTypeTemplates = dataType.parentElement;
-    const id = dataType.getAttribute("id");
-    if (!dataTypeTemplates || !id)
-        return false;
-    if (dataType.tagName === "EnumType")
-        return Array.from(dataTypeTemplates.querySelectorAll(`DOType > DA[type="${id}"],DAType > BDA[type="${id}"]`)).some((typeChild) => isDataTypeConnectionToIed(typeChild.parentElement, newIed));
-    if (dataType.tagName === "DAType")
-        return Array.from(dataTypeTemplates.querySelectorAll(`DOType > DA[type="${id}"],DAType > BDA[type="${id}"]`)).some((typeChild) => isDataTypeConnectionToIed(typeChild.parentElement, newIed));
-    if (dataType.tagName === "DOType")
-        return Array.from(dataTypeTemplates.querySelectorAll(`LNodeType > DO[type="${id}"], DOType > SDO[type="${id}"]`)).some((typeChild) => isDataTypeConnectionToIed(typeChild.parentElement, newIed));
-    return Array.from(newIed.getElementsByTagName("LN0"))
-        .concat(Array.from(newIed.getElementsByTagName("LN")))
-        .some((anyLn) => anyLn.getAttribute("lnType") === id);
-}
-/**
- * Generates a new DTT section id in case of a collision by adding a number in hex
- * prefixed with an underscore to the existing id.
- *
- * @param existingId - Existing string for id attribute.
- * @param existingLNodeType - Existing LNodeType for which a new ID is required.
- * @param dataTypeTemplates - Existing Element of DTTs from the SCL file.
- * @returns New string which is unique in the DTT section.
- */
-function generateNewId(existingId, newIed, existingLNodeType, dataTypeTemplates) {
-    const iedName = newIed.getAttribute("name");
-    const tagType = existingLNodeType.tagName;
-    const duplicatesFound = function (counter) {
-        return !!dataTypeTemplates.querySelector(`${tagType}[id="${existingId}@${iedName}#${counter.toString(10)}"]`);
-    };
-    let counter = 1;
-    // 2,000 limit reasonable way to avoid infinite loop
-    while (duplicatesFound(counter) && counter < 2000) {
-        counter += 1;
+    else {
+        lnPrefixQualifiers = [":not([prefix])"];
     }
-    return `${existingId}@${iedName}#${counter.toString(10)}`;
-}
-function addEnumType(newIed, newEnumType, oldDataTypeTemplates) {
-    if (!isDataTypeConnectionToIed(newEnumType, newIed))
-        return;
-    const existEnumType = oldDataTypeTemplates.querySelector(`EnumType[id="${newEnumType.getAttribute("id")}"]`);
-    if (existEnumType && newEnumType.isEqualNode(existEnumType))
-        return;
-    if (existEnumType) {
-        // There is an `id` conflict in the project that must be resolved by
-        // concatenating the IED name with the id
-        const data = newEnumType.parentElement;
-        const idOld = newEnumType.getAttribute("id");
-        const idNew = generateNewId(idOld, newIed, existEnumType, oldDataTypeTemplates);
-        newEnumType.setAttribute("id", idNew);
-        data
-            .querySelectorAll(`DOType > DA[type="${idOld}"],DAType > BDA[type="${idOld}"]`)
-            .forEach((type) => type.setAttribute("type", idNew));
-    }
-    return {
-        parent: oldDataTypeTemplates,
-        node: newEnumType,
-        reference: getReference(oldDataTypeTemplates, "EnumType"),
-    };
-}
-function addDAType(newIed, newDAType, oldDataTypeTemplates) {
-    if (!isDataTypeConnectionToIed(newDAType, newIed))
-        return;
-    const existDAType = oldDataTypeTemplates.querySelector(`DAType[id="${newDAType.getAttribute("id")}"]`);
-    if (existDAType && newDAType.isEqualNode(existDAType))
-        return;
-    if (existDAType) {
-        // There is an `id` conflict in the project that must be resolved by
-        // concatenating the IED name with the id
-        const data = newDAType.parentElement;
-        const idOld = newDAType.getAttribute("id");
-        const idNew = generateNewId(idOld, newIed, existDAType, oldDataTypeTemplates);
-        newDAType.setAttribute("id", idNew);
-        data
-            .querySelectorAll(`DOType > DA[type="${idOld}"],DAType > BDA[type="${idOld}"]`)
-            .forEach((type) => type.setAttribute("type", idNew));
-    }
-    return {
-        parent: oldDataTypeTemplates,
-        node: newDAType,
-        reference: getReference(oldDataTypeTemplates, "DAType"),
-    };
-}
-function addDOType(newIed, newDOType, oldDataTypeTemplates) {
-    if (!isDataTypeConnectionToIed(newDOType, newIed))
-        return;
-    const existDOType = oldDataTypeTemplates.querySelector(`DOType[id="${newDOType.getAttribute("id")}"]`);
-    if (existDOType && newDOType.isEqualNode(existDOType))
-        return;
-    if (existDOType) {
-        // There is an `id` conflict in the project that must be resolved by
-        // concatenating the IED name with the id
-        const data = newDOType.parentElement;
-        const idOld = newDOType.getAttribute("id");
-        const idNew = generateNewId(idOld, newIed, existDOType, oldDataTypeTemplates);
-        newDOType.setAttribute("id", idNew);
-        data
-            .querySelectorAll(`LNodeType > DO[type="${idOld}"], DOType > SDO[type="${idOld}"]`)
-            .forEach((type) => type.setAttribute("type", idNew));
-    }
-    return {
-        parent: oldDataTypeTemplates,
-        node: newDOType,
-        reference: getReference(oldDataTypeTemplates, "DOType"),
-    };
-}
-function addLNodeType(newIed, newLNodeType, oldDataTypeTemplates) {
-    if (!isDataTypeConnectionToIed(newLNodeType, newIed))
-        return;
-    const existLNodeType = oldDataTypeTemplates.querySelector(`LNodeType[id="${newLNodeType.getAttribute("id")}"]`);
-    if (existLNodeType && newLNodeType.isEqualNode(existLNodeType))
-        return;
-    if (existLNodeType) {
-        // There is an `id` conflict in the project that must be resolved by
-        // concatenating the IED name with the id
-        const idOld = newLNodeType.getAttribute("id");
-        const idNew = generateNewId(idOld, newIed, existLNodeType, oldDataTypeTemplates);
-        newLNodeType.setAttribute("id", idNew);
-        Array.from(newIed.querySelectorAll(`LN0[lnType="${idOld}"],LN[lnType="${idOld}"]`))
-            .filter((anyLn) => !anyLn.closest("Private"))
-            .forEach((ln) => ln.setAttribute("lnType", idNew));
-    }
-    return {
-        parent: oldDataTypeTemplates,
-        node: newLNodeType,
-        reference: getReference(oldDataTypeTemplates, "LNodeType"),
-    };
-}
-function addDataTypeTemplates(newIed, scl) {
-    const dataTypeEdit = [];
-    const dataTypeTemplates = scl.querySelector(":root > DataTypeTemplates")
-        ? scl.querySelector(":root > DataTypeTemplates")
-        : createElement(scl.ownerDocument, "DataTypeTemplates", {});
-    if (!dataTypeTemplates.parentElement) {
-        dataTypeEdit.push({
-            parent: scl,
-            node: dataTypeTemplates,
-            reference: getReference(scl, "DataTypeTemplates"),
-        });
-    }
-    const typeEdits = [];
-    newIed.ownerDocument
-        .querySelectorAll(":root > DataTypeTemplates > EnumType")
-        .forEach((enumType) => typeEdits.push(addEnumType(newIed, enumType, dataTypeTemplates)));
-    newIed.ownerDocument
-        .querySelectorAll(":root > DataTypeTemplates > DAType")
-        .forEach((daType) => typeEdits.push(addDAType(newIed, daType, dataTypeTemplates)));
-    newIed.ownerDocument
-        .querySelectorAll(":root > DataTypeTemplates > DOType")
-        .forEach((doType) => typeEdits.push(addDOType(newIed, doType, dataTypeTemplates)));
-    newIed.ownerDocument
-        .querySelectorAll(":root > DataTypeTemplates > LNodeType")
-        .forEach((lNodeType) => typeEdits.push(addLNodeType(newIed, lNodeType, dataTypeTemplates)));
-    return dataTypeEdit.concat(typeEdits.reverse().filter((item) => item !== undefined));
-}
-function isNameUnique(scl, ied) {
-    return !!scl.querySelector(`IED[name="${ied.getAttribute("name")}"]`);
-}
-function isIED(node) {
-    return node.tagName === "IED";
-}
-function isSCL(node) {
-    return node.tagName === "SCL";
-}
-/** Function to import !single IEDs with its `DataTypeTemplates` and
- * optionally linked `Communication`section elements.
- * >NOTE: Element are MOVED from ied document to the project not copied
- * @param scl - the parent SCL element to insert the IED to
- * @param ied - the new IED to be added to the project (SCL)
- * @param options
- * @returns An array containing diff objects representing an import IED edit
- * section */
-function insertIed(scl, ied, options = { addCommunicationSection: true }) {
-    if (!isSCL(scl) || !isIED(ied) || isNameUnique(scl, ied))
-        return [];
-    const insertCommunication = [];
-    if (options.addCommunicationSection)
-        insertCommunication.push(...addCommunicationElements(ied, scl));
-    const insertDataTypes = [];
-    insertDataTypes.push(...addDataTypeTemplates(ied, scl));
-    const insertIed = {
-        parent: scl,
-        node: ied,
-        reference: getReference(scl, "IED"),
-    };
-    return [...insertCommunication, insertIed, ...insertDataTypes];
+    // On LN0 srcLNInst missing on the ExtRef means an inst=""
+    // On LN inst must be a non-empty string and so srcLNInst
+    // must also be a non-empty string and be present
+    const lnInst = anyLN !== "LN0" && srcLNInst ? `[inst="${srcLNInst}"]` : '[inst=""]';
+    const cbName = `[name="${srcCBName}"]`;
+    const cbTypes = [
+        maybeReport ? `ReportControl${cbName}` : null,
+        maybeGSE ? `GSEControl${cbName}` : null,
+        maybeSMV ? `SampledValueControl${cbName}` : null,
+    ].filter((s) => !!s);
+    return doc.querySelector(crossProduct([`${lDevice}>${anyLN}${lnClass}${lnInst}`], lnPrefixQualifiers, [">"], cbTypes)
+        .map((strings) => strings.join(""))
+        .join(","));
 }
 
 /** maximum value for `lnInst` attribute */
@@ -6323,6 +6136,227 @@ const maxLnInst = 99;
 Array(maxLnInst)
     .fill(1)
     .map((_, i) => `${i + 1}`);
+
+/** @returns Whether child `DA` with name `setSrcRef` can edited by SCL editor */
+function isSrcRefEditable(supervisionLn) {
+    const lnClass = supervisionLn.getAttribute("lnClass");
+    const cbRefType = lnClass === "LGOS" ? "GoCBRef" : "SvCBRef";
+    if (supervisionLn.querySelector(`:scope > DOI[name="${cbRefType}"] > 
+        DAI[name="setSrcRef"][valImport="true"][valKind="RO"],
+       :scope > DOI[name="${cbRefType}"] > 
+        DAI[name="setSrcRef"][valImport="true"][valKind="Conf"]`))
+        return true;
+    const rootNode = supervisionLn.ownerDocument;
+    const lnType = supervisionLn.getAttribute("lnType");
+    const goOrSvCBRef = rootNode.querySelector(`DataTypeTemplates > 
+        LNodeType[id="${lnType}"][lnClass="${lnClass}"] > DO[name="${cbRefType}"]`);
+    const cbRefId = goOrSvCBRef?.getAttribute("type");
+    const setSrcRef = rootNode.querySelector(`DataTypeTemplates > DOType[id="${cbRefId}"] > DA[name="setSrcRef"]`);
+    return ((setSrcRef?.getAttribute("valKind") === "Conf" ||
+        setSrcRef?.getAttribute("valKind") === "RO") &&
+        setSrcRef.getAttribute("valImport") === "true");
+}
+
+/** @returns Element to remove the subscription supervision */
+function removableSupervisionElement(ctrlBlock, subscriberIed) {
+    const supervisionType = ctrlBlock.tagName === "GSEControl" ? "LGOS" : "LSVS";
+    const valElement = Array.from(subscriberIed.querySelectorAll(`LN[lnClass="${supervisionType}"] > DOI > DAI > Val`)).find((val) => val.textContent === controlBlockObjRef(ctrlBlock));
+    if (!valElement)
+        return null;
+    const ln = valElement.closest("LN");
+    const doi = valElement.closest("DOI");
+    // do not remove logical nodes `LGOS`, `LSVS` unless privately tagged
+    const canRemoveLn = ln.querySelector(':scope > Private[type="OpenSCD.create"]');
+    return canRemoveLn ? ln : doi;
+}
+/** @returns Whether `DA` with name `setSrcRef` can edited by SCL editor */
+function isSupervisionEditable(ctrlBlock, subscriberIed) {
+    const supervisionElement = removableSupervisionElement(ctrlBlock, subscriberIed);
+    const supervisionLn = supervisionElement?.closest("LN") ?? null;
+    if (!supervisionLn)
+        return false;
+    return isSrcRefEditable(supervisionLn);
+}
+/** @returns Whether other subscribed ExtRef of the same control block exist */
+function isControlBlockSubscribed(extRefs) {
+    const [srcCBName, srcLDInst, srcLNClass, iedName, srcPrefix, srcLNInst, serviceType,] = [
+        "srcCBName",
+        "srcLDInst",
+        "srcLNClass",
+        "iedName",
+        "srcPrefix",
+        "srcLNInst",
+        "serviceType",
+    ].map((attr) => extRefs[0].getAttribute(attr));
+    const parentIed = extRefs[0].closest("IED");
+    return Array.from(parentIed.getElementsByTagName("ExtRef")).some((otherExtRef) => !extRefs.includes(otherExtRef) &&
+        (otherExtRef.getAttribute("srcPrefix") ?? "") === (srcPrefix ?? "") &&
+        (otherExtRef.getAttribute("srcLNInst") ?? "") === (srcLNInst ?? "") &&
+        otherExtRef.getAttribute("srcCBName") === srcCBName &&
+        otherExtRef.getAttribute("srcLDInst") === srcLDInst &&
+        otherExtRef.getAttribute("srcLNClass") === srcLNClass &&
+        otherExtRef.getAttribute("iedName") === iedName &&
+        otherExtRef.getAttribute("serviceType") === serviceType);
+}
+function cannotRemoveSupervision(extRefGroup) {
+    return (isControlBlockSubscribed(extRefGroup.extRefs) ||
+        !isSupervisionEditable(extRefGroup.ctrlBlock, extRefGroup.subscriberIed));
+}
+function groupPerControlBlock(extRefs) {
+    const groupedExtRefs = {};
+    extRefs.forEach((extRef) => {
+        const ctrlBlock = sourceControlBlock(extRef);
+        if (ctrlBlock) {
+            const ctrlBlockRef = controlBlockObjRef(ctrlBlock);
+            if (groupedExtRefs[ctrlBlockRef])
+                groupedExtRefs[ctrlBlockRef].extRefs.push(extRef);
+            else
+                groupedExtRefs[ctrlBlockRef] = {
+                    extRefs: [extRef],
+                    ctrlBlock,
+                    subscriberIed: extRef.closest("IED"),
+                };
+        }
+    });
+    return groupedExtRefs;
+}
+/** Removes subscription supervision - `LGOS` or `LSVS` - when no other data
+ * of a given `GSEControl` or `SampledValueControl`
+ * @param extRefs - An array of external reference elements
+ * @returns edits to remove subscription supervision `LGOS` or `LSVS`
+ */
+function removeSubscriptionSupervision(extRefs) {
+    if (extRefs.length === 0)
+        return [];
+    const groupedExtRefs = groupPerControlBlock(extRefs);
+    return Object.values(groupedExtRefs)
+        .map((extRefGroup) => {
+        if (cannotRemoveSupervision(extRefGroup))
+            return null;
+        return removableSupervisionElement(extRefGroup.ctrlBlock, extRefGroup.subscriberIed);
+    })
+        .filter((element) => element).map((node) => ({ node }));
+}
+
+/**
+ * Remove link between sending IED data to receiving IED external
+ * references - unsubscribing.
+ * ```md
+ * 1. Unsubscribes external references itself:
+ * -Update `ExtRef` in case later binding is used (existing `intAddr` attribute)
+ * -Remove `ExtRef` in case `intAddr` is missing
+ *
+ * 2. Removes leaf `Input` elements as well
+ * 3. Removes subscription supervision (can be disabled through options.ignoreSupervision)
+ * - when all external references of one control block are unsubscribed
+ * - when `valKind` RO|Conf and `valImport` true
+ * ```
+ * In case the external reference
+ * @param extRefs - Array of external references
+ * @returns An array of update and/or remove edit representing changes required
+ * to unsubscribe.
+ */
+function unsubscribe(extRefs, options = { ignoreSupervision: false }) {
+    const updateEdits = [];
+    const removeEdits = [];
+    extRefs.map((extRef) => {
+        if (extRef.getAttribute("intAddr"))
+            updateEdits.push({
+                element: extRef,
+                attributes: {
+                    iedName: null,
+                    ldInst: null,
+                    prefix: null,
+                    lnClass: null,
+                    lnInst: null,
+                    doName: null,
+                    daName: null,
+                    srcLDInst: null,
+                    srcPrefix: null,
+                    srcLNClass: null,
+                    srcLNInst: null,
+                    srcCBName: null,
+                    ...(extRef.getAttribute("pServT") && { serviceType: null }),
+                },
+            });
+        else
+            removeEdits.push({ node: extRef });
+    });
+    return [
+        ...removeInputs(removeEdits),
+        ...updateEdits,
+        ...(options.ignoreSupervision
+            ? []
+            : removeSubscriptionSupervision(extRefs)),
+    ];
+}
+
+const elementsToRemove = ["Association", "ClientLN", "ConnectedAP", "KDC"];
+const elementsToReplaceWithNone = ["LNode"];
+function removeIEDNameTextContent(ied, iedName) {
+    return Array.from(ied.ownerDocument.getElementsByTagName("IEDName"))
+        .filter(isPublic)
+        .filter((iedNameElement) => iedNameElement.textContent === iedName)
+        .map((iedNameElement) => {
+        return { node: iedNameElement };
+    });
+}
+function removeWithIedName(ied, iedName) {
+    const selector = elementsToRemove
+        .map((iedNameElement) => `${iedNameElement}[iedName="${iedName}"]`)
+        .join(",");
+    return Array.from(ied.ownerDocument.querySelectorAll(selector))
+        .filter(isPublic)
+        .map((element) => {
+        return { node: element };
+    });
+}
+function removeIedSubscriptionsAndSupervisions(ied, iedName) {
+    const extRefs = Array.from(ied.ownerDocument.querySelectorAll(":root > IED"))
+        .filter((ied) => ied.getAttribute("name") !== iedName)
+        .flatMap((ied) => Array.from(ied.querySelectorAll(`:scope > AccessPoint > Server > LDevice > LN0 > Inputs > ExtRef[iedName="${iedName}"], 
+            :scope > AccessPoint > Server > LDevice > LN > Inputs > ExtRef[iedName="${iedName}"]`)));
+    const supervisionRemovals = removeSubscriptionSupervision(extRefs);
+    const extRefRemovals = unsubscribe(extRefs, { ignoreSupervision: true });
+    return [...extRefRemovals, ...supervisionRemovals];
+}
+function updateIedNameToNone(ied, iedName) {
+    const selector = elementsToReplaceWithNone
+        .map((iedNameElement) => `${iedNameElement}[iedName="${iedName}"]`)
+        .join(",");
+    return Array.from(ied.ownerDocument.querySelectorAll(selector))
+        .filter(isPublic)
+        .map((element) => {
+        return { element, attributes: { iedName: "None", ldInst: null } };
+    });
+}
+/**
+ * Function to remove an IED.
+ * ```md
+ * The function makes sure to also:
+ * 1. Remove all elements which should no longer exist including ClientLN,
+ *    KDC, Association, ConnectedAP and IEDName
+ * 2. Remove subscriptions and supervisions
+ * 2. Update LNodes to an iedName of None
+ * ```
+ * @param remove - IED element as a Remove edit
+ * @returns - Set of additional edits to relevant SCL elements
+ */
+function removeIED(remove) {
+    if (remove.node.nodeType !== Node.ELEMENT_NODE ||
+        remove.node.nodeName !== "IED" ||
+        !remove.node.hasAttribute("name"))
+        return [];
+    const ied = remove.node;
+    const name = ied.getAttribute("name");
+    return [
+        remove,
+        ...removeIEDNameTextContent(ied, name),
+        ...removeWithIedName(ied, name),
+        ...removeIedSubscriptionsAndSupervisions(ied, name),
+        ...updateIedNameToNone(ied, name),
+    ];
+}
 
 const maxGseMacAddress = 0x010ccd0101ff;
 const minGseMacAddress = 0x010ccd010000;
@@ -6359,11 +6393,6 @@ Array(maxSmvAppId - minSmvAppId)
 
 await fetch(new URL(new URL('assets/nsd-0a370a57.json', import.meta.url).href, import.meta.url)).then((res) => res.json());
 
-function uniqueNewIED(doc, newIED, ieds) {
-    const duplicateNewIED = ieds.some(ied => ied.ied.getAttribute('name') === newIED.getAttribute('name'));
-    const duplicateToExistingIEDs = !!doc.querySelector(`:root > IED[name="${newIED.getAttribute('name')}"]`);
-    return !(duplicateNewIED || duplicateToExistingIEDs);
-}
 function getIedDescription(ied) {
     const [manufacturer, type, desc, configVersion, originalSclVersion, originalSclRevision, originalSclRelease,] = [
         'manufacturer',
@@ -6390,7 +6419,7 @@ function getIedDescription(ied) {
     return { firstLine, secondLine };
 }
 /** An editor [[`plugin`]] to import IEDs from SCL files */
-class ImportIEDsPlugin extends s$5 {
+class RemoveIEDsPlugin extends s$5 {
     constructor() {
         super(...arguments);
         /** SCL change indicator */
@@ -6398,89 +6427,75 @@ class ImportIEDsPlugin extends s$5 {
         this.items = [];
     }
     async run() {
-        this.input.click();
-    }
-    async importIEDs() {
-        const ieds = this.selectionList.selectedElements;
-        const scl = this.doc.querySelector('SCL');
-        for await (const ied of ieds) {
-            // If IED exists remove it first
-            const existingIed = this.doc.querySelector(`:root > IED[name="${ied.getAttribute('name')}"]`);
-            if (existingIed) {
-                this.dispatchEvent(newEditEvent({ node: existingIed }));
-            }
-            // import but don't bring in communication for existing IEDs
-            this.dispatchEvent(newEditEvent(insertIed(scl, ied, { addCommunicationSection: !existingIed })));
-            // TODO: Fixme -- ugly timeout that might resolve with newer versions of OpenSCD core
-            await setTimeout(() => { }, 100);
-        }
-    }
-    /** Loads the file `event.target.files[0]` into [[`src`]] as a `blob:...`. */
-    async loadIEDs(event) {
-        var _a;
-        const files = (_a = event.target) === null || _a === void 0 ? void 0 : _a.files;
-        if (!files)
-            return;
-        const ieds = [];
-        for await (const file of Array.from(files)) {
-            const text = await file.text();
-            new DOMParser()
-                .parseFromString(text, 'application/xml')
-                .querySelectorAll('IED')
-                .forEach(newIED => ieds.push({
-                ied: newIED,
-                unique: uniqueNewIED(this.doc, newIED, ieds),
-            }));
-        }
-        this.items = ieds.map(ied => {
-            const { firstLine, secondLine } = getIedDescription(ied.ied);
-            return {
-                headline: `${ied.ied.getAttribute('name')} — ${firstLine}`,
-                supportingText: secondLine,
-                attachedElement: ied.ied,
-                selected: ied.unique,
-            };
-        });
         this.dialogUI.show();
     }
+    async removeIEDs() {
+        const ieds = this.selectionList.selectedElements;
+        for await (const ied of ieds) {
+            this.dispatchEvent(newEditEvent(removeIED({ node: ied })));
+        }
+        // TODO: Slightly dubious way to clear out selections
+        this.clearSelection();
+    }
+    clearSelection() {
+        if (this.selectionList) {
+            Array.from(this.selectionList.shadowRoot.querySelectorAll('md-list.listitems md-list-item md-checkbox')).forEach((cb) => {
+                if (cb.checked) {
+                    // eslint-disable-next-line no-param-reassign
+                    cb.checked = false;
+                    cb.dispatchEvent(new Event('change'));
+                    cb.requestUpdate();
+                }
+            });
+            const searchField = this.selectionList.shadowRoot.querySelector('md-outlined-text-field[placeholder="search"]');
+            searchField.value = '';
+            searchField.dispatchEvent(new Event('input'));
+        }
+    }
     render() {
-        return x$1 `<input
-        @click=${({ target }) => {
-            // eslint-disable-next-line no-param-reassign
-            target.value = '';
+        var _a, _b;
+        return x$1 `<md-dialog
+      id="selection-dialog"
+      @cancel=${(event) => {
+            event.preventDefault();
+            this.clearSelection();
         }}
-        @change=${this.loadIEDs}
-        id="importieds-plugin-input"
-        accept=".iid,.cid,.icd,.scd,.sed,.ssd"
-        type="file"
-        multiple
-      /><md-dialog
-        id="selection-dialog"
-        @cancel=${(event) => event.preventDefault()}
-      >
-        <form slot="content" id="selection" method="dialog">
-          <selection-list
-            id="selection-list"
-            .items=${this.items}
-            filterable
-          ></selection-list>
-        </form>
-        <div slot="actions">
-          <md-text-button @click=${() => this.dialogUI.close()}
-            >Close</md-text-button
-          >
-          <md-text-button
-            @click="${() => {
-            this.importIEDs();
+    >
+      <form slot="content" id="selection" method="dialog">
+        <selection-list
+          id="selection-list"
+          .items=${Array.from((_b = (_a = this.doc) === null || _a === void 0 ? void 0 : _a.querySelectorAll('IED')) !== null && _b !== void 0 ? _b : []).map(ied => {
+            const { firstLine, secondLine } = getIedDescription(ied);
+            return {
+                headline: `${ied.getAttribute('name')} — ${firstLine}`,
+                supportingText: secondLine,
+                attachedElement: ied,
+                selected: false,
+            };
+        })}
+          filterable
+        ></selection-list>
+      </form>
+      <div slot="actions">
+        <md-text-button
+          @click=${() => {
+            this.dialogUI.close();
+            this.clearSelection();
+        }}
+          >Close</md-text-button
+        >
+        <md-text-button
+          @click="${() => {
+            this.removeIEDs();
         }}"
-            form="selection"
-            >Import</md-text-button
-          >
-        </div></md-dialog
-      >`;
+          form="selection"
+          >Remove IEDs</md-text-button
+        >
+      </div></md-dialog
+    >`;
     }
 }
-ImportIEDsPlugin.styles = i$9 `
+RemoveIEDsPlugin.styles = i$9 `
     input {
       width: 0;
       height: 0;
@@ -6493,22 +6508,22 @@ ImportIEDsPlugin.styles = i$9 `
   `;
 __decorate([
     n$8({ attribute: false })
-], ImportIEDsPlugin.prototype, "doc", void 0);
+], RemoveIEDsPlugin.prototype, "doc", void 0);
 __decorate([
     n$8({ type: Number })
-], ImportIEDsPlugin.prototype, "editCount", void 0);
+], RemoveIEDsPlugin.prototype, "editCount", void 0);
 __decorate([
     r$4()
-], ImportIEDsPlugin.prototype, "items", void 0);
+], RemoveIEDsPlugin.prototype, "items", void 0);
 __decorate([
     e$a('input')
-], ImportIEDsPlugin.prototype, "input", void 0);
+], RemoveIEDsPlugin.prototype, "input", void 0);
 __decorate([
     e$a('#selection-dialog')
-], ImportIEDsPlugin.prototype, "dialogUI", void 0);
+], RemoveIEDsPlugin.prototype, "dialogUI", void 0);
 __decorate([
     e$a('#selection-list')
-], ImportIEDsPlugin.prototype, "selectionList", void 0);
+], RemoveIEDsPlugin.prototype, "selectionList", void 0);
 
-export { ImportIEDsPlugin as default };
-//# sourceMappingURL=oscd-import-ieds.js.map
+export { RemoveIEDsPlugin as default };
+//# sourceMappingURL=oscd-remove-ieds.js.map
