@@ -9,6 +9,7 @@ import '@material/mwc-list/mwc-check-list-item';
 import '@material/mwc-menu';
 import '@material/mwc-snackbar';
 import '@openscd/oscd-filtered-list';
+import '@openenergytools/scl-text-field';
 import '@vaadin/grid';
 import '@vaadin/checkbox';
 import '@vaadin/grid/theme/material/vaadin-grid.js';
@@ -35,6 +36,7 @@ type AddressItem = {
     appId: string;
     vlanPriority: string;
     vlanId: string;
+    confRev: string;
     minTime: string;
     maxTime: string;
     controlIdentity: string;
@@ -81,8 +83,11 @@ export default class TPMulticastNaming extends LitElement {
     selectedVlansForRemoval: number;
     gridUI: Grid;
     vlanListUI: Dialog;
+    updateVlanListUI: Dialog;
     busConnections: Map<string, string>;
     commElements: Element[] | [];
+    updateVlanValue: number | null;
+    updateVlanValueValidity: boolean;
     cbList: List | undefined;
     busConnectionMenuButtonUI?: Button;
     busConnectionMenuUI?: Menu;
@@ -107,6 +112,8 @@ export default class TPMulticastNaming extends LitElement {
     renderVlanList(): TemplateResult;
     renderFileInput(): TemplateResult;
     renderResultMessage(): TemplateResult;
+    onVlanUpdate(): void;
+    renderVlanDialog(): TemplateResult;
     render(): TemplateResult;
     static styles: import("lit").CSSResult;
 }

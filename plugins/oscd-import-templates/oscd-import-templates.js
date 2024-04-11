@@ -5256,13 +5256,14 @@ TextField = __decorate([
 ], TextField);
 
 function uniqueTemplateIedName(doc, ied) {
+    // replace invalid characters
     const [manufacturer, type] = ['manufacturer', 'type'].map(attr => { var _a; return (_a = ied.getAttribute(attr)) === null || _a === void 0 ? void 0 : _a.replace(/[^A-Za-z0-9_]/, ''); });
     const nameCore = manufacturer || type
-        ? `${manufacturer !== null && manufacturer !== void 0 ? manufacturer : ''}${type ? `_${type}` : ''}`
+        ? `${manufacturer !== null && manufacturer !== void 0 ? manufacturer : ''}${manufacturer && type ? '_' : ''}${type ? `${type}` : ''}`
         : 'TEMPLATE_IED';
     const siblingNames = Array.from(doc.querySelectorAll('IED'))
         .filter(isPublic)
-        .map(child => { var _a; return (_a = child.getAttribute('name')) !== null && _a !== void 0 ? _a : child.tagName; });
+        .map(child => child.getAttribute('name'));
     if (!siblingNames.length)
         return `${nameCore}_01`;
     let newName = '';
@@ -5275,7 +5276,7 @@ function uniqueTemplateIedName(doc, ied) {
     return newName;
 }
 function getTemplateIedDescription(doc) {
-    const templateIed = doc === null || doc === void 0 ? void 0 : doc.querySelector(':root > IED[name="TEMPLATE"]');
+    const templateIed = doc.querySelector(':root > IED[name="TEMPLATE"]');
     const [manufacturer, type, desc, configVersion, originalSclVersion, originalSclRevision, originalSclRelease] = [
         'manufacturer',
         'type',
@@ -5284,10 +5285,10 @@ function getTemplateIedDescription(doc) {
         'originalSclVersion',
         'originalSclRevision',
         'originalSclRelease'
-    ].map(attr => templateIed === null || templateIed === void 0 ? void 0 : templateIed.getAttribute(attr));
-    const firstLine = [manufacturer, type]
-        .filter(val => val !== null)
-        .join(' - ');
+    ].map(attr => templateIed.getAttribute(attr));
+    const firstLine = manufacturer || type
+        ? [manufacturer, type].filter(val => val !== null).join(' - ')
+        : 'Unknown Manufacturer or Type';
     const schemaInformation = [
         originalSclVersion,
         originalSclRevision,
@@ -5356,6 +5357,7 @@ class ImportTemplateIedPlugin extends s$c {
             newIed.setAttribute('name', newIedName);
             // Update communication elements for new name
             // TODO: What else needs to be updated if anything?
+            // Could also consider using updateIED from scl-lib
             Array.from(newDocument.querySelectorAll(':root > Communication > SubNetwork > ConnectedAP[iedName="TEMPLATE"]')).forEach(connectedAp => connectedAp.setAttribute('iedName', newIedName));
             const edits = insertIed(this.doc.documentElement, newIed, {
                 addCommunicationSection: this.importCommsAddressesUI.checked
@@ -5374,18 +5376,20 @@ class ImportTemplateIedPlugin extends s$c {
         }
         this.dialog.close();
     }
+    // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
     isImportValid(templateDoc, filename) {
+        // TODO: Handle errorStrings and display to user in case of failure.
         if (!templateDoc) {
-            this.errorString.push(`Could not load file in ${filename}`);
+            // this.errorString.push(`Could not load file in ${filename}`);
             return false;
         }
         if (templateDoc.querySelector('parsererror')) {
-            this.errorString.push(`Parser error in ${filename}`);
+            // this.errorString.push(`Parser error in ${filename}`);
             return false;
         }
         const ied = templateDoc.querySelector(':root > IED[name="TEMPLATE"]');
         if (!ied) {
-            this.errorString.push(`No Template IED element in the file ${filename}`);
+            // this.errorString.push(`No Template IED element in the file ${filename}`);
             return false;
         }
         return true;
