@@ -5526,6 +5526,10 @@ ImportTemplateIedPlugin.styles = i$8 `
       overflow: hidden;
     }
 
+    .template-count {
+      width: 100px;
+    }
+
     mwc-icon {
       --mdc-icon-size: 32px;
     }
