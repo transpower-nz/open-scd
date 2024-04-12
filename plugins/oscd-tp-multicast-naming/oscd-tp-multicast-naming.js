@@ -50028,7 +50028,7 @@ class TPMulticastNaming extends s$3 {
         <div>
           <mwc-button
             outlined
-            icon="update"
+            icon="upgrade"
             class="button"
             label="Update VLANs (${sizeSelectedItems || '0'})"
             ?disabled=${sizeSelectedItems === 0}
@@ -50194,7 +50194,7 @@ class TPMulticastNaming extends s$3 {
         supportingText="VLAN ID (3 character hex value) ${this
             .updateVlanValue === null
             ? ''
-            : `${this.updateVlanValue.toString(10)} decimal)`}"
+            : `(${this.updateVlanValue.toString(10)} decimal)`}"
         placeholder=""
         @input=${(event) => {
             this.updateVlanValueValidity = event.target.reportValidity();
