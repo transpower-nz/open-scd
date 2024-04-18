@@ -242,9 +242,8 @@ export default class SubscriberLaterBinding extends LitElement {
      * ExtRef element
      *
      * IMPORTANT: This function  is an _almost_ exact copy of the same function in
-     * scl-lib and is different only in that it uses cached values for performance,
-     * uses the UI option for the control block type and short circuits at the top
-     * for missing elements
+     * scl-lib and is different only in that it uses cached values for performance
+     * and short circuits at the top for missing elements.
      *
      */
     doesFcdaMeetExtRefRestrictions(extRef: Element, fcda: Element, options?: DoesFcdaMeetExtRefRestrictionsOptions): boolean;

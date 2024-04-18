@@ -1032,45 +1032,9 @@ function controlBlockObjRef(ctrlBlock) {
     return `${iedName}${ldInst}/${prefix}${lnClass}${lnInst}.${cbName}`;
 }
 
-const serviceType = {
-    GSEControl: "GOOSE",
-    SampledValueControl: "SMV",
-    ReportControl: "Report",
-};
-/** @returns Whether src... type ExtRef attributes match Control element*/
-function matchSrcAttributes(extRef, control) {
-    const cbName = control.getAttribute("name");
-    const srcLDInst = control.closest("LDevice")?.getAttribute("inst");
-    const srcPrefix = control.closest("LN0, LN")?.getAttribute("prefix") ?? "";
-    const srcLNClass = control.closest("LN0, LN")?.getAttribute("lnClass");
-    const srcLNInst = control.closest("LN0, LN")?.getAttribute("inst");
-    const extRefSrcLNClass = extRef.getAttribute("srcLNClass");
-    const srcLnClassCheck = !extRefSrcLNClass || extRefSrcLNClass === ""
-        ? "LLN0" === srcLNClass
-        : extRefSrcLNClass === srcLNClass;
-    const extRefSrcLDInst = extRef.getAttribute("srcLDInst");
-    const srcLdInstCheck = !extRefSrcLDInst || extRefSrcLDInst === ""
-        ? extRef.getAttribute("ldInst") === srcLDInst
-        : extRefSrcLDInst === srcLDInst;
-    return (extRef.getAttribute("srcCBName") === cbName &&
-        srcLdInstCheck &&
-        (extRef.getAttribute("srcPrefix") ?? "") === srcPrefix &&
-        (extRef.getAttribute("srcLNInst") ?? "") === srcLNInst &&
-        srcLnClassCheck &&
-        extRef.getAttribute("serviceType") === serviceType[control.tagName]);
-}
-
-/** @returns Whether a ExtRef to FCDA reference match */
-function matchDataAttributes(extRef, fcda) {
-    return (extRef.getAttribute("ldInst") === fcda.getAttribute("ldInst") &&
-        (extRef.getAttribute("prefix") ?? "") ===
-            (fcda.getAttribute("prefix") ?? "") &&
-        extRef.getAttribute("lnClass") === fcda.getAttribute("lnClass") &&
-        (extRef.getAttribute("lnInst") ?? "") ===
-            (fcda.getAttribute("lnInst") ?? "") &&
-        extRef.getAttribute("doName") === fcda.getAttribute("doName") &&
-        (extRef.getAttribute("daName") ?? "") ===
-            (fcda.getAttribute("daName") ?? ""));
+/** @returns Whether a given element is within a Private section */
+function isPublic(element) {
+    return !element.closest("Private");
 }
 
 function isInputLeaf(input, allInputs) {
@@ -1318,7 +1282,7 @@ function removeSubscriptionSupervision(extRefs) {
  * references - unsubscribing.
  * ```md
  * 1. Unsubscribes external references itself:
- * -Update `ExtRef` in case later binging is used (existing `intAddr` attribute)
+ * -Update `ExtRef` in case later binding is used (existing `intAddr` attribute)
  * -Remove `ExtRef` in case `intAddr` is missing
  *
  * 2. Removes leaf `Input` elements as well
@@ -1364,6 +1328,47 @@ function unsubscribe(extRefs, options = { ignoreSupervision: false }) {
             ? []
             : removeSubscriptionSupervision(extRefs)),
     ];
+}
+
+const serviceType = {
+    GSEControl: "GOOSE",
+    SampledValueControl: "SMV",
+    ReportControl: "Report",
+};
+/** @returns Whether src... type ExtRef attributes match Control element*/
+function matchSrcAttributes(extRef, control) {
+    const cbName = control.getAttribute("name");
+    const srcLDInst = control.closest("LDevice")?.getAttribute("inst");
+    const srcPrefix = control.closest("LN0, LN")?.getAttribute("prefix") ?? "";
+    const srcLNClass = control.closest("LN0, LN")?.getAttribute("lnClass");
+    const srcLNInst = control.closest("LN0, LN")?.getAttribute("inst");
+    const extRefSrcLNClass = extRef.getAttribute("srcLNClass");
+    const srcLnClassCheck = !extRefSrcLNClass || extRefSrcLNClass === ""
+        ? "LLN0" === srcLNClass
+        : extRefSrcLNClass === srcLNClass;
+    const extRefSrcLDInst = extRef.getAttribute("srcLDInst");
+    const srcLdInstCheck = !extRefSrcLDInst || extRefSrcLDInst === ""
+        ? extRef.getAttribute("ldInst") === srcLDInst
+        : extRefSrcLDInst === srcLDInst;
+    return (extRef.getAttribute("srcCBName") === cbName &&
+        srcLdInstCheck &&
+        (extRef.getAttribute("srcPrefix") ?? "") === srcPrefix &&
+        (extRef.getAttribute("srcLNInst") ?? "") === srcLNInst &&
+        srcLnClassCheck &&
+        extRef.getAttribute("serviceType") === serviceType[control.tagName]);
+}
+
+/** @returns Whether a ExtRef to FCDA reference match */
+function matchDataAttributes(extRef, fcda) {
+    return (extRef.getAttribute("ldInst") === fcda.getAttribute("ldInst") &&
+        (extRef.getAttribute("prefix") ?? "") ===
+            (fcda.getAttribute("prefix") ?? "") &&
+        extRef.getAttribute("lnClass") === fcda.getAttribute("lnClass") &&
+        (extRef.getAttribute("lnInst") ?? "") ===
+            (fcda.getAttribute("lnInst") ?? "") &&
+        extRef.getAttribute("doName") === fcda.getAttribute("doName") &&
+        (extRef.getAttribute("daName") ?? "") ===
+            (fcda.getAttribute("daName") ?? ""));
 }
 
 const maxGseMacAddress = 0x010ccd0101ff;
@@ -1831,6 +1836,13 @@ function extRefTypeRestrictions(extRef) {
     return { cdc, bType };
 }
 
+function isBasicTypeEqual$1(bTypeFcda, bTypeExtRef) {
+    // Basic types not the same
+    return (bTypeFcda === bTypeExtRef ||
+        // Enum to INT32 mappings specifically allowed, Ed 1 to Ed 2 compatibility
+        (bTypeFcda === "INT32" && bTypeExtRef === "Enum") ||
+        (bTypeFcda === "Enum" && bTypeExtRef === "INT32"));
+}
 /**
  * This function checks if restrictions of an `ExtRef` element given by
  * `pDO` and optionally by `pDA`, `pLN` and `pServT` are met by the FCDA/FCD
@@ -1849,19 +1861,27 @@ function doesFcdaMeetExtRefRestrictions(extRef, fcda, options = { checkOnlyBType
     // Check cannot be performed assume restriction check to fail
     if (!extRefSpec || !fcdaTypes)
         return false;
+    // If service type specified it must match
     if (extRef.getAttribute("pServT") &&
         options.controlBlockType &&
         options.controlBlockType !== extRef.getAttribute("pServT"))
         return false;
     // Some vendors allow subscribing of e.g. ACT to SPS, both bType BOOLEAN
     if (options.checkOnlyBType)
-        return fcdaTypes.bType === extRefSpec.bType;
+        return isBasicTypeEqual$1(fcdaTypes.bType, extRefSpec.bType);
     if (extRef.getAttribute("pLN") &&
         extRef.getAttribute("pLN") !== fcda.getAttribute("lnClass"))
         return false;
-    if (fcdaTypes.cdc !== extRefSpec.cdc)
+    // Ed 1 to Ed 2 compatibility. The following are compatible:
+    // ENS <> INS, ENC <> INC
+    if (fcdaTypes.cdc !== extRefSpec.cdc &&
+        !(fcdaTypes.cdc === "ENS" && extRefSpec.cdc === "INS") &&
+        !(fcdaTypes.cdc === "INS" && extRefSpec.cdc === "ENS") &&
+        !(fcdaTypes.cdc === "ENC" && extRefSpec.cdc === "INC") &&
+        !(fcdaTypes.cdc === "INC" && extRefSpec.cdc === "ENC"))
         return false;
-    if (extRef.getAttribute("pDA") && fcdaTypes.bType !== extRefSpec.bType)
+    if (extRef.getAttribute("pDA") &&
+        !isBasicTypeEqual$1(fcdaTypes.bType, extRefSpec.bType))
         return false;
     return true;
 }
@@ -2047,11 +2067,6 @@ function subscribe(connectionOrConnections, options = {
     if (options.ignoreSupervision)
         return [...extRefEdits];
     return [...extRefEdits, ...insertSubscriptionSupervisions(extRefEdits)];
-}
-
-/** @returns Whether a given element is within a Private section */
-function isPublic(element) {
-    return !element.closest("Private");
 }
 
 /** @returns parent `tagName` s for SCL (2007B4) element tag  */
@@ -11628,6 +11643,21 @@ function debounce(callback, delay = 100) {
         }, delay);
     };
 }
+/*
+ * IMPORTANT: This function  is an exact copy of the same function in
+ * scl-lib.
+ *
+ * TODO: Add tests to scl-lib and export
+ */
+function isBasicTypeEqual(bTypeFcda, bTypeExtRef) {
+    // Basic types not the same
+    return (
+    // eslint-disable-next-line eqeqeq
+    bTypeFcda === bTypeExtRef ||
+        // Enum to INT32 mappings specifically allowed, Ed 1 to Ed 2 compatibility
+        (bTypeFcda === 'INT32' && bTypeExtRef === 'Enum') ||
+        (bTypeFcda === 'Enum' && bTypeExtRef === 'INT32'));
+}
 /**
  * A plugin to allow subscriptions of GOOSE and SV using the
  * later binding method as described in IEC 61850-6 Ed 2.1 providing
@@ -12231,9 +12261,8 @@ class SubscriberLaterBinding extends s$h {
      * ExtRef element
      *
      * IMPORTANT: This function  is an _almost_ exact copy of the same function in
-     * scl-lib and is different only in that it uses cached values for performance,
-     * uses the UI option for the control block type and short circuits at the top
-     * for missing elements
+     * scl-lib and is different only in that it uses cached values for performance
+     * and short circuits at the top for missing elements.
      *
      */
     doesFcdaMeetExtRefRestrictions(extRef, fcda, options = { checkOnlyBType: false }) {
@@ -12247,19 +12276,27 @@ class SubscriberLaterBinding extends s$h {
         // Check cannot be performed assume restriction check to fail
         if (!extRefSpec || !fcdaTypes)
             return false;
+        // If service type specified it must match
         if (extRef.getAttribute('pServT') &&
             options.controlBlockType &&
             options.controlBlockType !== extRef.getAttribute('pServT'))
             return false;
         // Some vendors allow subscribing of e.g. ACT to SPS, both bType BOOLEAN
         if (options.checkOnlyBType)
-            return fcdaTypes.bType === extRefSpec.bType;
+            return isBasicTypeEqual(fcdaTypes.bType, extRefSpec.bType);
         if (extRef.getAttribute('pLN') &&
             extRef.getAttribute('pLN') !== fcda.getAttribute('lnClass'))
             return false;
-        if (fcdaTypes.cdc !== extRefSpec.cdc)
+        // Ed 1 to Ed 2 compatibility. The following are compatible:
+        // ENS <> INS, ENC <> INC
+        if (fcdaTypes.cdc !== extRefSpec.cdc &&
+            !(fcdaTypes.cdc === 'ENS' && extRefSpec.cdc === 'INS') &&
+            !(fcdaTypes.cdc === 'INS' && extRefSpec.cdc === 'ENS') &&
+            !(fcdaTypes.cdc === 'ENC' && extRefSpec.cdc === 'INC') &&
+            !(fcdaTypes.cdc === 'INC' && extRefSpec.cdc === 'ENC'))
             return false;
-        if (extRef.getAttribute('pDA') && fcdaTypes.bType !== extRefSpec.bType)
+        if (extRef.getAttribute('pDA') &&
+            !isBasicTypeEqual(fcdaTypes.bType, extRefSpec.bType))
             return false;
         return true;
     }
