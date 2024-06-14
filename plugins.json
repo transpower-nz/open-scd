@@ -10,14 +10,18 @@
       "src": "plugins/oscd-open/oscd-open.js"
     },
     {
-      "name": "Save project",
-      "translation": {
-        "de": "Projekt speichern"
-      },
+      "name": "Save",
       "icon": "save",
       "active": true,
       "requireDoc": true,
-      "src": "plugins/oscd-save/oscd-save.js"
+      "src": "plugins/oscd-save-as/oscd-save-as.js#Save"
+    },
+    {
+      "name": "Save As",
+      "icon": "save_as",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-save-as/oscd-save-as.js"
     },
     {
       "name": "Import IED",
