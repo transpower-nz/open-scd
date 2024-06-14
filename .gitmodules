@@ -119,3 +119,7 @@
 	path = plugins/oscd-remove-ieds
 	url = https://github.com/danyill/oscd-remove-ieds
 	branch = gh-pages
+[submodule "plugins/oscd-save-as"]
+	path = plugins/oscd-save-as
+	url = https://github.com/danyill/oscd-save-as
+	branch = gh-pages
