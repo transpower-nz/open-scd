@@ -15103,6 +15103,17 @@ function getSupervisedCBRefs(ied, controlType) {
 function getCBRefs(ied, controlType) {
     return getOtherIedControlElements(ied, controlType).map(cb => controlBlockReference(cb) ?? 'Unknown Control');
 }
+function getSupervisionLnDescription(supLn) {
+    const descriptionLn = getDescriptionAttribute(supLn);
+    const doi = supLn.querySelector(`:scope > DOI[name="St"]`);
+    let doiDesc = doi ? getDescriptionAttribute(doi) : undefined;
+    if (!doiDesc) {
+        doiDesc =
+            doi?.querySelector(':scope > DAI[name="d"] > Val')?.textContent ??
+                undefined;
+    }
+    return [descriptionLn, doiDesc].filter(d => d !== undefined).join(' > ');
+}
 /**
  * Editor to allow allocation of GOOSE and SMV supervision LNs
  * to control blocks
@@ -15207,7 +15218,7 @@ class OscdSupervision extends s$h {
     }
     // eslint-disable-next-line class-methods-use-this
     renderUnusedSupervisionNode(lN) {
-        const description = getDescriptionAttribute(lN);
+        const description = getSupervisionLnDescription(lN);
         const controlBlockRef = getSupervisionCBRef(lN);
         const invalidControlBlock = controlBlockRef !== '' &&
             !this.otherIedsCBRefs.includes(controlBlockRef ?? 'Unknown control block') &&
@@ -15253,7 +15264,7 @@ class OscdSupervision extends s$h {
     }
     // eslint-disable-next-line class-methods-use-this
     renderSupervisionListItem(lN, interactive) {
-        const description = getDescriptionAttribute(lN);
+        const description = getSupervisionLnDescription(lN);
         return x$1 `
       <mwc-list-item
         ?twoline=${!!description}
@@ -15308,13 +15319,7 @@ class OscdSupervision extends s$h {
         });
     }
     searchUnusedSupervisionLN(supLn) {
-        const descriptionLn = getDescriptionAttribute(supLn);
-        const cbRef = this.controlType === 'GOOSE' ? 'GoCBRef' : 'SvCBRef';
-        const doi = supLn.querySelector(`DOI[name="${cbRef}"`);
-        const descriptionDoi = doi ? getDescriptionAttribute(doi) : undefined;
-        const description = [descriptionLn, descriptionDoi]
-            .filter(d => d !== undefined)
-            .join(' > ');
+        const description = getSupervisionLnDescription(supLn);
         const supervisionSearchText = `${identity(supLn)} ${description}`;
         return (this.searchUnusedSupervisions &&
             this.searchUnusedSupervisions.test(supervisionSearchText));

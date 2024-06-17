@@ -11442,6 +11442,7 @@ const gooseActionIcon = b `<svg slot="onIcon" viewBox="0 0 24 24">${pathsSVG.goo
 const smvActionIcon = b `<svg slot="offIcon" viewBox="0 0 24 24">${pathsSVG.smvIcon}</svg>`;
 
 function getFcdaInstDesc(fcda) {
+    var _a, _b;
     const [doName, daName] = ['doName', 'daName'].map(attr => fcda.getAttribute(attr));
     const ied = fcda.closest('IED');
     const anyLn = Array.from(ied.querySelectorAll(`LDevice[inst="${fcda.getAttribute('ldInst')}"] > LN, LDevice[inst="${fcda.getAttribute('ldInst')}"] LN0`)).find(lN => {
@@ -11462,7 +11463,11 @@ function getFcdaInstDesc(fcda) {
     const doi = anyLn.querySelector(`DOI[name="${doNames[0]}"`);
     if (!doi)
         return descs;
-    const doiDesc = doi === null || doi === void 0 ? void 0 : doi.getAttribute('desc');
+    let doiDesc = doi === null || doi === void 0 ? void 0 : doi.getAttribute('desc');
+    if (!doiDesc) {
+        doiDesc =
+            (_b = (_a = doi === null || doi === void 0 ? void 0 : doi.querySelector(':scope > DAI[name="d"] > Val')) === null || _a === void 0 ? void 0 : _a.textContent) !== null && _b !== void 0 ? _b : null;
+    }
     descs = { ...descs, ...(doiDesc && doiDesc !== '' && { DOI: doiDesc }) };
     let previousDI = doi;
     doNames.slice(1).forEach(sdiName => {
