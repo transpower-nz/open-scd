@@ -6409,8 +6409,7 @@ class ImportIEDsPlugin extends s$5 {
             if (existingIed) {
                 this.dispatchEvent(newEditEvent({ node: existingIed }));
             }
-            // import but don't bring in communication for existing IEDs
-            this.dispatchEvent(newEditEvent(insertIed(scl, ied, { addCommunicationSection: !existingIed })));
+            this.dispatchEvent(newEditEvent(insertIed(scl, ied, { addCommunicationSection: true })));
             // TODO: Fixme -- ugly timeout that might resolve with newer versions of OpenSCD core
             await setTimeout(() => { }, 100);
         }
