@@ -123,3 +123,7 @@
 	path = plugins/oscd-save-as
 	url = https://github.com/danyill/oscd-save-as
 	branch = gh-pages
+[submodule "plugins/oscd-stencil"]
+	path = plugins/oscd-stencil
+	url = https://github.com/danyill/oscd-stencil
+	branch = gh-pages

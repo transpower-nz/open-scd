@@ -18,6 +18,8 @@
   --primary: var(--oscd-theme-primary);
   --secondary: var(--oscd-theme-secondary);
 
+  --md-sys-color-surface: none;
+
   margin: 0px;
   padding: 0px;
 }
