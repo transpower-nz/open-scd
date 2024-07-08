@@ -212,6 +212,13 @@
       "src": "plugins/oscd-template-generator/oscd-template-generator.js"
     },
     {
+      "name": "Stencil",
+      "icon": "draw_collage",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-stencil/oscd-stencil.js"
+    },
+    {
       "name": "Description",
       "icon": "description",
       "active": true,
