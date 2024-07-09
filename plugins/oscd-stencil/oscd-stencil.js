@@ -15059,7 +15059,14 @@ function getIedDescription(ied) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-await fetch(new URL(new URL('assets/default_stencil-00b98f0e.json', import.meta.url).href, import.meta.url)).then(res => res.json());
+// const defaultStencil = await fetch(
+//   new URL('./default_stencil.json', import.meta.url)
+// ).then(res => res.json());
+const defaultStencil = {
+    name: 'Noname',
+    version: '0.0.1',
+    applications: []
+};
 function newIedIdentity(iedName, id) {
     return `${iedName}${id}`;
 }
@@ -15074,11 +15081,7 @@ class Stencil extends s$d {
         this.tabIndex = 0;
         this.iedMappingStencilData = [];
         this.uniqueIeds = [];
-        this.stencilData = {
-            name: 'Noname',
-            version: '0.0.1',
-            applications: []
-        };
+        this.stencilData = defaultStencil;
         this.selectedApplication = null;
         this.selectedAppVersion = undefined;
         this.applicationSelectedIed = null;
@@ -15234,6 +15237,7 @@ class Stencil extends s$d {
                 ]
             };
         }
+        this.storeSettings();
         this.snackBarMessage = `New application created: ${(_j = this.appCategory.value.trim()) !== null && _j !== void 0 ? _j : 'UnknownCategory'} > ${(_k = this.appName.value.trim()) !== null && _k !== void 0 ? _k : 'UnknownName'}`;
         this.snackBarMessageUI.show();
         this.resetCreateApplication();
@@ -15285,6 +15289,7 @@ class Stencil extends s$d {
             return;
         const text = await file.text();
         this.stencilData = JSON.parse(text);
+        this.storeSettings();
         this.changeStencilUI.onchange = null;
     }
     // eslint-disable-next-line class-methods-use-this
@@ -15341,10 +15346,10 @@ class Stencil extends s$d {
                 })));
                 const newSupervisionId = newIedIdentity(newToIed, cb.supervision);
                 const newSupervision = find(this.doc, 'LN', newSupervisionId);
-                if (!newSupervision) {
+                if (!newSupervision && cb.supervision !== 'None') {
                     this.errorMessages.push(`Could not find Supervision: ${newSupervisionId}`);
                 }
-                else {
+                else if (cb.supervision !== 'None') {
                     const supervision = instantiateSubscriptionSupervision({
                         subscriberIedOrLn: newSupervision,
                         /** The control block to be supervised */
@@ -15380,6 +15385,31 @@ class Stencil extends s$d {
     }
     resetApplyStencil() {
         this.functionToIed = new Map();
+    }
+    connectedCallback() {
+        super.connectedCallback();
+        // restore settings from local storage on plugin loading
+        this.restoreSettings();
+    }
+    /**
+     * Restore settings from local storage, applying appropriate defaults
+     * if not set.
+     */
+    restoreSettings() {
+        const storedSettings = localStorage.getItem('oscd-stencil');
+        this.stencilData = storedSettings
+            ? JSON.parse(storedSettings)
+            : defaultStencil;
+    }
+    storeSettings() {
+        localStorage.setItem('oscd-stencil', JSON.stringify(this.stencilData));
+    }
+    updated(changedProperties) {
+        super.updated(changedProperties);
+        // update local storage for stored plugin settings
+        const storageUpdateRequired = Array.from(changedProperties.keys()).some(prop => prop === 'stencilData');
+        if (storageUpdateRequired)
+            this.storeSettings();
     }
     renderFunctionIedSelector() {
         var _a, _b, _c;
@@ -15964,6 +15994,9 @@ class Stencil extends s$d {
             const target = event.target;
             if (target) {
                 this.stencilData = JSON.parse(target.value);
+                this.storeSettings();
+                this.snackBarMessage = 'Stencil settings updated';
+                this.snackBarMessageUI.show();
                 this.requestUpdate();
             }
         }}
@@ -16004,6 +16037,7 @@ class Stencil extends s$d {
         @click=${() => {
             this.stencilData.name = this.stencilName.value.trim();
             this.stencilData.version = this.stencilVersion.value.trim();
+            this.storeSettings();
             this.resetCreateApplication();
         }}
         >Update Stencil Metadata
@@ -16137,6 +16171,7 @@ class Stencil extends s$d {
     renderErrorMessages() {
         return x$1 `<md-dialog
       id="error-dialog"
+      type="alert"
       @cancel=${(event) => {
             event.preventDefault();
             // this.clearSelection();
@@ -16144,6 +16179,10 @@ class Stencil extends s$d {
     >
       <div slot="headline">Errors occurred during template processing</div>
       <div slot="content">
+        <p>
+          The template was <em>not applied fully and correctly</em>. Either make
+          changes manually or revert to a previous scd file.
+        </p>
         <ul>
           ${this.errorMessages.map(message => x$1 `<li>${message}</li>`)}
         </ul>

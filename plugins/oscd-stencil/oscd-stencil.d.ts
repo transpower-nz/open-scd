@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult } from 'lit';
+import { LitElement, PropertyValues, TemplateResult } from 'lit';
 import '@material/mwc-tab-bar';
 import '@material/mwc-snackbar/mwc-snackbar.js';
 import '@material/web/button/outlined-button.js';
@@ -108,6 +108,14 @@ export default class Stencil extends LitElement {
     applyStencil(): void;
     resetCreateApplication(): void;
     resetApplyStencil(): void;
+    connectedCallback(): void;
+    /**
+     * Restore settings from local storage, applying appropriate defaults
+     * if not set.
+     */
+    protected restoreSettings(): void;
+    protected storeSettings(): void;
+    protected updated(changedProperties: PropertyValues): void;
     renderFunctionIedSelector(): TemplateResult;
     renderIedsForUse(): TemplateResult;
     renderApplicationDetails(): TemplateResult;
