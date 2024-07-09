@@ -15361,7 +15361,7 @@ class Stencil extends s$d {
                         this.dispatchEvent(newEditEvent(supervision));
                     }
                     else {
-                        this.errorMessages.push(`Could not find instantiate supervision: ${newSupervisionId}`);
+                        this.errorMessages.push(`Could not instantiate supervision: ${newSupervisionId}`);
                     }
                 }
             });
@@ -15737,7 +15737,7 @@ class Stencil extends s$d {
             this.saveStencilAsFile();
         }}
             >Save
-            <md-icon slot="icon">file_save</md-icon>
+            <md-icon slot="icon">save</md-icon>
           </md-outlined-button>
         </div>
       </div>
@@ -16143,7 +16143,11 @@ class Stencil extends s$d {
         }}
     >
       <div slot="headline">Errors occurred during template processing</div>
-      <p>${this.errorMessages.join('\n')}</p>
+      <div slot="content">
+        <ul>
+          ${this.errorMessages.map(message => x$1 `<li>${message}</li>`)}
+        </ul>
+      </div>
       <div slot="actions">
         <md-text-button
           @click="${() => {
@@ -16226,7 +16230,7 @@ Stencil.styles = i$a `
 
     #outputView {
       width: 100%;
-      height: 80vh;
+      max-height: 80vh;
       display: block;
       margin-top: 20px;
       --md-outlined-text-field-input-text-font: 'Roboto Mono';
