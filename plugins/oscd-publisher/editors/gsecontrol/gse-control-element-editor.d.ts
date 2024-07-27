@@ -23,9 +23,9 @@ export declare class GseControlElementEditor extends LitElement {
     gSEControlInputs: (SclTextField | SclSelect | SclCheckbox)[];
     gseControlSave: Button;
     instType?: Checkbox;
-    private resetInputs;
+    resetInputs(type?: 'GSEControl' | 'GSE'): void;
     private onGSEControlInputChange;
-    private saveGSEControlChanges;
+    saveGSEControlChanges(): void;
     private onGSEInputChange;
     private saveGSEChanges;
     private renderGseContent;

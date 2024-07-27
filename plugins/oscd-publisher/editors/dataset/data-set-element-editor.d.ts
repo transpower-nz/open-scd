@@ -29,7 +29,7 @@ export declare class DataSetElementEditor extends LitElement {
     doPickerButton: Button;
     doPickerDialog: Dialog;
     doPicker: TreeGrid;
-    private resetInputs;
+    resetInputs(): void;
     private onInputChange;
     private saveChanges;
     private saveDataObjects;

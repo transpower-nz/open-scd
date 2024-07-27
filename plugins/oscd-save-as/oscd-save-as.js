@@ -859,6 +859,10 @@ class SaveAs extends s$1 {
                         description: 'SCD file',
                         accept: { 'text/xml': ['.scd', '.SCD'] },
                     },
+                    {
+                        description: 'SSD file',
+                        accept: { 'text/xml': ['.ssd', '.SSD'] },
+                    },
                 ],
             };
             const fileHandle = await window.showSaveFilePicker(opts);

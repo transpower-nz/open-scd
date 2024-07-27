@@ -4,6 +4,7 @@ import type { Button } from '@material/mwc-button';
 import '@openenergytools/filterable-lists/dist/action-list.js';
 import type { ActionList } from '@openenergytools/filterable-lists/dist/action-list.js';
 import './data-set-element-editor.js';
+import type { DataSetElementEditor } from './data-set-element-editor.js';
 export declare class DataSetEditor extends LitElement {
     /** The document being edited as provided to plugins by [[`OpenSCD`]]. */
     doc: XMLDocument;
@@ -12,6 +13,7 @@ export declare class DataSetEditor extends LitElement {
     selectedDataSet?: Element;
     selectionList: ActionList;
     selectDataSetButton: Button;
+    dataSetElementEditor: DataSetElementEditor;
     /** Resets selected DataSet, if not existing in new doc
     update(props: Map<string | number | symbol, unknown>): void {
       if (props.has('doc') && this.selectedDataSet) {

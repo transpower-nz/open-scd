@@ -11,7 +11,7 @@ export declare class ReportControlElementEditor extends LitElement {
     /** The document being edited as provided to plugins by [[`OpenSCD`]]. */
     doc: XMLDocument;
     /** The element being edited as provided to plugins by [[`OpenSCD`]]. */
-    element: Element;
+    element: Element | null;
     /** SCL change indicator */
     editCount: number;
     private optFieldsDiff;
@@ -24,7 +24,7 @@ export declare class ReportControlElementEditor extends LitElement {
     reportControlInputs: (SclTextField | SclSelect | SclCheckbox)[];
     reportControlSave: Button;
     rptEnabledInput: SclTextField;
-    private resetInputs;
+    resetInputs(): void;
     private onOptFieldsInputChange;
     private saveOptFieldChanges;
     private onTrgOpsInputChange;

@@ -14,7 +14,7 @@ export declare class SampledValueControlElementEditor extends LitElement {
     /** The document being edited as provided to plugins by [[`OpenSCD`]]. */
     doc: XMLDocument;
     /** The element being edited as provided to plugins by [[`OpenSCD`]]. */
-    element: Element;
+    element: Element | null;
     /** SCL change indicator */
     editCount: number;
     get sMV(): Element | null;
@@ -28,7 +28,7 @@ export declare class SampledValueControlElementEditor extends LitElement {
     smvOptsInputs: SclCheckbox[];
     smvOptsSave: Button;
     instType?: Checkbox;
-    private resetInputs;
+    resetInputs(type?: 'SampledValueControl' | 'SMV'): void;
     private onSampledValueControlInputChange;
     private saveSampledValueControlChanges;
     private onSMVInputChange;
