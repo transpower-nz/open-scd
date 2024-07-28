@@ -852,7 +852,6 @@ class SaveAs extends s$1 {
         if ('showSaveFilePicker' in window) {
             // eslint-disable-next-line no-undef
             const opts = {
-                startIn: 'downloads',
                 suggestedName: this.docName,
                 types: [
                     {
@@ -923,7 +922,7 @@ class SaveAs extends s$1 {
             await writableStream.close();
         }
         catch (error) {
-            this.userMessage = `Unable to to write to file system. 
+            this.userMessage = `Unable to to write to file system.
       Check storage space and permissions.`;
             if (this.userMessageUI)
                 this.userMessageUI.show();
