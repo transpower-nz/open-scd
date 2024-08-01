@@ -170,13 +170,6 @@
       "src": "plugins/oscd-supervision/oscd-supervision.js"
     },
     {
-      "name": "Communication Explorer",
-      "icon": "lan",
-      "active": true,
-      "requireDoc": true,
-      "src": "plugins/oscd-plugins/communication-explorer/0.0.30/index.js"
-    },
-    {
       "name": "Communication",
       "icon": "settings_ethernet",
       "active": true,
@@ -217,6 +210,27 @@
       "active": true,
       "requireDoc": true,
       "src": "plugins/oscd-stencil/oscd-stencil.js"
+    },
+    {
+      "name": "SLD Designer CE",
+      "icon": "edit",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-designer-ce/oscd-designer.js"
+    },
+    {
+      "name": "Communication Editor",
+      "icon": "edit",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/scl-communication-editor/scl-communication-editor.js"
+    },
+    {
+      "name": "Communication Explorer",
+      "icon": "lan",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-plugins/communication-explorer/0.0.30/index.js"
     },
     {
       "name": "Description",
