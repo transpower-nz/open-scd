@@ -127,3 +127,11 @@
 	path = plugins/oscd-stencil
 	url = https://github.com/danyill/oscd-stencil
 	branch = gh-pages
+[submodule "plugins/oscd-designer-ce"]
+	path = plugins/oscd-designer-ce
+	url = https://github.com/OpenEnergyTools/oscd-designer
+	branch = gh-pages
+[submodule "plugins/scl-communication-editor"]
+	path = plugins/scl-communication-editor
+	url = https://github.com/OpenEnergyTools/scl-communication-editor
+	branch = gh-pages
