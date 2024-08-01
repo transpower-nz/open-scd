@@ -129,6 +129,16 @@
       "src": "plugins/scl-editor-landing/scl-editor-landing.js"
     },
     {
+      "name": "Designer",
+      "translations": {
+        "de": "Designer"
+      },
+      "icon": "add_box",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-designer/oscd-designer.js"
+    },
+    {
       "name": "Substation",
       "icon": "margin",
       "active": true,
@@ -200,13 +210,6 @@
       "active": true,
       "requireDoc": true,
       "src": "plugins/oscd-stencil/oscd-stencil.js"
-    },
-    {
-      "name": "SLD Designer CE",
-      "icon": "edit",
-      "active": true,
-      "requireDoc": true,
-      "src": "plugins/oscd-designer-ce/oscd-designer.js"
     },
     {
       "name": "Communication Editor",
