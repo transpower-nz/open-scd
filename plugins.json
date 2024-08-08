@@ -136,7 +136,7 @@
       "icon": "add_box",
       "active": true,
       "requireDoc": true,
-      "src": "plugins/oscd-oscd-designer-ce/oscd-designer.js"
+      "src": "plugins/oscd--designer-ce/oscd-designer.js"
     },
     {
       "name": "Designer",
