@@ -23,3 +23,25 @@ We do NOT upload any information of any sort.
 You browser is only downloading never uploading anything.
 So when you connect to [SCL editor](https://transpower-nz.github.io/open-scd) you download/update all the JavaScript files to run the editor in your browser.
 That is why you can work offline one you have connected to the page once!
+
+
+== Adding a plugin
+
+Add the submodule pointing toward the published bundle:
+
+  git submodule add -b gh-pages https://github.com/OpenEnergyTools/scl-ied-editor plugins/scl-ied-editor
+
+Add to the `plugins.json`:
+
+[source,json]
+----
+    {
+      "name": "IED editor",
+      "icon": "developer_board",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/scl-ied-editor/scl-ied-editor.js"
+    }
+----
+
+TIP: Ensure there are commas between plugins but no trailing commas.

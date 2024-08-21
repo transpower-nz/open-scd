@@ -135,3 +135,11 @@
 	path = plugins/scl-communication-editor
 	url = https://github.com/OpenEnergyTools/scl-communication-editor
 	branch = gh-pages
+[submodule "plugins/scl-ied-browser"]
+	path = plugins/scl-ied-browser
+	url = https://github.com/OpenEnergyTools/scl-ied-browser
+	branch = gh-pages
+[submodule "plugins/scl-ied-editor"]
+	path = plugins/scl-ied-editor
+	url = https://github.com/OpenEnergyTools/scl-ied-editor
+	branch = gh-pages
