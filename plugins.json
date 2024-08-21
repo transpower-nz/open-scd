@@ -226,6 +226,20 @@
       "src": "plugins/oscd-plugins/communication-explorer/0.0.30/index.js"
     },
     {
+      "name": "IED browser",
+      "icon": "developer_board",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/scl-ied-browser/scl-ied-browser.js"
+    },
+    {
+      "name": "IED editor",
+      "icon": "developer_board",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/scl-ied-editor/scl-ied-editor.js"
+    },
+    {
       "name": "Description",
       "icon": "description",
       "active": true,
