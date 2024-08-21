@@ -10,7 +10,7 @@ import { TextField } from '@material/mwc-textfield';
  * `multiplier` if an SI `unit` is given.
  *
  * NB: Use `maybeValue: string | null` instead of `value` if `nullable`! */
-export declare class SclWizardingTextfield extends TextField {
+export declare class OscdTextfield extends TextField {
     /** Whether [[`maybeValue`]] may be `null` */
     nullable: boolean;
     /** Selectable SI multipliers for a non-empty [[`unit`]]. */
@@ -42,8 +42,8 @@ export declare class SclWizardingTextfield extends TextField {
     firstUpdated(): Promise<void>;
     checkValidity(): boolean;
     constructor();
-    renderUnitSelector(): import("lit").TemplateResult<1>;
-    renderMulplierList(): import("lit").TemplateResult<1>;
-    renderSwitch(): import("lit").TemplateResult<1>;
-    render(): import("lit").TemplateResult<1>;
+    renderUnitSelector(): import("lit-html").TemplateResult<1>;
+    renderMulplierList(): import("lit-html").TemplateResult<1>;
+    renderSwitch(): import("lit-html").TemplateResult<1>;
+    render(): import("lit-html").TemplateResult<1>;
 }

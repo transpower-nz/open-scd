@@ -1,11 +1,11 @@
-import { LitElement } from 'lit';
 import '@material/mwc-formfield';
 import '@material/mwc-switch';
 import '@material/mwc-checkbox';
 import type { Checkbox } from '@material/mwc-checkbox';
 import type { Switch } from '@material/mwc-switch';
+import { LitElement } from 'lit';
 /** A potentially `nullable` labelled checkbox. */
-export declare class SclWizardingCheckbox extends LitElement {
+export declare class OscdCheckbox extends LitElement {
     label: string;
     /** Parenthetical information rendered after the label: `label (helper)` */
     helper: string;
@@ -33,6 +33,6 @@ export declare class SclWizardingCheckbox extends LitElement {
     private enable;
     private disable;
     firstUpdated(): void;
-    renderSwitch(): import("lit").TemplateResult<1>;
-    render(): import("lit").TemplateResult<1>;
+    renderSwitch(): import("lit-html").TemplateResult<1>;
+    render(): import("lit-html").TemplateResult<1>;
 }

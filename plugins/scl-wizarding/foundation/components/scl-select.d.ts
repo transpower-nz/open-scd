@@ -4,7 +4,7 @@ import { Select } from '@material/mwc-select';
 /** A potentially `nullable` `Select`.
  *
  * NB: Use `maybeValue: string | null` instead of `value` if `nullable`! */
-export declare class SclWizardingSelect extends Select {
+export declare class SclSelect extends Select {
     /** Whether [[`maybeValue`]] may be `null` */
     nullable: boolean;
     private isNull;
@@ -25,6 +25,6 @@ export declare class SclWizardingSelect extends Select {
     firstUpdated(): Promise<void>;
     checkValidity(): boolean;
     constructor();
-    renderSwitch(): import("lit").TemplateResult<1>;
-    render(): import("lit").TemplateResult<1>;
+    renderSwitch(): import("lit-html").TemplateResult<1>;
+    render(): import("lit-html").TemplateResult<1>;
 }

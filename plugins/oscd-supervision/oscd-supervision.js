@@ -15238,6 +15238,8 @@ class OscdSupervision extends s$h {
             this.selectedIedSubscribedCBRefs.length}
         data-ln="${identity(lN)}"
         value="${identity(lN)}"
+        title="${supervisionPath(lN)}
+${description ?? ''}"
       >
         <span>${supervisionPath(lN)}</span>
         ${description || invalidControlBlock || notSubscribedControlBlock
@@ -15273,6 +15275,8 @@ class OscdSupervision extends s$h {
         graphic="icon"
         data-ln="${identity(lN)}"
         value="${identity(lN)}"
+        title="${supervisionPath(lN)}
+${description || ''}"
       >
         <span>${supervisionPath(lN)}</span>
         ${description
@@ -15412,7 +15416,7 @@ class OscdSupervision extends s$h {
         const usedSupervisions = this.getSelectedIedSupLNs(true, false);
         if (usedSupervisions.length === 0)
             return x$1 `<h3>No supervision nodes used</h3>`;
-        return x$1 `<mwc-list class="column mlist">
+        return x$1 `<mwc-list class="column mlist suplist">
       ${usedSupervisions.map(lN => x$1 `${this.renderSupervisionListItem(lN, false)}`)}
     </mwc-list>`;
     }
@@ -15486,6 +15490,8 @@ class OscdSupervision extends s$h {
       ?twoline=${!!pathDescription || !!datasetName}
       data-control="${identity(controlElement)}"
       value="${pathName}"
+      title="${pathName}
+${secondLineDesc}"
     >
       <span>${pathName}</span>
       <span slot="secondary">${secondLineDesc}</span>
@@ -15497,7 +15503,7 @@ class OscdSupervision extends s$h {
     renderUsedControls() {
         if (!this.selectedIed)
             return x$1 ``;
-        return x$1 `<mwc-list class="column mlist">
+        return x$1 `<mwc-list class="column mlist conlist">
       ${this.getSelectedIedSupLNs(true, false).map(lN => {
             const cbRef = getSupervisionCBRef(lN);
             const controlElement = getOtherIedControlElements(this.selectedIed, this.controlType).find(control => cbRef === controlBlockReference(control));
@@ -15571,6 +15577,7 @@ class OscdSupervision extends s$h {
     renderUnusedControlList() {
         return x$1 `<oscd-filtered-list
       id="unusedControls"
+      class="conlist"
       @selected=${(ev) => {
             const selectedListItem = (ev.target.selected);
             if (!selectedListItem)
@@ -15625,7 +15632,7 @@ class OscdSupervision extends s$h {
     }
     renderUnusedSupervisionList() {
         return x$1 `<div class="filteredList">
-      <div class="searchField mitem sup-ln">
+      <div class="searchField mitem sup-ln suplist">
         <abbr title="Search"
           ><mwc-textfield
             id="filterUnusedSupervisionInput"
@@ -16009,6 +16016,11 @@ OscdSupervision.styles = i$8 `
       display: flex;
       flex: 1 1 48%;
       flex-direction: column;
+    }
+
+    .conlist,
+    .suplist {
+      overflow: hidden;
     }
 
     #createNewLN {

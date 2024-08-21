@@ -12,7 +12,7 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
-/* global Reflect, Promise */
+/* global Reflect, Promise, SuppressedError, Symbol */
 
 var extendStatics = function(d, b) {
     extendStatics = Object.setPrototypeOf ||
@@ -86,31 +86,36 @@ function __spreadArray(to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 }
 
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const t$3=window,e$a=t$3.ShadowRoot&&(void 0===t$3.ShadyCSS||t$3.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s$4=Symbol(),n$5=new WeakMap;class o$7{constructor(t,e,n){if(this._$cssResult$=!0,n!==s$4)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e;}get styleSheet(){let t=this.o;const s=this.t;if(e$a&&void 0===t){const e=void 0!==s&&1===s.length;e&&(t=n$5.get(s)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&n$5.set(s,t));}return t}toString(){return this.cssText}}const r$2=t=>new o$7("string"==typeof t?t:t+"",void 0,s$4),i$5=(t,...e)=>{const n=1===t.length?t[0]:e.reduce(((e,s,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[n+1]),t[0]);return new o$7(n,t,s$4)},S$1=(s,n)=>{e$a?s.adoptedStyleSheets=n.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet)):n.forEach((e=>{const n=document.createElement("style"),o=t$3.litNonce;void 0!==o&&n.setAttribute("nonce",o),n.textContent=e.cssText,s.appendChild(n);}));},c$1=e$a?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r$2(e)})(t):t;
+const t$3=window,e$a=t$3.ShadowRoot&&(void 0===t$3.ShadyCSS||t$3.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s$4=Symbol(),n$6=new WeakMap;class o$7{constructor(t,e,n){if(this._$cssResult$=!0,n!==s$4)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e;}get styleSheet(){let t=this.o;const s=this.t;if(e$a&&void 0===t){const e=void 0!==s&&1===s.length;e&&(t=n$6.get(s)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&n$6.set(s,t));}return t}toString(){return this.cssText}}const r$2=t=>new o$7("string"==typeof t?t:t+"",void 0,s$4),i$5=(t,...e)=>{const n=1===t.length?t[0]:e.reduce(((e,s,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[n+1]),t[0]);return new o$7(n,t,s$4)},S$1=(s,n)=>{e$a?s.adoptedStyleSheets=n.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet)):n.forEach((e=>{const n=document.createElement("style"),o=t$3.litNonce;void 0!==o&&n.setAttribute("nonce",o),n.textContent=e.cssText,s.appendChild(n);}));},c$1=e$a?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r$2(e)})(t):t;
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */var s$3;const e$9=window,r$1=e$9.trustedTypes,h$1=r$1?r$1.emptyScript:"",o$6=e$9.reactiveElementPolyfillSupport,n$4={toAttribute(t,i){switch(i){case Boolean:t=t?h$1:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t);}return t},fromAttribute(t,i){let s=t;switch(i){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t);}catch(t){s=null;}}return s}},a$1=(t,i)=>i!==t&&(i==i||t==t),l$5={attribute:!0,type:String,converter:n$4,reflect:!1,hasChanged:a$1};class d$1 extends HTMLElement{constructor(){super(),this._$Ei=new Map,this.isUpdatePending=!1,this.hasUpdated=!1,this._$El=null,this.u();}static addInitializer(t){var i;this.finalize(),(null!==(i=this.h)&&void 0!==i?i:this.h=[]).push(t);}static get observedAttributes(){this.finalize();const t=[];return this.elementProperties.forEach(((i,s)=>{const e=this._$Ep(s,i);void 0!==e&&(this._$Ev.set(e,s),t.push(e));})),t}static createProperty(t,i=l$5){if(i.state&&(i.attribute=!1),this.finalize(),this.elementProperties.set(t,i),!i.noAccessor&&!this.prototype.hasOwnProperty(t)){const s="symbol"==typeof t?Symbol():"__"+t,e=this.getPropertyDescriptor(t,s,i);void 0!==e&&Object.defineProperty(this.prototype,t,e);}}static getPropertyDescriptor(t,i,s){return {get(){return this[i]},set(e){const r=this[t];this[i]=e,this.requestUpdate(t,r,s);},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)||l$5}static finalize(){if(this.hasOwnProperty("finalized"))return !1;this.finalized=!0;const t=Object.getPrototypeOf(this);if(t.finalize(),void 0!==t.h&&(this.h=[...t.h]),this.elementProperties=new Map(t.elementProperties),this._$Ev=new Map,this.hasOwnProperty("properties")){const t=this.properties,i=[...Object.getOwnPropertyNames(t),...Object.getOwnPropertySymbols(t)];for(const s of i)this.createProperty(s,t[s]);}return this.elementStyles=this.finalizeStyles(this.styles),!0}static finalizeStyles(i){const s=[];if(Array.isArray(i)){const e=new Set(i.flat(1/0).reverse());for(const i of e)s.unshift(c$1(i));}else void 0!==i&&s.push(c$1(i));return s}static _$Ep(t,i){const s=i.attribute;return !1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}u(){var t;this._$E_=new Promise((t=>this.enableUpdating=t)),this._$AL=new Map,this._$Eg(),this.requestUpdate(),null===(t=this.constructor.h)||void 0===t||t.forEach((t=>t(this)));}addController(t){var i,s;(null!==(i=this._$ES)&&void 0!==i?i:this._$ES=[]).push(t),void 0!==this.renderRoot&&this.isConnected&&(null===(s=t.hostConnected)||void 0===s||s.call(t));}removeController(t){var i;null===(i=this._$ES)||void 0===i||i.splice(this._$ES.indexOf(t)>>>0,1);}_$Eg(){this.constructor.elementProperties.forEach(((t,i)=>{this.hasOwnProperty(i)&&(this._$Ei.set(i,this[i]),delete this[i]);}));}createRenderRoot(){var t;const s=null!==(t=this.shadowRoot)&&void 0!==t?t:this.attachShadow(this.constructor.shadowRootOptions);return S$1(s,this.constructor.elementStyles),s}connectedCallback(){var t;void 0===this.renderRoot&&(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostConnected)||void 0===i?void 0:i.call(t)}));}enableUpdating(t){}disconnectedCallback(){var t;null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostDisconnected)||void 0===i?void 0:i.call(t)}));}attributeChangedCallback(t,i,s){this._$AK(t,s);}_$EO(t,i,s=l$5){var e;const r=this.constructor._$Ep(t,s);if(void 0!==r&&!0===s.reflect){const h=(void 0!==(null===(e=s.converter)||void 0===e?void 0:e.toAttribute)?s.converter:n$4).toAttribute(i,s.type);this._$El=t,null==h?this.removeAttribute(r):this.setAttribute(r,h),this._$El=null;}}_$AK(t,i){var s;const e=this.constructor,r=e._$Ev.get(t);if(void 0!==r&&this._$El!==r){const t=e.getPropertyOptions(r),h="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==(null===(s=t.converter)||void 0===s?void 0:s.fromAttribute)?t.converter:n$4;this._$El=r,this[r]=h.fromAttribute(i,t.type),this._$El=null;}}requestUpdate(t,i,s){let e=!0;void 0!==t&&(((s=s||this.constructor.getPropertyOptions(t)).hasChanged||a$1)(this[t],i)?(this._$AL.has(t)||this._$AL.set(t,i),!0===s.reflect&&this._$El!==t&&(void 0===this._$EC&&(this._$EC=new Map),this._$EC.set(t,s))):e=!1),!this.isUpdatePending&&e&&(this._$E_=this._$Ej());}async _$Ej(){this.isUpdatePending=!0;try{await this._$E_;}catch(t){Promise.reject(t);}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){var t;if(!this.isUpdatePending)return;this.hasUpdated,this._$Ei&&(this._$Ei.forEach(((t,i)=>this[i]=t)),this._$Ei=void 0);let i=!1;const s=this._$AL;try{i=this.shouldUpdate(s),i?(this.willUpdate(s),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostUpdate)||void 0===i?void 0:i.call(t)})),this.update(s)):this._$Ek();}catch(t){throw i=!1,this._$Ek(),t}i&&this._$AE(s);}willUpdate(t){}_$AE(t){var i;null===(i=this._$ES)||void 0===i||i.forEach((t=>{var i;return null===(i=t.hostUpdated)||void 0===i?void 0:i.call(t)})),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t);}_$Ek(){this._$AL=new Map,this.isUpdatePending=!1;}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$E_}shouldUpdate(t){return !0}update(t){void 0!==this._$EC&&(this._$EC.forEach(((t,i)=>this._$EO(i,this[i],t))),this._$EC=void 0),this._$Ek();}updated(t){}firstUpdated(t){}}d$1.finalized=!0,d$1.elementProperties=new Map,d$1.elementStyles=[],d$1.shadowRootOptions={mode:"open"},null==o$6||o$6({ReactiveElement:d$1}),(null!==(s$3=e$9.reactiveElementVersions)&&void 0!==s$3?s$3:e$9.reactiveElementVersions=[]).push("1.6.1");
+ */var s$3;const e$9=window,r$1=e$9.trustedTypes,h$1=r$1?r$1.emptyScript:"",o$6=e$9.reactiveElementPolyfillSupport,n$5={toAttribute(t,i){switch(i){case Boolean:t=t?h$1:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t);}return t},fromAttribute(t,i){let s=t;switch(i){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t);}catch(t){s=null;}}return s}},a$2=(t,i)=>i!==t&&(i==i||t==t),l$5={attribute:!0,type:String,converter:n$5,reflect:!1,hasChanged:a$2},d$1="finalized";class u$1 extends HTMLElement{constructor(){super(),this._$Ei=new Map,this.isUpdatePending=!1,this.hasUpdated=!1,this._$El=null,this._$Eu();}static addInitializer(t){var i;this.finalize(),(null!==(i=this.h)&&void 0!==i?i:this.h=[]).push(t);}static get observedAttributes(){this.finalize();const t=[];return this.elementProperties.forEach(((i,s)=>{const e=this._$Ep(s,i);void 0!==e&&(this._$Ev.set(e,s),t.push(e));})),t}static createProperty(t,i=l$5){if(i.state&&(i.attribute=!1),this.finalize(),this.elementProperties.set(t,i),!i.noAccessor&&!this.prototype.hasOwnProperty(t)){const s="symbol"==typeof t?Symbol():"__"+t,e=this.getPropertyDescriptor(t,s,i);void 0!==e&&Object.defineProperty(this.prototype,t,e);}}static getPropertyDescriptor(t,i,s){return {get(){return this[i]},set(e){const r=this[t];this[i]=e,this.requestUpdate(t,r,s);},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)||l$5}static finalize(){if(this.hasOwnProperty(d$1))return !1;this[d$1]=!0;const t=Object.getPrototypeOf(this);if(t.finalize(),void 0!==t.h&&(this.h=[...t.h]),this.elementProperties=new Map(t.elementProperties),this._$Ev=new Map,this.hasOwnProperty("properties")){const t=this.properties,i=[...Object.getOwnPropertyNames(t),...Object.getOwnPropertySymbols(t)];for(const s of i)this.createProperty(s,t[s]);}return this.elementStyles=this.finalizeStyles(this.styles),!0}static finalizeStyles(i){const s=[];if(Array.isArray(i)){const e=new Set(i.flat(1/0).reverse());for(const i of e)s.unshift(c$1(i));}else void 0!==i&&s.push(c$1(i));return s}static _$Ep(t,i){const s=i.attribute;return !1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}_$Eu(){var t;this._$E_=new Promise((t=>this.enableUpdating=t)),this._$AL=new Map,this._$Eg(),this.requestUpdate(),null===(t=this.constructor.h)||void 0===t||t.forEach((t=>t(this)));}addController(t){var i,s;(null!==(i=this._$ES)&&void 0!==i?i:this._$ES=[]).push(t),void 0!==this.renderRoot&&this.isConnected&&(null===(s=t.hostConnected)||void 0===s||s.call(t));}removeController(t){var i;null===(i=this._$ES)||void 0===i||i.splice(this._$ES.indexOf(t)>>>0,1);}_$Eg(){this.constructor.elementProperties.forEach(((t,i)=>{this.hasOwnProperty(i)&&(this._$Ei.set(i,this[i]),delete this[i]);}));}createRenderRoot(){var t;const s=null!==(t=this.shadowRoot)&&void 0!==t?t:this.attachShadow(this.constructor.shadowRootOptions);return S$1(s,this.constructor.elementStyles),s}connectedCallback(){var t;void 0===this.renderRoot&&(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostConnected)||void 0===i?void 0:i.call(t)}));}enableUpdating(t){}disconnectedCallback(){var t;null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostDisconnected)||void 0===i?void 0:i.call(t)}));}attributeChangedCallback(t,i,s){this._$AK(t,s);}_$EO(t,i,s=l$5){var e;const r=this.constructor._$Ep(t,s);if(void 0!==r&&!0===s.reflect){const h=(void 0!==(null===(e=s.converter)||void 0===e?void 0:e.toAttribute)?s.converter:n$5).toAttribute(i,s.type);this._$El=t,null==h?this.removeAttribute(r):this.setAttribute(r,h),this._$El=null;}}_$AK(t,i){var s;const e=this.constructor,r=e._$Ev.get(t);if(void 0!==r&&this._$El!==r){const t=e.getPropertyOptions(r),h="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==(null===(s=t.converter)||void 0===s?void 0:s.fromAttribute)?t.converter:n$5;this._$El=r,this[r]=h.fromAttribute(i,t.type),this._$El=null;}}requestUpdate(t,i,s){let e=!0;void 0!==t&&(((s=s||this.constructor.getPropertyOptions(t)).hasChanged||a$2)(this[t],i)?(this._$AL.has(t)||this._$AL.set(t,i),!0===s.reflect&&this._$El!==t&&(void 0===this._$EC&&(this._$EC=new Map),this._$EC.set(t,s))):e=!1),!this.isUpdatePending&&e&&(this._$E_=this._$Ej());}async _$Ej(){this.isUpdatePending=!0;try{await this._$E_;}catch(t){Promise.reject(t);}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){var t;if(!this.isUpdatePending)return;this.hasUpdated,this._$Ei&&(this._$Ei.forEach(((t,i)=>this[i]=t)),this._$Ei=void 0);let i=!1;const s=this._$AL;try{i=this.shouldUpdate(s),i?(this.willUpdate(s),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostUpdate)||void 0===i?void 0:i.call(t)})),this.update(s)):this._$Ek();}catch(t){throw i=!1,this._$Ek(),t}i&&this._$AE(s);}willUpdate(t){}_$AE(t){var i;null===(i=this._$ES)||void 0===i||i.forEach((t=>{var i;return null===(i=t.hostUpdated)||void 0===i?void 0:i.call(t)})),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t);}_$Ek(){this._$AL=new Map,this.isUpdatePending=!1;}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$E_}shouldUpdate(t){return !0}update(t){void 0!==this._$EC&&(this._$EC.forEach(((t,i)=>this._$EO(i,this[i],t))),this._$EC=void 0),this._$Ek();}updated(t){}firstUpdated(t){}}u$1[d$1]=!0,u$1.elementProperties=new Map,u$1.elementStyles=[],u$1.shadowRootOptions={mode:"open"},null==o$6||o$6({ReactiveElement:u$1}),(null!==(s$3=e$9.reactiveElementVersions)&&void 0!==s$3?s$3:e$9.reactiveElementVersions=[]).push("1.6.3");
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-var t$2;const i$4=window,s$2=i$4.trustedTypes,e$8=s$2?s$2.createPolicy("lit-html",{createHTML:t=>t}):void 0,o$5="$lit$",n$3=`lit$${(Math.random()+"").slice(9)}$`,l$4="?"+n$3,h=`<${l$4}>`,r=document,d=()=>r.createComment(""),u=t=>null===t||"object"!=typeof t&&"function"!=typeof t,c=Array.isArray,v=t=>c(t)||"function"==typeof(null==t?void 0:t[Symbol.iterator]),a="[ \t\n\f\r]",f$1=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,_=/-->/g,m=/>/g,p=RegExp(`>|${a}(?:([^\\s"'>=/]+)(${a}*=${a}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),g=/'/g,$=/"/g,y=/^(?:script|style|textarea|title)$/i,w=t=>(i,...s)=>({_$litType$:t,strings:i,values:s}),x=w(1),T=Symbol.for("lit-noChange"),A=Symbol.for("lit-nothing"),E=new WeakMap,C=r.createTreeWalker(r,129,null,!1),P=(t,i)=>{const s=t.length-1,l=[];let r,d=2===i?"<svg>":"",u=f$1;for(let i=0;i<s;i++){const s=t[i];let e,c,v=-1,a=0;for(;a<s.length&&(u.lastIndex=a,c=u.exec(s),null!==c);)a=u.lastIndex,u===f$1?"!--"===c[1]?u=_:void 0!==c[1]?u=m:void 0!==c[2]?(y.test(c[2])&&(r=RegExp("</"+c[2],"g")),u=p):void 0!==c[3]&&(u=p):u===p?">"===c[0]?(u=null!=r?r:f$1,v=-1):void 0===c[1]?v=-2:(v=u.lastIndex-c[2].length,e=c[1],u=void 0===c[3]?p:'"'===c[3]?$:g):u===$||u===g?u=p:u===_||u===m?u=f$1:(u=p,r=void 0);const w=u===p&&t[i+1].startsWith("/>")?" ":"";d+=u===f$1?s+h:v>=0?(l.push(e),s.slice(0,v)+o$5+s.slice(v)+n$3+w):s+n$3+(-2===v?(l.push(void 0),i):w);}const c=d+(t[s]||"<?>")+(2===i?"</svg>":"");if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return [void 0!==e$8?e$8.createHTML(c):c,l]};class V{constructor({strings:t,_$litType$:i},e){let h;this.parts=[];let r=0,u=0;const c=t.length-1,v=this.parts,[a,f]=P(t,i);if(this.el=V.createElement(a,e),C.currentNode=this.el.content,2===i){const t=this.el.content,i=t.firstChild;i.remove(),t.append(...i.childNodes);}for(;null!==(h=C.nextNode())&&v.length<c;){if(1===h.nodeType){if(h.hasAttributes()){const t=[];for(const i of h.getAttributeNames())if(i.endsWith(o$5)||i.startsWith(n$3)){const s=f[u++];if(t.push(i),void 0!==s){const t=h.getAttribute(s.toLowerCase()+o$5).split(n$3),i=/([.?@])?(.*)/.exec(s);v.push({type:1,index:r,name:i[2],strings:t,ctor:"."===i[1]?k:"?"===i[1]?I:"@"===i[1]?L:R});}else v.push({type:6,index:r});}for(const i of t)h.removeAttribute(i);}if(y.test(h.tagName)){const t=h.textContent.split(n$3),i=t.length-1;if(i>0){h.textContent=s$2?s$2.emptyScript:"";for(let s=0;s<i;s++)h.append(t[s],d()),C.nextNode(),v.push({type:2,index:++r});h.append(t[i],d());}}}else if(8===h.nodeType)if(h.data===l$4)v.push({type:2,index:r});else {let t=-1;for(;-1!==(t=h.data.indexOf(n$3,t+1));)v.push({type:7,index:r}),t+=n$3.length-1;}r++;}}static createElement(t,i){const s=r.createElement("template");return s.innerHTML=t,s}}function N(t,i,s=t,e){var o,n,l,h;if(i===T)return i;let r=void 0!==e?null===(o=s._$Co)||void 0===o?void 0:o[e]:s._$Cl;const d=u(i)?void 0:i._$litDirective$;return (null==r?void 0:r.constructor)!==d&&(null===(n=null==r?void 0:r._$AO)||void 0===n||n.call(r,!1),void 0===d?r=void 0:(r=new d(t),r._$AT(t,s,e)),void 0!==e?(null!==(l=(h=s)._$Co)&&void 0!==l?l:h._$Co=[])[e]=r:s._$Cl=r),void 0!==r&&(i=N(t,r._$AS(t,i.values),r,e)),i}class S{constructor(t,i){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=i;}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){var i;const{el:{content:s},parts:e}=this._$AD,o=(null!==(i=null==t?void 0:t.creationScope)&&void 0!==i?i:r).importNode(s,!0);C.currentNode=o;let n=C.nextNode(),l=0,h=0,d=e[0];for(;void 0!==d;){if(l===d.index){let i;2===d.type?i=new M(n,n.nextSibling,this,t):1===d.type?i=new d.ctor(n,d.name,d.strings,this,t):6===d.type&&(i=new z(n,this,t)),this._$AV.push(i),d=e[++h];}l!==(null==d?void 0:d.index)&&(n=C.nextNode(),l++);}return C.currentNode=r,o}v(t){let i=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,i),i+=s.strings.length-2):s._$AI(t[i])),i++;}}class M{constructor(t,i,s,e){var o;this.type=2,this._$AH=A,this._$AN=void 0,this._$AA=t,this._$AB=i,this._$AM=s,this.options=e,this._$Cp=null===(o=null==e?void 0:e.isConnected)||void 0===o||o;}get _$AU(){var t,i;return null!==(i=null===(t=this._$AM)||void 0===t?void 0:t._$AU)&&void 0!==i?i:this._$Cp}get parentNode(){let t=this._$AA.parentNode;const i=this._$AM;return void 0!==i&&11===(null==t?void 0:t.nodeType)&&(t=i.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,i=this){t=N(this,t,i),u(t)?t===A||null==t||""===t?(this._$AH!==A&&this._$AR(),this._$AH=A):t!==this._$AH&&t!==T&&this._(t):void 0!==t._$litType$?this.g(t):void 0!==t.nodeType?this.$(t):v(t)?this.T(t):this._(t);}k(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}$(t){this._$AH!==t&&(this._$AR(),this._$AH=this.k(t));}_(t){this._$AH!==A&&u(this._$AH)?this._$AA.nextSibling.data=t:this.$(r.createTextNode(t)),this._$AH=t;}g(t){var i;const{values:s,_$litType$:e}=t,o="number"==typeof e?this._$AC(t):(void 0===e.el&&(e.el=V.createElement(e.h,this.options)),e);if((null===(i=this._$AH)||void 0===i?void 0:i._$AD)===o)this._$AH.v(s);else {const t=new S(o,this),i=t.u(this.options);t.v(s),this.$(i),this._$AH=t;}}_$AC(t){let i=E.get(t.strings);return void 0===i&&E.set(t.strings,i=new V(t)),i}T(t){c(this._$AH)||(this._$AH=[],this._$AR());const i=this._$AH;let s,e=0;for(const o of t)e===i.length?i.push(s=new M(this.k(d()),this.k(d()),this,this.options)):s=i[e],s._$AI(o),e++;e<i.length&&(this._$AR(s&&s._$AB.nextSibling,e),i.length=e);}_$AR(t=this._$AA.nextSibling,i){var s;for(null===(s=this._$AP)||void 0===s||s.call(this,!1,!0,i);t&&t!==this._$AB;){const i=t.nextSibling;t.remove(),t=i;}}setConnected(t){var i;void 0===this._$AM&&(this._$Cp=t,null===(i=this._$AP)||void 0===i||i.call(this,t));}}class R{constructor(t,i,s,e,o){this.type=1,this._$AH=A,this._$AN=void 0,this.element=t,this.name=i,this._$AM=e,this.options=o,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=A;}get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}_$AI(t,i=this,s,e){const o=this.strings;let n=!1;if(void 0===o)t=N(this,t,i,0),n=!u(t)||t!==this._$AH&&t!==T,n&&(this._$AH=t);else {const e=t;let l,h;for(t=o[0],l=0;l<o.length-1;l++)h=N(this,e[s+l],i,l),h===T&&(h=this._$AH[l]),n||(n=!u(h)||h!==this._$AH[l]),h===A?t=A:t!==A&&(t+=(null!=h?h:"")+o[l+1]),this._$AH[l]=h;}n&&!e&&this.j(t);}j(t){t===A?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,null!=t?t:"");}}class k extends R{constructor(){super(...arguments),this.type=3;}j(t){this.element[this.name]=t===A?void 0:t;}}const H=s$2?s$2.emptyScript:"";class I extends R{constructor(){super(...arguments),this.type=4;}j(t){t&&t!==A?this.element.setAttribute(this.name,H):this.element.removeAttribute(this.name);}}class L extends R{constructor(t,i,s,e,o){super(t,i,s,e,o),this.type=5;}_$AI(t,i=this){var s;if((t=null!==(s=N(this,t,i,0))&&void 0!==s?s:A)===T)return;const e=this._$AH,o=t===A&&e!==A||t.capture!==e.capture||t.once!==e.once||t.passive!==e.passive,n=t!==A&&(e===A||o);o&&this.element.removeEventListener(this.name,this,e),n&&this.element.addEventListener(this.name,this,t),this._$AH=t;}handleEvent(t){var i,s;"function"==typeof this._$AH?this._$AH.call(null!==(s=null===(i=this.options)||void 0===i?void 0:i.host)&&void 0!==s?s:this.element,t):this._$AH.handleEvent(t);}}class z{constructor(t,i,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=i,this.options=s;}get _$AU(){return this._$AM._$AU}_$AI(t){N(this,t);}}const j=i$4.litHtmlPolyfillSupport;null==j||j(V,M),(null!==(t$2=i$4.litHtmlVersions)&&void 0!==t$2?t$2:i$4.litHtmlVersions=[]).push("2.7.4");const B=(t,i,s)=>{var e,o;const n=null!==(e=null==s?void 0:s.renderBefore)&&void 0!==e?e:i;let l=n._$litPart$;if(void 0===l){const t=null!==(o=null==s?void 0:s.renderBefore)&&void 0!==o?o:null;n._$litPart$=l=new M(i.insertBefore(d(),t),t,void 0,null!=s?s:{});}return l._$AI(t),l};
+var t$2;const i$4=window,s$2=i$4.trustedTypes,e$8=s$2?s$2.createPolicy("lit-html",{createHTML:t=>t}):void 0,o$5="$lit$",n$4=`lit$${(Math.random()+"").slice(9)}$`,l$4="?"+n$4,h=`<${l$4}>`,r=document,u=()=>r.createComment(""),d=t=>null===t||"object"!=typeof t&&"function"!=typeof t,c=Array.isArray,v=t=>c(t)||"function"==typeof(null==t?void 0:t[Symbol.iterator]),a$1="[ \t\n\f\r]",f=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,_=/-->/g,m=/>/g,p=RegExp(`>|${a$1}(?:([^\\s"'>=/]+)(${a$1}*=${a$1}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),g=/'/g,$=/"/g,y=/^(?:script|style|textarea|title)$/i,w=t=>(i,...s)=>({_$litType$:t,strings:i,values:s}),x=w(1),T=Symbol.for("lit-noChange"),A=Symbol.for("lit-nothing"),E=new WeakMap,C=r.createTreeWalker(r,129,null,!1);function P(t,i){if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==e$8?e$8.createHTML(i):i}const V=(t,i)=>{const s=t.length-1,e=[];let l,r=2===i?"<svg>":"",u=f;for(let i=0;i<s;i++){const s=t[i];let d,c,v=-1,a=0;for(;a<s.length&&(u.lastIndex=a,c=u.exec(s),null!==c);)a=u.lastIndex,u===f?"!--"===c[1]?u=_:void 0!==c[1]?u=m:void 0!==c[2]?(y.test(c[2])&&(l=RegExp("</"+c[2],"g")),u=p):void 0!==c[3]&&(u=p):u===p?">"===c[0]?(u=null!=l?l:f,v=-1):void 0===c[1]?v=-2:(v=u.lastIndex-c[2].length,d=c[1],u=void 0===c[3]?p:'"'===c[3]?$:g):u===$||u===g?u=p:u===_||u===m?u=f:(u=p,l=void 0);const w=u===p&&t[i+1].startsWith("/>")?" ":"";r+=u===f?s+h:v>=0?(e.push(d),s.slice(0,v)+o$5+s.slice(v)+n$4+w):s+n$4+(-2===v?(e.push(void 0),i):w);}return [P(t,r+(t[s]||"<?>")+(2===i?"</svg>":"")),e]};class N{constructor({strings:t,_$litType$:i},e){let h;this.parts=[];let r=0,d=0;const c=t.length-1,v=this.parts,[a,f]=V(t,i);if(this.el=N.createElement(a,e),C.currentNode=this.el.content,2===i){const t=this.el.content,i=t.firstChild;i.remove(),t.append(...i.childNodes);}for(;null!==(h=C.nextNode())&&v.length<c;){if(1===h.nodeType){if(h.hasAttributes()){const t=[];for(const i of h.getAttributeNames())if(i.endsWith(o$5)||i.startsWith(n$4)){const s=f[d++];if(t.push(i),void 0!==s){const t=h.getAttribute(s.toLowerCase()+o$5).split(n$4),i=/([.?@])?(.*)/.exec(s);v.push({type:1,index:r,name:i[2],strings:t,ctor:"."===i[1]?H:"?"===i[1]?L:"@"===i[1]?z:k});}else v.push({type:6,index:r});}for(const i of t)h.removeAttribute(i);}if(y.test(h.tagName)){const t=h.textContent.split(n$4),i=t.length-1;if(i>0){h.textContent=s$2?s$2.emptyScript:"";for(let s=0;s<i;s++)h.append(t[s],u()),C.nextNode(),v.push({type:2,index:++r});h.append(t[i],u());}}}else if(8===h.nodeType)if(h.data===l$4)v.push({type:2,index:r});else {let t=-1;for(;-1!==(t=h.data.indexOf(n$4,t+1));)v.push({type:7,index:r}),t+=n$4.length-1;}r++;}}static createElement(t,i){const s=r.createElement("template");return s.innerHTML=t,s}}function S(t,i,s=t,e){var o,n,l,h;if(i===T)return i;let r=void 0!==e?null===(o=s._$Co)||void 0===o?void 0:o[e]:s._$Cl;const u=d(i)?void 0:i._$litDirective$;return (null==r?void 0:r.constructor)!==u&&(null===(n=null==r?void 0:r._$AO)||void 0===n||n.call(r,!1),void 0===u?r=void 0:(r=new u(t),r._$AT(t,s,e)),void 0!==e?(null!==(l=(h=s)._$Co)&&void 0!==l?l:h._$Co=[])[e]=r:s._$Cl=r),void 0!==r&&(i=S(t,r._$AS(t,i.values),r,e)),i}class M{constructor(t,i){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=i;}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){var i;const{el:{content:s},parts:e}=this._$AD,o=(null!==(i=null==t?void 0:t.creationScope)&&void 0!==i?i:r).importNode(s,!0);C.currentNode=o;let n=C.nextNode(),l=0,h=0,u=e[0];for(;void 0!==u;){if(l===u.index){let i;2===u.type?i=new R(n,n.nextSibling,this,t):1===u.type?i=new u.ctor(n,u.name,u.strings,this,t):6===u.type&&(i=new Z(n,this,t)),this._$AV.push(i),u=e[++h];}l!==(null==u?void 0:u.index)&&(n=C.nextNode(),l++);}return C.currentNode=r,o}v(t){let i=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,i),i+=s.strings.length-2):s._$AI(t[i])),i++;}}class R{constructor(t,i,s,e){var o;this.type=2,this._$AH=A,this._$AN=void 0,this._$AA=t,this._$AB=i,this._$AM=s,this.options=e,this._$Cp=null===(o=null==e?void 0:e.isConnected)||void 0===o||o;}get _$AU(){var t,i;return null!==(i=null===(t=this._$AM)||void 0===t?void 0:t._$AU)&&void 0!==i?i:this._$Cp}get parentNode(){let t=this._$AA.parentNode;const i=this._$AM;return void 0!==i&&11===(null==t?void 0:t.nodeType)&&(t=i.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,i=this){t=S(this,t,i),d(t)?t===A||null==t||""===t?(this._$AH!==A&&this._$AR(),this._$AH=A):t!==this._$AH&&t!==T&&this._(t):void 0!==t._$litType$?this.g(t):void 0!==t.nodeType?this.$(t):v(t)?this.T(t):this._(t);}k(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}$(t){this._$AH!==t&&(this._$AR(),this._$AH=this.k(t));}_(t){this._$AH!==A&&d(this._$AH)?this._$AA.nextSibling.data=t:this.$(r.createTextNode(t)),this._$AH=t;}g(t){var i;const{values:s,_$litType$:e}=t,o="number"==typeof e?this._$AC(t):(void 0===e.el&&(e.el=N.createElement(P(e.h,e.h[0]),this.options)),e);if((null===(i=this._$AH)||void 0===i?void 0:i._$AD)===o)this._$AH.v(s);else {const t=new M(o,this),i=t.u(this.options);t.v(s),this.$(i),this._$AH=t;}}_$AC(t){let i=E.get(t.strings);return void 0===i&&E.set(t.strings,i=new N(t)),i}T(t){c(this._$AH)||(this._$AH=[],this._$AR());const i=this._$AH;let s,e=0;for(const o of t)e===i.length?i.push(s=new R(this.k(u()),this.k(u()),this,this.options)):s=i[e],s._$AI(o),e++;e<i.length&&(this._$AR(s&&s._$AB.nextSibling,e),i.length=e);}_$AR(t=this._$AA.nextSibling,i){var s;for(null===(s=this._$AP)||void 0===s||s.call(this,!1,!0,i);t&&t!==this._$AB;){const i=t.nextSibling;t.remove(),t=i;}}setConnected(t){var i;void 0===this._$AM&&(this._$Cp=t,null===(i=this._$AP)||void 0===i||i.call(this,t));}}class k{constructor(t,i,s,e,o){this.type=1,this._$AH=A,this._$AN=void 0,this.element=t,this.name=i,this._$AM=e,this.options=o,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=A;}get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}_$AI(t,i=this,s,e){const o=this.strings;let n=!1;if(void 0===o)t=S(this,t,i,0),n=!d(t)||t!==this._$AH&&t!==T,n&&(this._$AH=t);else {const e=t;let l,h;for(t=o[0],l=0;l<o.length-1;l++)h=S(this,e[s+l],i,l),h===T&&(h=this._$AH[l]),n||(n=!d(h)||h!==this._$AH[l]),h===A?t=A:t!==A&&(t+=(null!=h?h:"")+o[l+1]),this._$AH[l]=h;}n&&!e&&this.j(t);}j(t){t===A?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,null!=t?t:"");}}class H extends k{constructor(){super(...arguments),this.type=3;}j(t){this.element[this.name]=t===A?void 0:t;}}const I=s$2?s$2.emptyScript:"";class L extends k{constructor(){super(...arguments),this.type=4;}j(t){t&&t!==A?this.element.setAttribute(this.name,I):this.element.removeAttribute(this.name);}}class z extends k{constructor(t,i,s,e,o){super(t,i,s,e,o),this.type=5;}_$AI(t,i=this){var s;if((t=null!==(s=S(this,t,i,0))&&void 0!==s?s:A)===T)return;const e=this._$AH,o=t===A&&e!==A||t.capture!==e.capture||t.once!==e.once||t.passive!==e.passive,n=t!==A&&(e===A||o);o&&this.element.removeEventListener(this.name,this,e),n&&this.element.addEventListener(this.name,this,t),this._$AH=t;}handleEvent(t){var i,s;"function"==typeof this._$AH?this._$AH.call(null!==(s=null===(i=this.options)||void 0===i?void 0:i.host)&&void 0!==s?s:this.element,t):this._$AH.handleEvent(t);}}class Z{constructor(t,i,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=i,this.options=s;}get _$AU(){return this._$AM._$AU}_$AI(t){S(this,t);}}const B=i$4.litHtmlPolyfillSupport;null==B||B(N,R),(null!==(t$2=i$4.litHtmlVersions)&&void 0!==t$2?t$2:i$4.litHtmlVersions=[]).push("2.8.0");const D=(t,i,s)=>{var e,o;const n=null!==(e=null==s?void 0:s.renderBefore)&&void 0!==e?e:i;let l=n._$litPart$;if(void 0===l){const t=null!==(o=null==s?void 0:s.renderBefore)&&void 0!==o?o:null;n._$litPart$=l=new R(i.insertBefore(u(),t),t,void 0,null!=s?s:{});}return l._$AI(t),l};
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */var l$3,o$4;class s$1 extends d$1{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0;}createRenderRoot(){var t,e;const i=super.createRenderRoot();return null!==(t=(e=this.renderOptions).renderBefore)&&void 0!==t||(e.renderBefore=i.firstChild),i}update(t){const i=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=B(i,this.renderRoot,this.renderOptions);}connectedCallback(){var t;super.connectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!0);}disconnectedCallback(){var t;super.disconnectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!1);}render(){return T}}s$1.finalized=!0,s$1._$litElement$=!0,null===(l$3=globalThis.litElementHydrateSupport)||void 0===l$3||l$3.call(globalThis,{LitElement:s$1});const n$2=globalThis.litElementPolyfillSupport;null==n$2||n$2({LitElement:s$1});(null!==(o$4=globalThis.litElementVersions)&&void 0!==o$4?o$4:globalThis.litElementVersions=[]).push("3.3.2");
+ */var l$3,o$4;class s$1 extends u$1{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0;}createRenderRoot(){var t,e;const i=super.createRenderRoot();return null!==(t=(e=this.renderOptions).renderBefore)&&void 0!==t||(e.renderBefore=i.firstChild),i}update(t){const i=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=D(i,this.renderRoot,this.renderOptions);}connectedCallback(){var t;super.connectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!0);}disconnectedCallback(){var t;super.disconnectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!1);}render(){return T}}s$1.finalized=!0,s$1._$litElement$=!0,null===(l$3=globalThis.litElementHydrateSupport)||void 0===l$3||l$3.call(globalThis,{LitElement:s$1});const n$3=globalThis.litElementPolyfillSupport;null==n$3||n$3({LitElement:s$1});(null!==(o$4=globalThis.litElementVersions)&&void 0!==o$4?o$4:globalThis.litElementVersions=[]).push("3.3.3");
 
 /**
  * @license
@@ -124,13 +129,13 @@ const e$7=e=>n=>"function"==typeof n?((e,n)=>(customElements.define(e,n),n))(e,n
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const i$3=(i,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,finisher(n){n.createProperty(e.key,i);}}:{kind:"field",key:Symbol(),placement:"own",descriptor:{},originalKey:e.key,initializer(){"function"==typeof e.initializer&&(this[e.key]=e.initializer.call(this));},finisher(n){n.createProperty(e.key,i);}};function e$6(e){return (n,t)=>void 0!==t?((i,e,n)=>{e.constructor.createProperty(n,i);})(e,n,t):i$3(e,n)}
+const i$3=(i,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,finisher(n){n.createProperty(e.key,i);}}:{kind:"field",key:Symbol(),placement:"own",descriptor:{},originalKey:e.key,initializer(){"function"==typeof e.initializer&&(this[e.key]=e.initializer.call(this));},finisher(n){n.createProperty(e.key,i);}},e$6=(i,e,n)=>{e.constructor.createProperty(n,i);};function n$2(n){return (t,o)=>void 0!==o?e$6(n,t,o):i$3(n,t)}
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */function t$1(t){return e$6({...t,state:!0})}
+ */function t$1(t){return n$2({...t,state:!0})}
 
 /**
  * @license
@@ -198,24 +203,7 @@ function e$3(e){return o$3({descriptor:r=>({async get(){var r;return await this.
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-/**
- * @fileoverview A "ponyfill" is a polyfill that doesn't modify the global prototype chain.
- * This makes ponyfills safer than traditional polyfills, especially for libraries like MDC.
- */
-function closest(element, selector) {
-    if (element.closest) {
-        return element.closest(selector);
-    }
-    var el = element;
-    while (el) {
-        if (matches(el, selector)) {
-            return el;
-        }
-        el = el.parentElement;
-    }
-    return null;
-}
-function matches(element, selector) {
+function matches$1(element, selector) {
     var nativeMatches = element.matches
         || element.webkitMatchesSelector
         || element.msMatchesSelector;
@@ -344,7 +332,7 @@ class BaseElement extends s$1 {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-var MDCFoundation = /** @class */ (function () {
+var MDCFoundation$c = /** @class */ (function () {
     function MDCFoundation(adapter) {
         if (adapter === void 0) { adapter = {}; }
         this.adapter = adapter;
@@ -985,7 +973,7 @@ var MDCRippleFoundation = /** @class */ (function (_super) {
         }
     };
     return MDCRippleFoundation;
-}(MDCFoundation));
+}(MDCFoundation$c));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCRippleFoundation$1 = MDCRippleFoundation;
 
@@ -1006,7 +994,7 @@ const t={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},e
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const i="important",n=" !"+i,o=e$1(class extends i$1{constructor(t$1){var e;if(super(t$1),t$1.type!==t.ATTRIBUTE||"style"!==t$1.name||(null===(e=t$1.strings)||void 0===e?void 0:e.length)>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(t){return Object.keys(t).reduce(((e,r)=>{const s=t[r];return null==s?e:e+`${r=r.includes("-")?r:r.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,"-$&").toLowerCase()}:${s};`}),"")}update(e,[r]){const{style:s}=e.element;if(void 0===this.ut){this.ut=new Set;for(const t in r)this.ut.add(t);return this.render(r)}this.ut.forEach((t=>{null==r[t]&&(this.ut.delete(t),t.includes("-")?s.removeProperty(t):s[t]="");}));for(const t in r){const e=r[t];if(null!=e){this.ut.add(t);const r="string"==typeof e&&e.endsWith(n);t.includes("-")||r?s.setProperty(t,r?e.slice(0,-11):e,r?i:""):s[t]=e;}}return T}});
+ */const i="important",n=" !"+i,o=e$1(class extends i$1{constructor(t$1){var e;if(super(t$1),t$1.type!==t.ATTRIBUTE||"style"!==t$1.name||(null===(e=t$1.strings)||void 0===e?void 0:e.length)>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(t){return Object.keys(t).reduce(((e,r)=>{const s=t[r];return null==s?e:e+`${r=r.includes("-")?r:r.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,"-$&").toLowerCase()}:${s};`}),"")}update(e,[r]){const{style:s}=e.element;if(void 0===this.ht){this.ht=new Set;for(const t in r)this.ht.add(t);return this.render(r)}this.ht.forEach((t=>{null==r[t]&&(this.ht.delete(t),t.includes("-")?s.removeProperty(t):s[t]="");}));for(const t in r){const e=r[t];if(null!=e){this.ht.add(t);const r="string"==typeof e&&e.endsWith(n);t.includes("-")||r?s.setProperty(t,r?e.slice(0,-11):e,r?i:""):s[t]=e;}}return T}});
 
 /**
  * @license
@@ -1037,7 +1025,7 @@ class RippleBase extends BaseElement {
         this.mdcFoundationClass = MDCRippleFoundation$1;
     }
     get isActive() {
-        return matches(this.parentElement || this, ':active');
+        return matches$1(this.parentElement || this, ':active');
     }
     createAdapter() {
         return {
@@ -1189,25 +1177,25 @@ __decorate$1([
     i$2('.mdc-ripple-surface')
 ], RippleBase.prototype, "mdcRoot", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], RippleBase.prototype, "primary", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], RippleBase.prototype, "accent", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], RippleBase.prototype, "unbounded", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], RippleBase.prototype, "disabled", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], RippleBase.prototype, "activated", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], RippleBase.prototype, "selected", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], RippleBase.prototype, "internalUseStateLayerCustomProperties", void 0);
 __decorate$1([
     t$1()
@@ -1514,18 +1502,18 @@ class IconButtonBase extends s$1 {
     }
 }
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], IconButtonBase.prototype, "disabled", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], IconButtonBase.prototype, "icon", void 0);
 __decorate$1([
     ariaProperty,
-    e$6({ type: String, attribute: 'aria-label' })
+    n$2({ type: String, attribute: 'aria-label' })
 ], IconButtonBase.prototype, "ariaLabel", void 0);
 __decorate$1([
     ariaProperty,
-    e$6({ type: String, attribute: 'aria-haspopup' })
+    n$2({ type: String, attribute: 'aria-haspopup' })
 ], IconButtonBase.prototype, "ariaHasPopup", void 0);
 __decorate$1([
     i$2('button')
@@ -23505,7 +23493,7 @@ customElements.define('ace-editor', AceEditor);
 
   (function () {
     // Return early if we're not running inside of the browser.
-    if (typeof window === 'undefined') {
+    if (typeof window === 'undefined' || typeof Element === 'undefined') {
       return;
     }
 
@@ -23520,7 +23508,7 @@ customElements.define('ace-editor', AceEditor);
     var matches = Element.prototype.matches || Element.prototype.msMatchesSelector;
 
     /** @type {string} */
-    var _focusableElementsString = ['a[href]', 'area[href]', 'input:not([disabled])', 'select:not([disabled])', 'textarea:not([disabled])', 'button:not([disabled])', 'details', 'summary', 'iframe', 'object', 'embed', '[contenteditable]'].join(',');
+    var _focusableElementsString = ['a[href]', 'area[href]', 'input:not([disabled])', 'select:not([disabled])', 'textarea:not([disabled])', 'button:not([disabled])', 'details', 'summary', 'iframe', 'object', 'embed', 'video', '[contenteditable]'].join(',');
 
     /**
      * `InertRoot` manages a single inert subtree, i.e. a DOM subtree whose root element has an `inert`
@@ -24498,6 +24486,79 @@ var AnimationFrame = /** @class */ (function () {
 
 /**
  * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$b = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
+
+/**
+ * @license
  * Copyright 2017 Google Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24870,7 +24931,7 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
         }
     };
     return MDCDialogFoundation;
-}(MDCFoundation));
+}(MDCFoundation$b));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCDialogFoundation$1 = MDCDialogFoundation;
 
@@ -24928,6 +24989,52 @@ function supportsPassiveOption(globalObj) {
         passiveSupported = false;
     }
     return passiveSupported;
+}
+
+/**
+ * @license
+ * Copyright 2018 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+/**
+ * @fileoverview A "ponyfill" is a polyfill that doesn't modify the global prototype chain.
+ * This makes ponyfills safer than traditional polyfills, especially for libraries like MDC.
+ */
+function closest(element, selector) {
+    if (element.closest) {
+        return element.closest(selector);
+    }
+    var el = element;
+    while (el) {
+        if (matches(el, selector)) {
+            return el;
+        }
+        el = el.parentElement;
+    }
+    return null;
+}
+function matches(element, selector) {
+    var nativeMatches = element.matches
+        || element.webkitMatchesSelector
+        || element.msMatchesSelector;
+    return nativeMatches.call(element, selector);
 }
 
 /**
@@ -25291,31 +25398,31 @@ __decorate$1([
     i$2('.mdc-container')
 ], DialogBase.prototype, "conatinerElement", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], DialogBase.prototype, "hideActions", void 0);
 __decorate$1([
-    e$6({ type: Boolean }),
+    n$2({ type: Boolean }),
     observer(function () {
         this.forceLayout();
     })
 ], DialogBase.prototype, "stacked", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], DialogBase.prototype, "heading", void 0);
 __decorate$1([
-    e$6({ type: String }),
+    n$2({ type: String }),
     observer(function (newAction) {
         this.mdcFoundation.setScrimClickAction(newAction);
     })
 ], DialogBase.prototype, "scrimClickAction", void 0);
 __decorate$1([
-    e$6({ type: String }),
+    n$2({ type: String }),
     observer(function (newAction) {
         this.mdcFoundation.setEscapeKeyAction(newAction);
     })
 ], DialogBase.prototype, "escapeKeyAction", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true }),
+    n$2({ type: Boolean, reflect: true }),
     observer(function (isOpen) {
         // Check isConnected because we could have been disconnected before first
         // update. If we're now closed, then we shouldn't start the MDC foundation
@@ -25335,13 +25442,13 @@ __decorate$1([
     })
 ], DialogBase.prototype, "open", void 0);
 __decorate$1([
-    e$6()
+    n$2()
 ], DialogBase.prototype, "defaultAction", void 0);
 __decorate$1([
-    e$6()
+    n$2()
 ], DialogBase.prototype, "actionAttribute", void 0);
 __decorate$1([
-    e$6()
+    n$2()
 ], DialogBase.prototype, "initialFocusAttribute", void 0);
 
 /**
@@ -25521,37 +25628,37 @@ class ButtonBase extends s$1 {
 ButtonBase.shadowRootOptions = { mode: 'open', delegatesFocus: true };
 __decorate$1([
     ariaProperty,
-    e$6({ type: String, attribute: 'aria-haspopup' })
+    n$2({ type: String, attribute: 'aria-haspopup' })
 ], ButtonBase.prototype, "ariaHasPopup", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], ButtonBase.prototype, "raised", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], ButtonBase.prototype, "unelevated", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], ButtonBase.prototype, "outlined", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], ButtonBase.prototype, "dense", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], ButtonBase.prototype, "disabled", void 0);
 __decorate$1([
-    e$6({ type: Boolean, attribute: 'trailingicon' })
+    n$2({ type: Boolean, attribute: 'trailingicon' })
 ], ButtonBase.prototype, "trailingIcon", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], ButtonBase.prototype, "fullwidth", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], ButtonBase.prototype, "icon", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], ButtonBase.prototype, "label", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], ButtonBase.prototype, "expandContent", void 0);
 __decorate$1([
     i$2('#button')
@@ -25648,7 +25755,7 @@ function cloneElement(element, attrs) {
     });
     return newElement;
 }
-function isPublic$1(element) {
+function isPublic$2(element) {
     return !element.closest('Private');
 }
 /** @returns a new [[`tag`]] element owned by [[`doc`]]. */
@@ -26009,10 +26116,10 @@ SclWizardDialog.styles = i$5 `
     }
   `;
 __decorate$1([
-    e$6({ type: Array })
+    n$2({ type: Array })
 ], SclWizardDialog.prototype, "wizard", void 0);
 __decorate$1([
-    e$6({ attribute: false })
+    n$2({ attribute: false })
 ], SclWizardDialog.prototype, "wizardRequest", void 0);
 __decorate$1([
     t$1()
@@ -26114,7 +26221,7 @@ CodeDialog.styles = i$5 `
     }
   `;
 __decorate$1([
-    e$6({ attribute: false })
+    n$2({ attribute: false })
 ], CodeDialog.prototype, "element", void 0);
 __decorate$1([
     i$2('ace-editor')
@@ -26296,37 +26403,37 @@ function updateSubstation(update) {
     return [update].concat(...updateConnectivityNodes(substation, newName));
 }
 
-const tAbstractConductingEquipment$1 = [
+const tAbstractConductingEquipment = [
     "TransformerWinding",
     "ConductingEquipment",
 ];
-const tEquipment$1 = [
+const tEquipment = [
     "GeneralEquipment",
     "PowerTransformer",
-    ...tAbstractConductingEquipment$1,
+    ...tAbstractConductingEquipment,
 ];
-const tEquipmentContainer$1 = ["Substation", "VoltageLevel", "Bay"];
-const tGeneralEquipmentContainer$1 = ["Process", "Line"];
-const tAbstractEqFuncSubFunc$1 = ["EqSubFunction", "EqFunction"];
-const tPowerSystemResource$1 = [
+const tEquipmentContainer = ["Substation", "VoltageLevel", "Bay"];
+const tGeneralEquipmentContainer = ["Process", "Line"];
+const tAbstractEqFuncSubFunc = ["EqSubFunction", "EqFunction"];
+const tPowerSystemResource = [
     "SubFunction",
     "Function",
     "TapChanger",
     "SubEquipment",
-    ...tEquipment$1,
-    ...tEquipmentContainer$1,
-    ...tGeneralEquipmentContainer$1,
-    ...tAbstractEqFuncSubFunc$1,
+    ...tEquipment,
+    ...tEquipmentContainer,
+    ...tGeneralEquipmentContainer,
+    ...tAbstractEqFuncSubFunc,
 ];
-const tLNodeContainer$1 = ["ConnectivityNode", ...tPowerSystemResource$1];
-const tCertificate$1 = ["GOOSESecurity", "SMVSecurity"];
-const tNaming$1 = ["SubNetwork", ...tCertificate$1, ...tLNodeContainer$1];
-const tAbstractDataAttribute$1 = ["BDA", "DA"];
-const tControlWithIEDName$1 = ["SampledValueControl", "GSEControl"];
-const tControlWithTriggerOpt$1 = ["LogControl", "ReportControl"];
-const tControl$1 = [...tControlWithIEDName$1, ...tControlWithTriggerOpt$1];
-const tControlBlock$1 = ["GSE", "SMV"];
-const tUnNaming$1 = [
+const tLNodeContainer = ["ConnectivityNode", ...tPowerSystemResource];
+const tCertificate = ["GOOSESecurity", "SMVSecurity"];
+const tNaming = ["SubNetwork", ...tCertificate, ...tLNodeContainer];
+const tAbstractDataAttribute = ["BDA", "DA"];
+const tControlWithIEDName = ["SampledValueControl", "GSEControl"];
+const tControlWithTriggerOpt = ["LogControl", "ReportControl"];
+const tControl = [...tControlWithIEDName, ...tControlWithTriggerOpt];
+const tControlBlock = ["GSE", "SMV"];
+const tUnNaming = [
     "ConnectedAP",
     "PhysConn",
     "SDO",
@@ -26346,21 +26453,21 @@ const tUnNaming$1 = [
     "AccessPoint",
     "IED",
     "NeutralPoint",
-    ...tControl$1,
-    ...tControlBlock$1,
-    ...tAbstractDataAttribute$1,
+    ...tControl,
+    ...tControlBlock,
+    ...tAbstractDataAttribute,
 ];
-const tAnyLN$1 = ["LN0", "LN"];
-const tAnyContentFromOtherNamespace$1 = [
+const tAnyLN = ["LN0", "LN"];
+const tAnyContentFromOtherNamespace = [
     "Text",
     "Private",
     "Hitem",
     "AccessControl",
 ];
-const tCert$1 = ["Subject", "IssuerName"];
-const tDurationInMilliSec$1 = ["MinTime", "MaxTime"];
-const tIDNaming$1 = ["LNodeType", "DOType", "DAType", "EnumType"];
-const tServiceYesNo$1 = [
+const tCert = ["Subject", "IssuerName"];
+const tDurationInMilliSec = ["MinTime", "MaxTime"];
+const tIDNaming = ["LNodeType", "DOType", "DAType", "EnumType"];
+const tServiceYesNo = [
     "FileHandling",
     "TimeSyncProt",
     "CommProt",
@@ -26378,45 +26485,45 @@ const tServiceYesNo$1 = [
     "GSEDir",
     "ConfLdName",
 ];
-const tServiceWithMaxAndMaxAttributes$1 = ["DynDataSet", "ConfDataSet"];
-const tServiceWithMax$1 = [
+const tServiceWithMaxAndMaxAttributes = ["DynDataSet", "ConfDataSet"];
+const tServiceWithMax = [
     "GSSE",
     "GOOSE",
     "ConfReportControl",
     "SMVsc",
-    ...tServiceWithMaxAndMaxAttributes$1,
+    ...tServiceWithMaxAndMaxAttributes,
 ];
-const tServiceWithMaxNonZero$1 = ["ConfLogControl", "ConfSigRef"];
-const tServiceSettings$1 = [
+const tServiceWithMaxNonZero = ["ConfLogControl", "ConfSigRef"];
+const tServiceSettings = [
     "ReportSettings",
     "LogSettings",
     "GSESettings",
     "SMVSettings",
 ];
-const tBaseElement$1 = ["SCL", ...tNaming$1, ...tUnNaming$1, ...tIDNaming$1];
-const sCLTags$1 = [
-    ...tBaseElement$1,
-    ...tAnyContentFromOtherNamespace$1,
+const tBaseElement = ["SCL", ...tNaming, ...tUnNaming, ...tIDNaming];
+const sCLTags = [
+    ...tBaseElement,
+    ...tAnyContentFromOtherNamespace,
     "Header",
     "LNode",
     "Val",
     "Voltage",
     "Services",
-    ...tCert$1,
-    ...tDurationInMilliSec$1,
+    ...tCert,
+    ...tDurationInMilliSec,
     "Association",
     "FCDA",
     "ClientLN",
     "IEDName",
     "ExtRef",
     "Protocol",
-    ...tAnyLN$1,
-    ...tServiceYesNo$1,
+    ...tAnyLN,
+    ...tServiceYesNo,
     "DynAssociation",
     "SettingGroups",
-    ...tServiceWithMax$1,
-    ...tServiceWithMaxNonZero$1,
-    ...tServiceSettings$1,
+    ...tServiceWithMax,
+    ...tServiceWithMaxNonZero,
+    ...tServiceSettings,
     "ConfLNs",
     "ClientServices",
     "SupSubscription",
@@ -26440,28 +26547,28 @@ const sCLTags$1 = [
     "SmpRate",
     "SecPerSamples",
 ];
-const tBaseNameSequence$1 = ["Text", "Private"];
-const tNamingSequence$1 = [...tBaseNameSequence$1];
-const tUnNamingSequence$1 = [...tBaseNameSequence$1];
-const tIDNamingSequence$1 = [...tBaseNameSequence$1];
-const tAbstractDataAttributeSequence$1 = [...tUnNamingSequence$1, "Val"];
-const tLNodeContainerSequence$1 = [...tNamingSequence$1, "LNode"];
-const tPowerSystemResourceSequence$1 = [...tLNodeContainerSequence$1];
-const tEquipmentSequence$1 = [...tPowerSystemResourceSequence$1];
-const tEquipmentContainerSequence$1 = [
-    ...tPowerSystemResourceSequence$1,
+const tBaseNameSequence = ["Text", "Private"];
+const tNamingSequence = [...tBaseNameSequence];
+const tUnNamingSequence = [...tBaseNameSequence];
+const tIDNamingSequence = [...tBaseNameSequence];
+const tAbstractDataAttributeSequence = [...tUnNamingSequence, "Val"];
+const tLNodeContainerSequence = [...tNamingSequence, "LNode"];
+const tPowerSystemResourceSequence = [...tLNodeContainerSequence];
+const tEquipmentSequence = [...tPowerSystemResourceSequence];
+const tEquipmentContainerSequence = [
+    ...tPowerSystemResourceSequence,
     "PowerTransformer",
     "GeneralEquipment",
 ];
-const tAbstractConductingEquipmentSequence$1 = [
-    ...tEquipmentSequence$1,
+const tAbstractConductingEquipmentSequence = [
+    ...tEquipmentSequence,
     "Terminal",
 ];
-const tControlBlockSequence$1 = [...tUnNamingSequence$1, "Address"];
-const tControlSequence$1 = [...tNamingSequence$1];
-const tControlWithIEDNameSequence$1 = [...tControlSequence$1, "IEDName"];
-const tAnyLNSequence$1 = [
-    ...tUnNamingSequence$1,
+const tControlBlockSequence = [...tUnNamingSequence, "Address"];
+const tControlSequence = [...tNamingSequence];
+const tControlWithIEDNameSequence = [...tControlSequence, "IEDName"];
+const tAnyLNSequence = [
+    ...tUnNamingSequence,
     "DataSet",
     "ReportControl",
     "LogControl",
@@ -26469,18 +26576,18 @@ const tAnyLNSequence$1 = [
     "Inputs",
     "Log",
 ];
-const tGeneralEquipmentContainerSequence$1 = [
-    ...tPowerSystemResourceSequence$1,
+const tGeneralEquipmentContainerSequence = [
+    ...tPowerSystemResourceSequence,
     "GeneralEquipment",
     "Function",
 ];
-const tControlWithTriggerOptSequence$1 = [...tControlSequence$1, "TrgOps"];
-const tAbstractEqFuncSubFuncSequence$1 = [
-    ...tPowerSystemResourceSequence$1,
+const tControlWithTriggerOptSequence = [...tControlSequence, "TrgOps"];
+const tAbstractEqFuncSubFuncSequence = [
+    ...tPowerSystemResourceSequence,
     "GeneralEquipment",
     "EqSubFunction",
 ];
-const tags$2 = {
+const tags$1 = {
     AccessControl: {
         parents: ["LDevice"],
         children: [],
@@ -26488,7 +26595,7 @@ const tags$2 = {
     AccessPoint: {
         parents: ["IED"],
         children: [
-            ...tNamingSequence$1,
+            ...tNamingSequence,
             "Server",
             "LN",
             "ServerAt",
@@ -26511,7 +26618,7 @@ const tags$2 = {
     },
     BDA: {
         parents: ["DAType"],
-        children: [...tAbstractDataAttributeSequence$1],
+        children: [...tAbstractDataAttributeSequence],
     },
     BitRate: {
         parents: ["SubNetwork"],
@@ -26520,7 +26627,7 @@ const tags$2 = {
     Bay: {
         parents: ["VoltageLevel"],
         children: [
-            ...tEquipmentContainerSequence$1,
+            ...tEquipmentContainerSequence,
             "ConductingEquipment",
             "ConnectivityNode",
             "Function",
@@ -26540,12 +26647,12 @@ const tags$2 = {
     },
     Communication: {
         parents: ["SCL"],
-        children: [...tUnNamingSequence$1, "SubNetwork"],
+        children: [...tUnNamingSequence, "SubNetwork"],
     },
     ConductingEquipment: {
         parents: ["Process", "Line", "SubFunction", "Function", "Bay"],
         children: [
-            ...tAbstractConductingEquipmentSequence$1,
+            ...tAbstractConductingEquipmentSequence,
             "EqFunction",
             "SubEquipment",
         ],
@@ -26580,43 +26687,43 @@ const tags$2 = {
     },
     ConnectedAP: {
         parents: ["SubNetwork"],
-        children: [...tUnNamingSequence$1, "Address", "GSE", "SMV", "PhysConn"],
+        children: [...tUnNamingSequence, "Address", "GSE", "SMV", "PhysConn"],
     },
     ConnectivityNode: {
         parents: ["Bay", "Line"],
-        children: [...tLNodeContainerSequence$1],
+        children: [...tLNodeContainerSequence],
     },
     DA: {
         parents: ["DOType"],
-        children: [...tAbstractDataAttributeSequence$1],
+        children: [...tAbstractDataAttributeSequence],
     },
     DAI: {
         parents: ["DOI", "SDI"],
-        children: [...tUnNamingSequence$1, "Val"],
+        children: [...tUnNamingSequence, "Val"],
     },
     DAType: {
         parents: ["DataTypeTemplates"],
-        children: [...tIDNamingSequence$1, "BDA", "ProtNs"],
+        children: [...tIDNamingSequence, "BDA", "ProtNs"],
     },
     DO: {
         parents: ["LNodeType"],
-        children: [...tUnNamingSequence$1],
+        children: [...tUnNamingSequence],
     },
     DOI: {
-        parents: [...tAnyLN$1],
-        children: [...tUnNamingSequence$1, "SDI", "DAI"],
+        parents: [...tAnyLN],
+        children: [...tUnNamingSequence, "SDI", "DAI"],
     },
     DOType: {
         parents: ["DataTypeTemplates"],
-        children: [...tIDNamingSequence$1, "SDO", "DA"],
+        children: [...tIDNamingSequence, "SDO", "DA"],
     },
     DataObjectDirectory: {
         parents: ["Services"],
         children: [],
     },
     DataSet: {
-        parents: [...tAnyLN$1],
-        children: [...tNamingSequence$1, "FCDA"],
+        parents: [...tAnyLN],
+        children: [...tNamingSequence, "FCDA"],
     },
     DataSetDirectory: {
         parents: ["Services"],
@@ -26636,7 +26743,7 @@ const tags$2 = {
     },
     EnumType: {
         parents: ["DataTypeTemplates"],
-        children: [...tIDNamingSequence$1, "EnumVal"],
+        children: [...tIDNamingSequence, "EnumVal"],
     },
     EnumVal: {
         parents: ["EnumType"],
@@ -26651,11 +26758,11 @@ const tags$2 = {
             "SubEquipment",
             "ConductingEquipment",
         ],
-        children: [...tAbstractEqFuncSubFuncSequence$1],
+        children: [...tAbstractEqFuncSubFuncSequence],
     },
     EqSubFunction: {
         parents: ["EqSubFunction", "EqFunction"],
-        children: [...tAbstractEqFuncSubFuncSequence$1],
+        children: [...tAbstractEqFuncSubFuncSequence],
     },
     ExtRef: {
         parents: ["Inputs"],
@@ -26672,7 +26779,7 @@ const tags$2 = {
     Function: {
         parents: ["Bay", "VoltageLevel", "Substation", "Process", "Line"],
         children: [
-            ...tPowerSystemResourceSequence$1,
+            ...tPowerSystemResourceSequence,
             "SubFunction",
             "GeneralEquipment",
             "ConductingEquipment",
@@ -26682,11 +26789,11 @@ const tags$2 = {
         parents: [
             "SubFunction",
             "Function",
-            ...tGeneralEquipmentContainer$1,
-            ...tAbstractEqFuncSubFunc$1,
-            ...tEquipmentContainer$1,
+            ...tGeneralEquipmentContainer,
+            ...tAbstractEqFuncSubFunc,
+            ...tEquipmentContainer,
         ],
-        children: [...tEquipmentSequence$1, "EqFunction"],
+        children: [...tEquipmentSequence, "EqFunction"],
     },
     GetCBValues: {
         parents: ["Services"],
@@ -26710,11 +26817,11 @@ const tags$2 = {
     },
     GOOSESecurity: {
         parents: ["AccessPoint"],
-        children: [...tNamingSequence$1, "Subject", "IssuerName"],
+        children: [...tNamingSequence, "Subject", "IssuerName"],
     },
     GSE: {
         parents: ["ConnectedAP"],
-        children: [...tControlBlockSequence$1, "MinTime", "MaxTime"],
+        children: [...tControlBlockSequence, "MinTime", "MaxTime"],
     },
     GSEDir: {
         parents: ["Services"],
@@ -26722,7 +26829,7 @@ const tags$2 = {
     },
     GSEControl: {
         parents: ["LN0"],
-        children: [...tControlWithIEDNameSequence$1, "Protocol"],
+        children: [...tControlWithIEDNameSequence, "Protocol"],
     },
     GSESettings: {
         parents: ["Services"],
@@ -26746,15 +26853,15 @@ const tags$2 = {
     },
     IED: {
         parents: ["SCL"],
-        children: [...tUnNamingSequence$1, "Services", "AccessPoint", "KDC"],
+        children: [...tUnNamingSequence, "Services", "AccessPoint", "KDC"],
     },
     IEDName: {
         parents: ["GSEControl", "SampledValueControl"],
         children: [],
     },
     Inputs: {
-        parents: [...tAnyLN$1],
-        children: [...tUnNamingSequence$1, "ExtRef"],
+        parents: [...tAnyLN],
+        children: [...tUnNamingSequence, "ExtRef"],
     },
     IssuerName: {
         parents: ["GOOSESecurity", "SMVSecurity"],
@@ -26766,44 +26873,44 @@ const tags$2 = {
     },
     LDevice: {
         parents: ["Server"],
-        children: [...tUnNamingSequence$1, "LN0", "LN", "AccessControl"],
+        children: [...tUnNamingSequence, "LN0", "LN", "AccessControl"],
     },
     LN: {
         parents: ["AccessPoint", "LDevice"],
-        children: [...tAnyLNSequence$1],
+        children: [...tAnyLNSequence],
     },
     LN0: {
         parents: ["LDevice"],
         children: [
-            ...tAnyLNSequence$1,
+            ...tAnyLNSequence,
             "GSEControl",
             "SampledValueControl",
             "SettingControl",
         ],
     },
     LNode: {
-        parents: [...tLNodeContainer$1],
-        children: [...tUnNamingSequence$1],
+        parents: [...tLNodeContainer],
+        children: [...tUnNamingSequence],
     },
     LNodeType: {
         parents: ["DataTypeTemplates"],
-        children: [...tIDNamingSequence$1, "DO"],
+        children: [...tIDNamingSequence, "DO"],
     },
     Line: {
         parents: ["Process", "SCL"],
         children: [
-            ...tGeneralEquipmentContainerSequence$1,
+            ...tGeneralEquipmentContainerSequence,
             "Voltage",
             "ConductingEquipment",
         ],
     },
     Log: {
-        parents: [...tAnyLN$1],
-        children: [...tUnNamingSequence$1],
+        parents: [...tAnyLN],
+        children: [...tUnNamingSequence],
     },
     LogControl: {
-        parents: [...tAnyLN$1],
-        children: [...tControlWithTriggerOptSequence$1],
+        parents: [...tAnyLN],
+        children: [...tControlWithTriggerOptSequence],
     },
     LogSettings: {
         parents: ["Services"],
@@ -26823,7 +26930,7 @@ const tags$2 = {
     },
     NeutralPoint: {
         parents: ["TransformerWinding"],
-        children: [...tUnNamingSequence$1],
+        children: [...tUnNamingSequence],
     },
     OptFields: {
         parents: ["ReportControl"],
@@ -26835,12 +26942,12 @@ const tags$2 = {
     },
     PhysConn: {
         parents: ["ConnectedAP"],
-        children: [...tUnNamingSequence$1, "P"],
+        children: [...tUnNamingSequence, "P"],
     },
     PowerTransformer: {
-        parents: [...tEquipmentContainer$1],
+        parents: [...tEquipmentContainer],
         children: [
-            ...tEquipmentSequence$1,
+            ...tEquipmentSequence,
             "TransformerWinding",
             "SubEquipment",
             "EqFunction",
@@ -26853,7 +26960,7 @@ const tags$2 = {
     Process: {
         parents: ["Process", "SCL"],
         children: [
-            ...tGeneralEquipmentContainerSequence$1,
+            ...tGeneralEquipmentContainerSequence,
             "ConductingEquipment",
             "Substation",
             "Line",
@@ -26877,8 +26984,8 @@ const tags$2 = {
         children: [],
     },
     ReportControl: {
-        parents: [...tAnyLN$1],
-        children: [...tControlWithTriggerOptSequence$1, "OptFields", "RptEnabled"],
+        parents: [...tAnyLN],
+        children: [...tControlWithTriggerOptSequence, "OptFields", "RptEnabled"],
     },
     ReportSettings: {
         parents: ["Services"],
@@ -26886,7 +26993,7 @@ const tags$2 = {
     },
     RptEnabled: {
         parents: ["ReportControl"],
-        children: [...tUnNamingSequence$1, "ClientLN"],
+        children: [...tUnNamingSequence, "ClientLN"],
     },
     SamplesPerSec: {
         parents: ["SMVSettings"],
@@ -26894,7 +27001,7 @@ const tags$2 = {
     },
     SampledValueControl: {
         parents: ["LN0"],
-        children: [...tControlWithIEDNameSequence$1, "SmvOpts"],
+        children: [...tControlWithIEDNameSequence, "SmvOpts"],
     },
     SecPerSamples: {
         parents: ["SMVSettings"],
@@ -26903,7 +27010,7 @@ const tags$2 = {
     SCL: {
         parents: [],
         children: [
-            ...tBaseNameSequence$1,
+            ...tBaseNameSequence,
             "Header",
             "Substation",
             "Communication",
@@ -26915,16 +27022,16 @@ const tags$2 = {
     },
     SDI: {
         parents: ["DOI", "SDI"],
-        children: [...tUnNamingSequence$1, "SDI", "DAI"],
+        children: [...tUnNamingSequence, "SDI", "DAI"],
     },
     SDO: {
         parents: ["DOType"],
-        children: [...tNamingSequence$1],
+        children: [...tNamingSequence],
     },
     Server: {
         parents: ["AccessPoint"],
         children: [
-            ...tUnNamingSequence$1,
+            ...tUnNamingSequence,
             "Authentication",
             "LDevice",
             "Association",
@@ -26932,7 +27039,7 @@ const tags$2 = {
     },
     ServerAt: {
         parents: ["AccessPoint"],
-        children: [...tUnNamingSequence$1],
+        children: [...tUnNamingSequence],
     },
     Services: {
         parents: ["IED", "AccessPoint"],
@@ -26978,7 +27085,7 @@ const tags$2 = {
     },
     SettingControl: {
         parents: ["LN0"],
-        children: [...tUnNamingSequence$1],
+        children: [...tUnNamingSequence],
     },
     SettingGroups: {
         parents: ["Services"],
@@ -26994,7 +27101,7 @@ const tags$2 = {
     },
     SMV: {
         parents: ["ConnectedAP"],
-        children: [...tControlBlockSequence$1],
+        children: [...tControlBlockSequence],
     },
     SmvOpts: {
         parents: ["SampledValueControl"],
@@ -27006,7 +27113,7 @@ const tags$2 = {
     },
     SMVSecurity: {
         parents: ["AccessPoint"],
-        children: [...tNamingSequence$1, "Subject", "IssuerName"],
+        children: [...tNamingSequence, "Subject", "IssuerName"],
     },
     SMVSettings: {
         parents: ["Services"],
@@ -27018,14 +27125,14 @@ const tags$2 = {
             "PowerTransformer",
             "ConductingEquipment",
             "TransformerWinding",
-            ...tAbstractConductingEquipment$1,
+            ...tAbstractConductingEquipment,
         ],
-        children: [...tPowerSystemResourceSequence$1, "EqFunction"],
+        children: [...tPowerSystemResourceSequence, "EqFunction"],
     },
     SubFunction: {
         parents: ["SubFunction", "Function"],
         children: [
-            ...tPowerSystemResourceSequence$1,
+            ...tPowerSystemResourceSequence,
             "GeneralEquipment",
             "ConductingEquipment",
             "SubFunction",
@@ -27033,7 +27140,7 @@ const tags$2 = {
     },
     SubNetwork: {
         parents: ["Communication"],
-        children: [...tNamingSequence$1, "BitRate", "ConnectedAP"],
+        children: [...tNamingSequence, "BitRate", "ConnectedAP"],
     },
     Subject: {
         parents: ["GOOSESecurity", "SMVSecurity"],
@@ -27041,7 +27148,7 @@ const tags$2 = {
     },
     Substation: {
         parents: ["SCL"],
-        children: [...tEquipmentContainerSequence$1, "VoltageLevel", "Function"],
+        children: [...tEquipmentContainerSequence, "VoltageLevel", "Function"],
     },
     SupSubscription: {
         parents: ["Services"],
@@ -27049,14 +27156,14 @@ const tags$2 = {
     },
     TapChanger: {
         parents: ["TransformerWinding"],
-        children: [...tPowerSystemResourceSequence$1, "SubEquipment", "EqFunction"],
+        children: [...tPowerSystemResourceSequence, "SubEquipment", "EqFunction"],
     },
     Terminal: {
-        parents: [...tEquipment$1],
-        children: [...tUnNamingSequence$1],
+        parents: [...tEquipment],
+        children: [...tUnNamingSequence],
     },
     Text: {
-        parents: sCLTags$1.filter((tag) => tag !== "Text" && tag !== "Private"),
+        parents: sCLTags.filter((tag) => tag !== "Text" && tag !== "Private"),
         children: [],
     },
     TimerActivatedControl: {
@@ -27070,7 +27177,7 @@ const tags$2 = {
     TransformerWinding: {
         parents: ["PowerTransformer"],
         children: [
-            ...tAbstractConductingEquipmentSequence$1,
+            ...tAbstractConductingEquipmentSequence,
             "TapChanger",
             "NeutralPoint",
             "EqFunction",
@@ -27095,11 +27202,11 @@ const tags$2 = {
     },
     VoltageLevel: {
         parents: ["Substation"],
-        children: [...tEquipmentContainerSequence$1, "Voltage", "Bay", "Function"],
+        children: [...tEquipmentContainerSequence, "Voltage", "Bay", "Function"],
     },
 };
-const tagSet$1 = new Set(sCLTags$1);
-function isSCLTag$1(tag) {
+const tagSet$1 = new Set(sCLTags);
+function isSCLTag(tag) {
     return tagSet$1.has(tag);
 }
 
@@ -27111,16 +27218,16 @@ function isSCLTag$1(tag) {
  * @param tag - The `tagName` of the new child
  * @returns Reference for new [[`tag`]] child within [[`parent`]]  or `null`
  */
-function getReference$1(parent, tag) {
-    if (!isSCLTag$1(tag))
+function getReference(parent, tag) {
+    if (!isSCLTag(tag))
         return null;
     const parentTag = parent.tagName;
     const children = Array.from(parent.children);
     if (parentTag === "Services" ||
         parentTag === "SettingGroups" ||
-        !isSCLTag$1(parentTag))
+        !isSCLTag(parentTag))
         return children.find((child) => child.tagName === tag) ?? null;
-    const sequence = tags$2[parentTag].children;
+    const sequence = tags$1[parentTag].children;
     let index = sequence.findIndex((element) => element === tag);
     if (index < 0)
         return null;
@@ -27147,7 +27254,7 @@ function controlBlockObjRef(ctrlBlock) {
     return `${iedName}${ldInst}/${prefix}${lnClass}${lnInst}.${cbName}`;
 }
 
-function isPublic(element) {
+function isPublic$1(element) {
     return !element.closest("Private");
 }
 const elementsWithIedNameAttribute = [
@@ -27160,7 +27267,7 @@ const elementsWithIedNameAttribute = [
 ];
 function updateIEDNameTextContent(ied, oldIedName, newIedName) {
     return Array.from(ied.ownerDocument.getElementsByTagName("IEDName"))
-        .filter(isPublic)
+        .filter(isPublic$1)
         .filter((iedName) => iedName.textContent === oldIedName)
         .map((iedName) => {
         const node = Array.from(iedName.childNodes).find((node) => node.nodeType === Node.TEXT_NODE);
@@ -27221,7 +27328,7 @@ function updateIedNameAttributes(ied, oldIedName, newIedName) {
         .map((iedNameElement) => `${iedNameElement}[iedName="${oldIedName}"]`)
         .join(",");
     return Array.from(ied.ownerDocument.querySelectorAll(selector))
-        .filter(isPublic)
+        .filter(isPublic$1)
         .map((element) => {
         return { element, attributes: { iedName: newIedName } };
     });
@@ -27255,6 +27362,52 @@ function updateIED(update) {
         ...updateSubscriptionSupervision(ied, oldIedName, newIedName),
         ...updateIEDNameTextContent(ied, oldIedName, newIedName),
     ];
+}
+
+/** @returns Whether a given element is within a Private section */
+function isPublic(element) {
+    return !element.closest("Private");
+}
+
+function getChildElementsByTagName(element, tag) {
+    return Array.from(element.children).filter((element) => element.tagName === tag);
+}
+/** maximum value for `lnInst` attribute */
+const maxLnInst = 99;
+const lnInstRange = Array(maxLnInst)
+    .fill(1)
+    .map((_, i) => `${i + 1}`);
+/**
+ * Generator function returning unique `inst` or `lnInst` attribute for element
+ * [[`tagName`]] within [[`parent`]].
+ * ```md
+ * Valid range for both `inst` and `lnInst` is between 1 and 99
+ * ```
+ * @param parent - The parent element to be scanned for `inst` or `lnInst`
+ * values already in use. Be sure to create a new generator every time the
+ * children of this element change in SCL.
+ * @param tagName - Tag name of the child elements containing the
+ * `lnInst` or `inst` attribute
+ * @returns a function generating increasing unused `inst` or `lnInst` values
+ * element with [[`tagName`]] within [[`parent`]] on subsequent invocations
+ */
+function lnInstGenerator(parent, tagName) {
+    const generators = new Map();
+    const generatedAttribute = tagName === "LN" ? "inst" : "lnInst";
+    return (lnClass) => {
+        if (!generators.has(lnClass)) {
+            const lnInstOrInst = new Set(getChildElementsByTagName(parent, tagName)
+                .filter((element) => element.getAttribute("lnClass") === lnClass)
+                .map((element) => element.getAttribute(generatedAttribute)));
+            generators.set(lnClass, () => {
+                const uniqueLnInstOrInst = lnInstRange.find((lnInst) => !lnInstOrInst.has(lnInst));
+                if (uniqueLnInstOrInst)
+                    lnInstOrInst.add(uniqueLnInstOrInst);
+                return uniqueLnInstOrInst;
+            });
+        }
+        return generators.get(lnClass)();
+    };
 }
 
 const maxGseMacAddress = 0x010ccd0101ff;
@@ -27349,57 +27502,549 @@ function appIdGenerator(doc, serviceType, type1A = false) {
     };
 }
 
-function getChildElementsByTagName(element, tag) {
-    return Array.from(element.children).filter((element) => element.tagName === tag);
-}
-/** maximum value for `lnInst` attribute */
-const maxLnInst = 99;
-const lnInstRange = Array(maxLnInst)
-    .fill(1)
-    .map((_, i) => `${i + 1}`);
-/**
- * Generator function returning unique `inst` or `lnInst` attribute for element
- * [[`tagName`]] within [[`parent`]].
- * ```md
- * Valid range for both `inst` and `lnInst` is between 1 and 99
- * ```
- * @param parent - The parent element to be scanned for `inst` or `lnInst`
- * values already in use. Be sure to create a new generator every time the
- * children of this element change in SCL.
- * @param tagName - Tag name of the child elements containing the
- * `lnInst` or `inst` attribute
- * @returns a function generating increasing unused `inst` or `lnInst` values
- * element with [[`tagName`]] within [[`parent`]] on subsequent invocations
- */
-function lnInstGenerator(parent, tagName) {
-    const generators = new Map();
-    const generatedAttribute = tagName === "LN" ? "inst" : "lnInst";
-    return (lnClass) => {
-        if (!generators.has(lnClass)) {
-            const lnInstOrInst = new Set(getChildElementsByTagName(parent, tagName)
-                .filter((element) => element.getAttribute("lnClass") === lnClass)
-                .map((element) => element.getAttribute(generatedAttribute)));
-            generators.set(lnClass, () => {
-                const uniqueLnInstOrInst = lnInstRange.find((lnInst) => !lnInstOrInst.has(lnInst));
-                if (uniqueLnInstOrInst)
-                    lnInstOrInst.add(uniqueLnInstOrInst);
-                return uniqueLnInstOrInst;
-            });
-        }
-        return generators.get(lnClass)();
-    };
-}
-
 await fetch(new URL(new URL('assets/nsd-0a370a57.json', import.meta.url).href, import.meta.url)).then((res) => res.json());
 
+/** @returns parent `tagName` s for SCL (2007B4) element tag  */
+function parentTags(tagName) {
+    if (!isSCLTag(tagName))
+        return [];
+    return tags$1[tagName].parents;
+}
+
+const indexedSCLTags = ["ExtRef", "IEDName", "P", "ProtNs", "Val"];
+const voidSelector = ":not(*)";
+function crossProduct(...arrays) {
+    return arrays.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())), [[]]);
+}
+function pathParts(identity) {
+    const path = identity.split(">");
+    const end = path.pop();
+    const start = path.join(">");
+    return [start, end];
+}
+function hitemSelector(tagName, identity) {
+    const [version, revision] = identity.split("\t");
+    if (!version || !revision)
+        return voidSelector;
+    return `${tagName}[version="${version}"][revision="${revision}"]`;
+}
+function terminalSelector(tagName, identity) {
+    const [parentIdentity, connectivityNode] = pathParts(identity);
+    const parentSelectors = parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(","));
+    return crossProduct(parentSelectors, [">"], [`${tagName}[connectivityNode="${connectivityNode}"]`])
+        .map((strings) => strings.join(""))
+        .join(",");
+}
+function lNodeSelector(tagName, identity) {
+    if (identity.endsWith(")")) {
+        const [parentIdentity, childIdentity] = pathParts(identity);
+        const [lnClass, lnInst, lnType] = childIdentity
+            .substring(1, childIdentity.length - 1)
+            .split(" ");
+        if (!lnClass || !lnType)
+            return voidSelector;
+        const parentSelectors = parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(","));
+        return crossProduct(parentSelectors, [">"], [`${tagName}[iedName="None"][lnClass="${lnClass}"][lnType="${lnType}"]`], lnInst ? [`[lnInst="${lnInst}"]`] : [":not([lnInst])", '[lnInst=""]'])
+            .map((strings) => strings.join(""))
+            .join(",");
+    }
+    const [iedName, ldInst, prefix, lnClass, lnInst] = identity.split(/[ /]/);
+    if (!iedName || !ldInst || !lnClass)
+        return voidSelector;
+    const [iedNameSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors,] = [
+        [`[iedName="${iedName}"]`],
+        ldInst === "(Client)"
+            ? [":not([ldInst])", '[ldInst=""]']
+            : [`[ldInst="${ldInst}"]`],
+        prefix ? [`[prefix="${prefix}"]`] : [":not([prefix])", '[prefix=""]'],
+        [`[lnClass="${lnClass}"]`],
+        lnInst ? [`[lnInst="${lnInst}"]`] : [":not([lnInst])", '[lnInst=""]'],
+    ];
+    return crossProduct([tagName], iedNameSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors)
+        .map((strings) => strings.join(""))
+        .join(",");
+}
+function kDCSelector(tagName, identity) {
+    const [parentIdentity, childIdentity] = pathParts(identity);
+    const [iedName, apName] = childIdentity.split(" ");
+    return `${selector("IED", parentIdentity)}>${tagName}[iedName="${iedName}"][apName="${apName}"]`;
+}
+function associationSelector(tagName, identity) {
+    const [parentIdentity, childIdentity] = pathParts(identity);
+    const [iedName, ldInst, prefix, lnClass, lnInst] = childIdentity.split(/[ /]/);
+    const parentSelectors = parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(","));
+    const [iedNameSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors,] = [
+        [`[iedName="${iedName}"]`],
+        [`[ldInst="${ldInst}"]`],
+        prefix ? [`[prefix="${prefix}"]`] : [":not([prefix])", '[prefix=""]'],
+        [`[lnClass="${lnClass}"]`],
+        lnInst ? [`[lnInst="${lnInst}"]`] : [":not([lnInst])", '[lnInst=""]'],
+    ];
+    return crossProduct(parentSelectors, [">"], [tagName], iedNameSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors)
+        .map((strings) => strings.join(""))
+        .join(",");
+}
+function lDeviceSelector(tagName, identity) {
+    const [iedName, inst] = identity.split(">>");
+    if (!inst)
+        return voidSelector;
+    return `IED[name="${iedName}"] ${tagName}[inst="${inst}"]`;
+}
+function fCDASelector(tagName, identity) {
+    const [parentIdentity, childIdentity] = pathParts(identity);
+    const [ldInst, prefix, lnClass, lnInst] = childIdentity.split(/[ /.]/);
+    const matchDoDa = childIdentity.match(/.([A-Z][A-Za-z0-9.]*) ([A-Za-z0-9.]*) \(/);
+    const doName = matchDoDa && matchDoDa[1] ? matchDoDa[1] : "";
+    const daName = matchDoDa && matchDoDa[2] ? matchDoDa[2] : "";
+    const matchFx = childIdentity.match(/\(([A-Z]{2})/);
+    const matchIx = childIdentity.match(/ \[([0-9]{1,2})\]/);
+    const fc = matchFx && matchFx[1] ? matchFx[1] : "";
+    const ix = matchIx && matchIx[1] ? matchIx[1] : "";
+    const [parentSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors, doNameSelectors, daNameSelectors, fcSelectors, ixSelectors,] = [
+        parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(",")),
+        [`[ldInst="${ldInst}"]`],
+        prefix ? [`[prefix="${prefix}"]`] : [":not([prefix])", '[prefix=""]'],
+        [`[lnClass="${lnClass}"]`],
+        lnInst ? [`[lnInst="${lnInst}"]`] : [":not([lnInst])", '[lnInst=""]'],
+        [`[doName="${doName}"]`],
+        daName ? [`[daName="${daName}"]`] : [":not([daName])", '[daName=""]'],
+        [`[fc="${fc}"]`],
+        ix ? [`[ix="${ix}"]`] : [":not([ix])", '[ix=""]'],
+    ];
+    return crossProduct(parentSelectors, [">"], [tagName], ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors, doNameSelectors, daNameSelectors, fcSelectors, ixSelectors)
+        .map((strings) => strings.join(""))
+        .join(",");
+}
+function lNSelector(tagName, identity) {
+    const [parentIdentity, childIdentity] = pathParts(identity);
+    const parentSelectors = parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(","));
+    const [prefix, lnClass, inst] = childIdentity.split(" ");
+    if (!lnClass)
+        return voidSelector;
+    const [prefixSelectors, lnClassSelectors, instSelectors] = [
+        prefix ? [`[prefix="${prefix}"]`] : [":not([prefix])", '[prefix=""]'],
+        [`[lnClass="${lnClass}"]`],
+        [`[inst="${inst}"]`],
+    ];
+    return crossProduct(parentSelectors, [">"], [tagName], prefixSelectors, lnClassSelectors, instSelectors)
+        .map((strings) => strings.join(""))
+        .join(",");
+}
+function clientLNSelector(tagName, identity) {
+    const [parentIdentity, childIdentity] = pathParts(identity);
+    const parentSelectors = parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(","));
+    const [iedName, apRef, ldInst, prefix, lnClass, lnInst] = childIdentity.split(/[ /]/);
+    const [iedNameSelectors, apRefSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors,] = [
+        iedName ? [`[iedName="${iedName}"]`] : [":not([iedName])", '[iedName=""]'],
+        apRef ? [`[apRef="${apRef}"]`] : [":not([apRef])", '[apRef=""]'],
+        ldInst ? [`[ldInst="${ldInst}"]`] : [":not([ldInst])", '[ldInst=""]'],
+        prefix ? [`[prefix="${prefix}"]`] : [":not([prefix])", '[prefix=""]'],
+        [`[lnClass="${lnClass}"]`],
+        lnInst ? [`[lnInst="${lnInst}"]`] : [":not([lnInst])", '[lnInst=""]'],
+    ];
+    return crossProduct(parentSelectors, [">"], [tagName], iedNameSelectors, apRefSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors)
+        .map((strings) => strings.join(""))
+        .join(",");
+}
+function ixNamingSelector(tagName, identity, depth = -1) {
+    // eslint-disable-next-line no-param-reassign
+    if (depth === -1)
+        depth = identity.split(">").length;
+    const [parentIdentity, childIdentity] = pathParts(identity);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_0, name, _1, ix] = childIdentity.match(/([^[]*)(\[([0-9]*)\])?/);
+    if (!name)
+        return voidSelector;
+    const parentSelectors = parentTags(tagName)
+        .flatMap((parentTag) => parentTag === "SDI"
+        ? ixNamingSelector(parentTag, parentIdentity, depth - 1).split(",")
+        : selector(parentTag, parentIdentity).split(","))
+        // eslint-disable-next-line no-shadow
+        .filter((selector) => !selector.startsWith(voidSelector));
+    if (parentSelectors.length === 0)
+        return voidSelector;
+    const [nameSelectors, ixSelectors] = [
+        [`[name="${name}"]`],
+        ix ? [`[ix="${ix}"]`] : ['[ix=""]', ":not([ix])"],
+    ];
+    return crossProduct(parentSelectors, [">"], [tagName], nameSelectors, ixSelectors)
+        .map((strings) => strings.join(""))
+        .join(",");
+}
+function connectedAPSelector(tagName, identity) {
+    const [iedName, apName] = identity.split(" ");
+    if (!iedName || !apName)
+        return voidSelector;
+    return `${tagName}[iedName="${iedName}"][apName="${apName}"]`;
+}
+function controlBlockSelector(tagName, identity) {
+    const [ldInst, cbName] = identity.split(" ");
+    if (!ldInst || !cbName)
+        return voidSelector;
+    return `${tagName}[ldInst="${ldInst}"][cbName="${cbName}"]`;
+}
+function physConnSelector(tagName, identity) {
+    const [parentIdentity, pcType] = pathParts(identity);
+    const [parentSelectors, typeSelectors] = [
+        parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(",")),
+        pcType ? [`[type="${pcType}"]`] : [""],
+    ];
+    return crossProduct(parentSelectors, [">"], [tagName], typeSelectors)
+        .map((strings) => strings.join(""))
+        .join(",");
+}
+function enumValSelector(tagName, identity) {
+    const [parentIdentity, ord] = pathParts(identity);
+    return `${selector("EnumType", parentIdentity)}>${tagName}[ord="${ord}"]`;
+}
+function sCLSelector() {
+    return ":root";
+}
+function namingSelector(tagName, identity, depth = -1) {
+    // eslint-disable-next-line no-param-reassign
+    if (depth === -1)
+        depth = identity.split(">").length;
+    const [parentIdentity, name] = pathParts(identity);
+    if (!name)
+        return voidSelector;
+    // eslint-disable-next-line prefer-destructuring
+    const parents = parentTags(tagName);
+    const parentSelectors = parents
+        .flatMap((parentTag) => selectorTags[parentTag] === selectorTags.Substation
+        ? namingSelector(parentTag, parentIdentity, depth - 1).split(",")
+        : selector(parentTag, parentIdentity).split(","))
+        // eslint-disable-next-line no-shadow
+        .filter((selector) => !selector.startsWith(voidSelector));
+    if (parentSelectors.length === 0)
+        return voidSelector;
+    return crossProduct(parentSelectors, [">"], [tagName], [`[name="${name}"]`])
+        .map((strings) => strings.join(""))
+        .join(",");
+}
+function singletonSelector(tagName, identity) {
+    // eslint-disable-next-line prefer-destructuring
+    const parents = parentTags(tagName);
+    const parentSelectors = parents
+        .flatMap((parentTag) => selector(parentTag, identity).split(","))
+        // eslint-disable-next-line no-shadow
+        .filter((selector) => !selector.startsWith(voidSelector));
+    if (parentSelectors.length === 0)
+        return voidSelector;
+    return crossProduct(parentSelectors, [">"], [tagName])
+        .map((strings) => strings.join(""))
+        .join(",");
+}
+function idNamingSelector(tagName, identity) {
+    const id = identity.replace(/^#/, "");
+    if (!id)
+        return voidSelector;
+    return `${tagName}[id="${id}"]`;
+}
+const selectorTags = {
+    AccessControl: singletonSelector,
+    AccessPoint: namingSelector,
+    Address: singletonSelector,
+    Association: associationSelector,
+    Authentication: singletonSelector,
+    BDA: namingSelector,
+    BitRate: singletonSelector,
+    Bay: namingSelector,
+    ClientLN: clientLNSelector,
+    ClientServices: singletonSelector,
+    CommProt: singletonSelector,
+    Communication: singletonSelector,
+    ConductingEquipment: namingSelector,
+    ConfDataSet: singletonSelector,
+    ConfLdName: singletonSelector,
+    ConfLNs: singletonSelector,
+    ConfLogControl: singletonSelector,
+    ConfReportControl: singletonSelector,
+    ConfSG: singletonSelector,
+    ConfSigRef: singletonSelector,
+    ConnectedAP: connectedAPSelector,
+    ConnectivityNode: namingSelector,
+    DA: namingSelector,
+    DAI: ixNamingSelector,
+    DAType: idNamingSelector,
+    DO: namingSelector,
+    DOI: namingSelector,
+    DOType: idNamingSelector,
+    DataObjectDirectory: singletonSelector,
+    DataSet: namingSelector,
+    DataSetDirectory: singletonSelector,
+    DataTypeTemplates: singletonSelector,
+    DynAssociation: singletonSelector,
+    DynDataSet: singletonSelector,
+    EnumType: idNamingSelector,
+    EnumVal: enumValSelector,
+    EqFunction: namingSelector,
+    EqSubFunction: namingSelector,
+    ExtRef: () => voidSelector,
+    FCDA: fCDASelector,
+    FileHandling: singletonSelector,
+    Function: namingSelector,
+    GeneralEquipment: namingSelector,
+    GetCBValues: singletonSelector,
+    GetDataObjectDefinition: singletonSelector,
+    GetDataSetValue: singletonSelector,
+    GetDirectory: singletonSelector,
+    GOOSE: singletonSelector,
+    GOOSESecurity: namingSelector,
+    GSE: controlBlockSelector,
+    GSEDir: singletonSelector,
+    GSEControl: namingSelector,
+    GSESettings: singletonSelector,
+    GSSE: singletonSelector,
+    Header: singletonSelector,
+    History: singletonSelector,
+    Hitem: hitemSelector,
+    IED: namingSelector,
+    IEDName: () => voidSelector,
+    Inputs: singletonSelector,
+    IssuerName: singletonSelector,
+    KDC: kDCSelector,
+    LDevice: lDeviceSelector,
+    LN: lNSelector,
+    LN0: singletonSelector,
+    LNode: lNodeSelector,
+    LNodeType: idNamingSelector,
+    Line: namingSelector,
+    Log: namingSelector,
+    LogControl: namingSelector,
+    LogSettings: singletonSelector,
+    MaxTime: singletonSelector,
+    McSecurity: singletonSelector,
+    MinTime: singletonSelector,
+    NeutralPoint: terminalSelector,
+    OptFields: singletonSelector,
+    P: () => voidSelector,
+    PhysConn: physConnSelector,
+    PowerTransformer: namingSelector,
+    Private: () => voidSelector,
+    Process: namingSelector,
+    ProtNs: () => voidSelector,
+    Protocol: singletonSelector,
+    ReadWrite: singletonSelector,
+    RedProt: singletonSelector,
+    ReportControl: namingSelector,
+    ReportSettings: singletonSelector,
+    RptEnabled: singletonSelector,
+    SamplesPerSec: singletonSelector,
+    SampledValueControl: namingSelector,
+    SecPerSamples: singletonSelector,
+    SCL: sCLSelector,
+    SDI: ixNamingSelector,
+    SDO: namingSelector,
+    Server: singletonSelector,
+    ServerAt: singletonSelector,
+    Services: singletonSelector,
+    SetDataSetValue: singletonSelector,
+    SettingControl: singletonSelector,
+    SettingGroups: singletonSelector,
+    SGEdit: singletonSelector,
+    SmpRate: singletonSelector,
+    SMV: controlBlockSelector,
+    SmvOpts: singletonSelector,
+    SMVsc: singletonSelector,
+    SMVSecurity: namingSelector,
+    SMVSettings: singletonSelector,
+    SubEquipment: namingSelector,
+    SubFunction: namingSelector,
+    SubNetwork: namingSelector,
+    Subject: singletonSelector,
+    Substation: namingSelector,
+    SupSubscription: singletonSelector,
+    TapChanger: namingSelector,
+    Terminal: terminalSelector,
+    Text: singletonSelector,
+    TimerActivatedControl: singletonSelector,
+    TimeSyncProt: singletonSelector,
+    TransformerWinding: namingSelector,
+    TrgOps: singletonSelector,
+    Val: () => voidSelector,
+    ValueHandling: singletonSelector,
+    Voltage: singletonSelector,
+    VoltageLevel: namingSelector,
+};
+function selector(tagName, identity) {
+    return selectorTags[tagName](tagName, identity);
+}
+function findExtRef(root, tagName, identity) {
+    const [parentIdentity, childIdentity] = pathParts(identity);
+    const parentSelectors = parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(","));
+    if (childIdentity.endsWith("]")) {
+        const [intAddr] = childIdentity.split("[");
+        const intAddrSelectors = [`[intAddr="${intAddr}"]`];
+        const index = childIdentity &&
+            childIdentity.match(/\[([0-9]+)\]/) &&
+            childIdentity.match(/\[([0-9]+)\]/)[1]
+            ? parseFloat(childIdentity.match(/\[([0-9]+)\]/)[1])
+            : NaN;
+        const extRefSelector = crossProduct(parentSelectors, [">"], [tagName], intAddrSelectors)
+            .map((strings) => strings.join(""))
+            .join(",");
+        return (Array.from(root.querySelectorAll(extRefSelector)).filter(isPublic)[index] ?? null);
+    }
+    let iedName;
+    let ldInst;
+    let prefix;
+    let lnClass;
+    let lnInst;
+    let doName;
+    let daName;
+    let serviceType;
+    let srcCBName;
+    let srcLDInst;
+    let srcPrefix;
+    let srcLNClass;
+    let srcLNInst;
+    if (!childIdentity.includes(":") && !childIdentity.includes("@")) {
+        [iedName, ldInst, prefix, lnClass, lnInst, doName, daName] =
+            childIdentity.split(/[ /]/);
+    }
+    else if (childIdentity.includes(":") && !childIdentity.includes("@")) {
+        [
+            serviceType,
+            srcCBName,
+            srcLDInst,
+            srcPrefix,
+            srcLNClass,
+            srcLNInst,
+            iedName,
+            ldInst,
+            prefix,
+            lnClass,
+            lnInst,
+            doName,
+            daName,
+        ] = childIdentity.split(/[ /:]/);
+    }
+    const [iedNameSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors, doNameSelectors, daNameSelectors, serviceTypeSelectors, srcCBNameSelectors, srcLDInstSelectors, srcPrefixSelectors, srcLNClassSelectors, srcLNInstSelectors,] = [
+        iedName ? [`[iedName="${iedName}"]`] : [":not([iedName])"],
+        ldInst ? [`[ldInst="${ldInst}"]`] : [":not([ldInst])", '[ldInst=""]'],
+        prefix ? [`[prefix="${prefix}"]`] : [":not([prefix])", '[prefix=""]'],
+        lnClass ? [`[lnClass="${lnClass}"]`] : [":not([lnClass])"],
+        lnInst ? [`[lnInst="${lnInst}"]`] : [":not([lnInst])", '[lnInst=""]'],
+        doName ? [`[doName="${doName}"]`] : [":not([doName])"],
+        daName ? [`[daName="${daName}"]`] : [":not([daName])", '[daName=""]'],
+        serviceType
+            ? [`[serviceType="${serviceType}"]`]
+            : [":not([serviceType])", '[serviceType=""]'],
+        srcCBName
+            ? [`[srcCBName="${srcCBName}"]`]
+            : [":not([srcCBName])", '[srcCBName=""]'],
+        srcLDInst
+            ? [`[srcLDInst="${srcLDInst}"]`]
+            : [":not([srcLDInst])", '[srcLDInst=""]'],
+        srcPrefix
+            ? [`[srcPrefix="${srcPrefix}"]`]
+            : [":not([srcPrefix])", '[srcPrefix=""]'],
+        srcLNClass
+            ? [`[srcLNClass="${srcLNClass}"]`]
+            : [":not([srcLNClass])", '[srcLNClass=""]'],
+        srcLNInst
+            ? [`[srcLNInst="${srcLNInst}"]`]
+            : [":not([srcLNInst])", '[srcLNInst=""]'],
+    ];
+    const extRefSelector = crossProduct(parentSelectors, [">"], [tagName], iedNameSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors, doNameSelectors, daNameSelectors, serviceTypeSelectors, srcCBNameSelectors, srcLDInstSelectors, srcPrefixSelectors, srcLNClassSelectors, srcLNInstSelectors)
+        .map((strings) => strings.join(""))
+        .join(",");
+    return (Array.from(root.querySelectorAll(extRefSelector)).filter(isPublic)[0] ??
+        null);
+}
+function findIEDName(root, tagName, identity) {
+    const [parentIdentity, childIdentity] = pathParts(identity);
+    const [iedName, apRef, ldInst, prefix, lnClass, lnInst] = childIdentity.split(/[ /]/);
+    const [parentSelectors, apRefSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors,] = [
+        parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(",")),
+        apRef ? [`[apRef="${apRef}"]`] : [":not([apRef])", '[apRef=""]'],
+        ldInst ? [`[ldInst="${ldInst}"]`] : [":not([ldInst])", '[ldInst=""]'],
+        prefix ? [`[prefix="${prefix}"]`] : [":not([prefix])", '[prefix=""]'],
+        lnClass ? [`[lnClass="${lnClass}"]`] : [":not([lnClass])", '[lnClass=""]'],
+        lnInst ? [`[lnInst="${lnInst}"]`] : [":not([lnInst])", '[lnInst=""]'],
+    ];
+    const iEDNameSelector = crossProduct(parentSelectors, [">"], [tagName], apRefSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors)
+        .map((strings) => strings.join(""))
+        .join(",");
+    return (Array.from(root.querySelectorAll(iEDNameSelector))
+        .filter(isPublic)
+        .find((iEDName) => iEDName.textContent === iedName) ?? null);
+}
+function findP(root, tagName, identity) {
+    const [parentIdentity, childIdentity] = pathParts(identity);
+    const [type] = childIdentity.split(" ");
+    const index = childIdentity &&
+        childIdentity.match(/\[([0-9]+)\]/) &&
+        childIdentity.match(/\[([0-9]+)\]/)[1]
+        ? parseFloat(childIdentity.match(/\[([0-9]+)\]/)[1])
+        : NaN;
+    const [parentSelectors, typeSelectors] = [
+        parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(",")),
+        [`[type="${type}"]`],
+    ];
+    const pSelector = crossProduct(parentSelectors, [">"], [tagName], typeSelectors)
+        .map((strings) => strings.join(""))
+        .join(",");
+    return Number.isNaN(index)
+        ? Array.from(root.querySelectorAll(pSelector)).find(isPublic) ?? null
+        : Array.from(root.querySelectorAll(pSelector)).filter(isPublic)[index] ??
+            null;
+}
+function findProtNs(root, tagName, identity) {
+    const [parentIdentity, childIdentity] = pathParts(identity);
+    const [type, protNsContent] = childIdentity.split("\t");
+    const [parentSelectors, typeSelector] = [
+        parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(",")),
+        type && type !== "8-MMS"
+            ? [`[type="${type}"]`]
+            : [":not([type])", '[type="8-MMS"]'],
+    ];
+    const protNsSelector = crossProduct(parentSelectors, [">"], [tagName], typeSelector)
+        .map((strings) => strings.join(""))
+        .join(",");
+    return (Array.from(root.querySelectorAll(protNsSelector))
+        .filter(isPublic)
+        .find((protNs) => protNs.textContent === protNsContent) ?? null);
+}
+function findVal(root, tagName, identity) {
+    const [parentIdentity, childIdentity] = pathParts(identity);
+    const [sGroup, indexText] = childIdentity.split(" ");
+    const index = parseFloat(indexText);
+    const parentSelectors = parentTags(tagName).flatMap((parentTag) => selector(parentTag, parentIdentity).split(","));
+    const [nameSelectors] = [sGroup ? [`[sGroup="${sGroup}"]`] : [""]];
+    const valSelector = crossProduct(parentSelectors, [">"], [tagName], nameSelectors)
+        .map((strings) => strings.join(""))
+        .join(",");
+    return (Array.from(root.querySelectorAll(valSelector)).filter(isPublic)[index] ??
+        null);
+}
+const sclTags = {
+    ExtRef: findExtRef,
+    IEDName: findIEDName,
+    P: findP,
+    ProtNs: findProtNs,
+    Val: findVal,
+};
+const tagSet = new Set(indexedSCLTags);
+function isIndexedSCL(tag) {
+    return tagSet.has(tag);
+}
+function find(root, tagName, identity) {
+    if (typeof identity !== "string" || !isSCLTag(tagName))
+        return null;
+    if (isIndexedSCL(tagName))
+        return sclTags[tagName](root, tagName, identity);
+    return (Array.from(root.querySelectorAll(selectorTags[tagName](tagName, identity))).filter(isPublic)[0] ?? null);
+}
+
 /* eslint-disable no-use-before-define */
-function hitemIdentity$1(e) {
+function hitemIdentity(e) {
     return `${e.getAttribute("version")}\t${e.getAttribute("revision")}`;
 }
-function terminalIdentity$1(e) {
-    return `${identity$1(e.parentElement)}>${e.getAttribute("connectivityNode")}`;
+function terminalIdentity(e) {
+    return `${identity(e.parentElement)}>${e.getAttribute("connectivityNode")}`;
 }
-function lNodeIdentity$1(e) {
+function lNodeIdentity(e) {
     const [iedName, ldInst, prefix, lnClass, lnInst, lnType] = [
         "iedName",
         "ldInst",
@@ -27409,13 +28054,13 @@ function lNodeIdentity$1(e) {
         "lnType",
     ].map((name) => e.getAttribute(name));
     if (iedName === "None")
-        return `${identity$1(e.parentElement)}>(${lnClass} ${lnType})`;
+        return `${identity(e.parentElement)}>(${lnClass} ${lnInst ?? ""} ${lnType})`;
     return `${iedName} ${ldInst || "(Client)"}/${prefix ?? ""} ${lnClass} ${lnInst ?? ""}`;
 }
-function kDCIdentity$1(e) {
-    return `${identity$1(e.parentElement)}>${e.getAttribute("iedName")} ${e.getAttribute("apName")}`;
+function kDCIdentity(e) {
+    return `${identity(e.parentElement)}>${e.getAttribute("iedName")} ${e.getAttribute("apName")}`;
 }
-function associationIdentity$1(e) {
+function associationIdentity(e) {
     const [iedName, ldInst, prefix, lnClass, lnInst] = [
         "iedName",
         "ldInst",
@@ -27424,12 +28069,12 @@ function associationIdentity$1(e) {
         "lnInst",
         "lnType",
     ].map((name) => e.getAttribute(name));
-    return `${identity$1(e.parentElement)}>${iedName} ${ldInst}/${prefix ?? ""} ${lnClass} ${lnInst ?? ""}`;
+    return `${identity(e.parentElement)}>${iedName} ${ldInst}/${prefix ?? ""} ${lnClass} ${lnInst ?? ""}`;
 }
-function lDeviceIdentity$1(e) {
-    return `${identity$1(e.closest("IED"))}>>${e.getAttribute("inst")}`;
+function lDeviceIdentity(e) {
+    return `${identity(e.closest("IED"))}>>${e.getAttribute("inst")}`;
 }
-function iEDNameIdentity$1(e) {
+function iEDNameIdentity(e) {
     const iedName = e.textContent;
     const [apRef, ldInst, prefix, lnClass, lnInst] = [
         "apRef",
@@ -27438,9 +28083,9 @@ function iEDNameIdentity$1(e) {
         "lnClass",
         "lnInst",
     ].map((name) => e.getAttribute(name));
-    return `${identity$1(e.parentElement)}>${iedName} ${apRef || ""} ${ldInst || ""}/${prefix ?? ""} ${lnClass ?? ""} ${lnInst ?? ""}`;
+    return `${identity(e.parentElement)}>${iedName} ${apRef || ""} ${ldInst || ""}/${prefix ?? ""} ${lnClass ?? ""} ${lnInst ?? ""}`;
 }
-function fCDAIdentity$1(e) {
+function fCDAIdentity(e) {
     const [ldInst, prefix, lnClass, lnInst, doName, daName, fc, ix] = [
         "ldInst",
         "prefix",
@@ -27452,12 +28097,12 @@ function fCDAIdentity$1(e) {
         "ix",
     ].map((name) => e.getAttribute(name));
     const dataPath = `${ldInst}/${prefix ?? ""} ${lnClass} ${lnInst ?? ""}.${doName} ${daName || ""}`;
-    return `${identity$1(e.parentElement)}>${dataPath} (${fc}${ix ? ` [${ix}]` : ""})`;
+    return `${identity(e.parentElement)}>${dataPath} (${fc}${ix ? ` [${ix}]` : ""})`;
 }
-function extRefIdentity$1(e) {
+function extRefIdentity(e) {
     if (!e.parentElement)
         return NaN;
-    const parentIdentity = identity$1(e.parentElement);
+    const parentIdentity = identity(e.parentElement);
     const iedName = e.getAttribute("iedName");
     const intAddr = e.getAttribute("intAddr");
     const intAddrIndex = Array.from(e.parentElement.querySelectorAll(`ExtRef[intAddr="${intAddr}"]`)).indexOf(e);
@@ -27493,11 +28138,11 @@ function extRefIdentity$1(e) {
     const dataPath = `${iedName} ${ldInst}/${finalPrefix} ${lnClass} ${finalLnInst} ${doName} ${finalDaName}`;
     return `${parentIdentity}>${cbPath ? `${cbPath} ` : ""}${dataPath}`;
 }
-function lNIdentity$1(e) {
+function lNIdentity(e) {
     const [prefix, lnClass, inst] = ["prefix", "lnClass", "inst"].map((name) => e.getAttribute(name));
-    return `${identity$1(e.parentElement)}>${prefix ?? ""} ${lnClass} ${inst}`;
+    return `${identity(e.parentElement)}>${prefix ?? ""} ${lnClass} ${inst}`;
 }
-function clientLNIdentity$1(e) {
+function clientLNIdentity(e) {
     const [apRef, iedName, ldInst, prefix, lnClass, lnInst] = [
         "apRef",
         "iedName",
@@ -27506,30 +28151,30 @@ function clientLNIdentity$1(e) {
         "lnClass",
         "lnInst",
     ].map((name) => e.getAttribute(name));
-    return `${identity$1(e.parentElement)}>${iedName} ${apRef || ""} ${ldInst}/${prefix ?? ""} ${lnClass} ${lnInst}`;
+    return `${identity(e.parentElement)}>${iedName} ${apRef || ""} ${ldInst}/${prefix ?? ""} ${lnClass} ${lnInst}`;
 }
-function ixNamingIdentity$1(e) {
+function ixNamingIdentity(e) {
     const [name, ix] = ["name", "ix"].map((naming) => e.getAttribute(naming));
-    return `${identity$1(e.parentElement)}>${name}${ix ? `[${ix}]` : ""}`;
+    return `${identity(e.parentElement)}>${name}${ix ? `[${ix}]` : ""}`;
 }
-function valIdentity$1(e) {
+function valIdentity(e) {
     if (!e.parentElement)
         return NaN;
     const sGroup = e.getAttribute("sGroup");
     const index = Array.from(e.parentElement.children)
         .filter((child) => child.getAttribute("sGroup") === sGroup)
         .findIndex((child) => child.isSameNode(e));
-    return `${identity$1(e.parentElement)}>${sGroup ? `${sGroup}` : ""} ${index}`;
+    return `${identity(e.parentElement)}>${sGroup ? `${sGroup}` : ""} ${index}`;
 }
-function connectedAPIdentity$1(e) {
+function connectedAPIdentity(e) {
     const [iedName, apName] = ["iedName", "apName"].map((name) => e.getAttribute(name));
     return `${iedName} ${apName}`;
 }
-function controlBlockIdentity$1(e) {
+function controlBlockIdentity(e) {
     const [ldInst, cbName] = ["ldInst", "cbName"].map((name) => e.getAttribute(name));
     return `${ldInst} ${cbName}`;
 }
-function physConnIdentity$1(e) {
+function physConnIdentity(e) {
     if (!e.parentElement)
         return NaN;
     const pcType = e.getAttribute("type");
@@ -27537,423 +28182,423 @@ function physConnIdentity$1(e) {
         pcType !== "Connection" &&
         pcType !== "RedConn")
         return NaN;
-    return `${identity$1(e.parentElement)}>${pcType}`;
+    return `${identity(e.parentElement)}>${pcType}`;
 }
-function pIdentity$1(e) {
+function pIdentity(e) {
     if (!e.parentElement)
         return NaN;
     const eParent = e.parentElement;
     const eType = e.getAttribute("type");
     if (eParent.tagName === "PhysConn")
-        return `${identity$1(e.parentElement)}>${eType}`;
+        return `${identity(e.parentElement)}>${eType}`;
     const index = Array.from(e.parentElement.children)
         .filter((child) => child.getAttribute("type") === eType)
         .findIndex((child) => child.isSameNode(e));
-    return `${identity$1(e.parentElement)}>${eType} [${index}]`;
+    return `${identity(e.parentElement)}>${eType} [${index}]`;
 }
-function enumValIdentity$1(e) {
-    return `${identity$1(e.parentElement)}>${e.getAttribute("ord")}`;
+function enumValIdentity(e) {
+    return `${identity(e.parentElement)}>${e.getAttribute("ord")}`;
 }
-function protNsIdentity$1(e) {
+function protNsIdentity(e) {
     if (!e.parentElement)
         return NaN;
     const type = e.getAttribute("type");
-    return `${identity$1(e.parentElement)}>${type || "8-MMS"}\t${e.textContent}`;
+    return `${identity(e.parentElement)}>${type || "8-MMS"}\t${e.textContent}`;
 }
-function sCLIdentity$1() {
+function sCLIdentity() {
     return "";
 }
-function namingIdentity$1(e) {
+function namingIdentity(e) {
     return e.parentElement.tagName === "SCL"
         ? e.getAttribute("name")
-        : `${identity$1(e.parentElement)}>${e.getAttribute("name")}`;
+        : `${identity(e.parentElement)}>${e.getAttribute("name")}`;
 }
-function singletonIdentity$1(e) {
-    return identity$1(e.parentElement).toString();
+function singletonIdentity(e) {
+    return identity(e.parentElement).toString();
 }
-function idNamingIdentity$1(e) {
+function idNamingIdentity(e) {
     return `#${e.id}`;
 }
-const tags$1 = {
+const tags = {
     AccessControl: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     AccessPoint: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     Address: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     Association: {
-        identity: associationIdentity$1,
+        identity: associationIdentity,
     },
     Authentication: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     BDA: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     BitRate: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     Bay: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     ClientLN: {
-        identity: clientLNIdentity$1,
+        identity: clientLNIdentity,
     },
     ClientServices: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     CommProt: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     Communication: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     ConductingEquipment: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     ConfDataSet: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     ConfLdName: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     ConfLNs: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     ConfLogControl: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     ConfReportControl: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     ConfSG: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     ConfSigRef: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     ConnectedAP: {
-        identity: connectedAPIdentity$1,
+        identity: connectedAPIdentity,
     },
     ConnectivityNode: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     DA: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     DAI: {
-        identity: ixNamingIdentity$1,
+        identity: ixNamingIdentity,
     },
     DAType: {
-        identity: idNamingIdentity$1,
+        identity: idNamingIdentity,
     },
     DO: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     DOI: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     DOType: {
-        identity: idNamingIdentity$1,
+        identity: idNamingIdentity,
     },
     DataObjectDirectory: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     DataSet: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     DataSetDirectory: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     DataTypeTemplates: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     DynAssociation: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     DynDataSet: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     EnumType: {
-        identity: idNamingIdentity$1,
+        identity: idNamingIdentity,
     },
     EnumVal: {
-        identity: enumValIdentity$1,
+        identity: enumValIdentity,
     },
     EqFunction: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     EqSubFunction: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     ExtRef: {
-        identity: extRefIdentity$1,
+        identity: extRefIdentity,
     },
     FCDA: {
-        identity: fCDAIdentity$1,
+        identity: fCDAIdentity,
     },
     FileHandling: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     Function: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     GeneralEquipment: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     GetCBValues: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     GetDataObjectDefinition: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     GetDataSetValue: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     GetDirectory: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     GOOSE: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     GOOSESecurity: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     GSE: {
-        identity: controlBlockIdentity$1,
+        identity: controlBlockIdentity,
     },
     GSEDir: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     GSEControl: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     GSESettings: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     GSSE: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     Header: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     History: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     Hitem: {
-        identity: hitemIdentity$1,
+        identity: hitemIdentity,
     },
     IED: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     IEDName: {
-        identity: iEDNameIdentity$1,
+        identity: iEDNameIdentity,
     },
     Inputs: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     IssuerName: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     KDC: {
-        identity: kDCIdentity$1,
+        identity: kDCIdentity,
     },
     LDevice: {
-        identity: lDeviceIdentity$1,
+        identity: lDeviceIdentity,
     },
     LN: {
-        identity: lNIdentity$1,
+        identity: lNIdentity,
     },
     LN0: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     LNode: {
-        identity: lNodeIdentity$1,
+        identity: lNodeIdentity,
     },
     LNodeType: {
-        identity: idNamingIdentity$1,
+        identity: idNamingIdentity,
     },
     Line: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     Log: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     LogControl: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     LogSettings: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     MaxTime: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     McSecurity: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     MinTime: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     NeutralPoint: {
-        identity: terminalIdentity$1,
+        identity: terminalIdentity,
     },
     OptFields: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     P: {
-        identity: pIdentity$1,
+        identity: pIdentity,
     },
     PhysConn: {
-        identity: physConnIdentity$1,
+        identity: physConnIdentity,
     },
     PowerTransformer: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     Process: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     ProtNs: {
-        identity: protNsIdentity$1,
+        identity: protNsIdentity,
     },
     Protocol: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     ReadWrite: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     RedProt: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     ReportControl: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     ReportSettings: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     RptEnabled: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SamplesPerSec: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SampledValueControl: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     SecPerSamples: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SCL: {
-        identity: sCLIdentity$1,
+        identity: sCLIdentity,
     },
     SDI: {
-        identity: ixNamingIdentity$1,
+        identity: ixNamingIdentity,
     },
     SDO: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     Server: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     ServerAt: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     Services: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SetDataSetValue: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SettingControl: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SettingGroups: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SGEdit: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SmpRate: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SMV: {
-        identity: controlBlockIdentity$1,
+        identity: controlBlockIdentity,
     },
     SmvOpts: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SMVsc: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SMVSecurity: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     SMVSettings: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     SubEquipment: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     SubFunction: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     SubNetwork: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     Subject: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     Substation: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     SupSubscription: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     TapChanger: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     Terminal: {
-        identity: terminalIdentity$1,
+        identity: terminalIdentity,
     },
     Text: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     TimerActivatedControl: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     TimeSyncProt: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     TransformerWinding: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
     TrgOps: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     Val: {
-        identity: valIdentity$1,
+        identity: valIdentity,
     },
     ValueHandling: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     Voltage: {
-        identity: singletonIdentity$1,
+        identity: singletonIdentity,
     },
     VoltageLevel: {
-        identity: namingIdentity$1,
+        identity: namingIdentity,
     },
 };
 /** @returns Identity string for a valid SCL element or NaN */
-function identity$1(e) {
+function identity(e) {
     if (e === null)
         return NaN;
     if (e.closest("Private"))
         return NaN;
     const tag = e.tagName;
-    if (isSCLTag$1(tag))
-        return tags$1[tag].identity(e);
+    if (isSCLTag(tag))
+        return tags[tag].identity(e);
     return NaN;
 }
 
@@ -28145,16 +28790,16 @@ __decorate$1([
     e$3('mwc-ripple')
 ], ListItemBase.prototype, "ripple", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], ListItemBase.prototype, "value", void 0);
 __decorate$1([
-    e$6({ type: String, reflect: true })
+    n$2({ type: String, reflect: true })
 ], ListItemBase.prototype, "group", void 0);
 __decorate$1([
-    e$6({ type: Number, reflect: true })
+    n$2({ type: Number, reflect: true })
 ], ListItemBase.prototype, "tabindex", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true }),
+    n$2({ type: Boolean, reflect: true }),
     observer(function (value) {
         if (value) {
             this.setAttribute('aria-disabled', 'true');
@@ -28165,22 +28810,22 @@ __decorate$1([
     })
 ], ListItemBase.prototype, "disabled", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], ListItemBase.prototype, "twoline", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], ListItemBase.prototype, "activated", void 0);
 __decorate$1([
-    e$6({ type: String, reflect: true })
+    n$2({ type: String, reflect: true })
 ], ListItemBase.prototype, "graphic", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], ListItemBase.prototype, "multipleGraphics", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], ListItemBase.prototype, "hasMeta", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true }),
+    n$2({ type: Boolean, reflect: true }),
     observer(function (value) {
         if (value) {
             this.removeAttribute('aria-checked');
@@ -28195,7 +28840,7 @@ __decorate$1([
     })
 ], ListItemBase.prototype, "noninteractive", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true }),
+    n$2({ type: Boolean, reflect: true }),
     observer(function (value) {
         const role = this.getAttribute('role');
         const isAriaSelectable = role === 'gridcell' || role === 'option' ||
@@ -28244,6 +28889,79 @@ ListItem = __decorate$1([
 
 /**
  * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$a = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
+
+/**
+ * @license
  * Copyright 2020 Google Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28267,7 +28985,7 @@ ListItem = __decorate$1([
 /**
  * KEY provides normalized string values for keys.
  */
-var KEY = {
+var KEY$3 = {
     UNKNOWN: 'Unknown',
     BACKSPACE: 'Backspace',
     ENTER: 'Enter',
@@ -28284,24 +29002,24 @@ var KEY = {
     ESCAPE: 'Escape',
     TAB: 'Tab',
 };
-var normalizedKeys = new Set();
+var normalizedKeys$3 = new Set();
 // IE11 has no support for new Map with iterable so we need to initialize this
 // by hand.
-normalizedKeys.add(KEY.BACKSPACE);
-normalizedKeys.add(KEY.ENTER);
-normalizedKeys.add(KEY.SPACEBAR);
-normalizedKeys.add(KEY.PAGE_UP);
-normalizedKeys.add(KEY.PAGE_DOWN);
-normalizedKeys.add(KEY.END);
-normalizedKeys.add(KEY.HOME);
-normalizedKeys.add(KEY.ARROW_LEFT);
-normalizedKeys.add(KEY.ARROW_UP);
-normalizedKeys.add(KEY.ARROW_RIGHT);
-normalizedKeys.add(KEY.ARROW_DOWN);
-normalizedKeys.add(KEY.DELETE);
-normalizedKeys.add(KEY.ESCAPE);
-normalizedKeys.add(KEY.TAB);
-var KEY_CODE = {
+normalizedKeys$3.add(KEY$3.BACKSPACE);
+normalizedKeys$3.add(KEY$3.ENTER);
+normalizedKeys$3.add(KEY$3.SPACEBAR);
+normalizedKeys$3.add(KEY$3.PAGE_UP);
+normalizedKeys$3.add(KEY$3.PAGE_DOWN);
+normalizedKeys$3.add(KEY$3.END);
+normalizedKeys$3.add(KEY$3.HOME);
+normalizedKeys$3.add(KEY$3.ARROW_LEFT);
+normalizedKeys$3.add(KEY$3.ARROW_UP);
+normalizedKeys$3.add(KEY$3.ARROW_RIGHT);
+normalizedKeys$3.add(KEY$3.ARROW_DOWN);
+normalizedKeys$3.add(KEY$3.DELETE);
+normalizedKeys$3.add(KEY$3.ESCAPE);
+normalizedKeys$3.add(KEY$3.TAB);
+var KEY_CODE$3 = {
     BACKSPACE: 8,
     ENTER: 13,
     SPACEBAR: 32,
@@ -28317,49 +29035,49 @@ var KEY_CODE = {
     ESCAPE: 27,
     TAB: 9,
 };
-var mappedKeyCodes = new Map();
+var mappedKeyCodes$3 = new Map();
 // IE11 has no support for new Map with iterable so we need to initialize this
 // by hand.
-mappedKeyCodes.set(KEY_CODE.BACKSPACE, KEY.BACKSPACE);
-mappedKeyCodes.set(KEY_CODE.ENTER, KEY.ENTER);
-mappedKeyCodes.set(KEY_CODE.SPACEBAR, KEY.SPACEBAR);
-mappedKeyCodes.set(KEY_CODE.PAGE_UP, KEY.PAGE_UP);
-mappedKeyCodes.set(KEY_CODE.PAGE_DOWN, KEY.PAGE_DOWN);
-mappedKeyCodes.set(KEY_CODE.END, KEY.END);
-mappedKeyCodes.set(KEY_CODE.HOME, KEY.HOME);
-mappedKeyCodes.set(KEY_CODE.ARROW_LEFT, KEY.ARROW_LEFT);
-mappedKeyCodes.set(KEY_CODE.ARROW_UP, KEY.ARROW_UP);
-mappedKeyCodes.set(KEY_CODE.ARROW_RIGHT, KEY.ARROW_RIGHT);
-mappedKeyCodes.set(KEY_CODE.ARROW_DOWN, KEY.ARROW_DOWN);
-mappedKeyCodes.set(KEY_CODE.DELETE, KEY.DELETE);
-mappedKeyCodes.set(KEY_CODE.ESCAPE, KEY.ESCAPE);
-mappedKeyCodes.set(KEY_CODE.TAB, KEY.TAB);
-var navigationKeys = new Set();
+mappedKeyCodes$3.set(KEY_CODE$3.BACKSPACE, KEY$3.BACKSPACE);
+mappedKeyCodes$3.set(KEY_CODE$3.ENTER, KEY$3.ENTER);
+mappedKeyCodes$3.set(KEY_CODE$3.SPACEBAR, KEY$3.SPACEBAR);
+mappedKeyCodes$3.set(KEY_CODE$3.PAGE_UP, KEY$3.PAGE_UP);
+mappedKeyCodes$3.set(KEY_CODE$3.PAGE_DOWN, KEY$3.PAGE_DOWN);
+mappedKeyCodes$3.set(KEY_CODE$3.END, KEY$3.END);
+mappedKeyCodes$3.set(KEY_CODE$3.HOME, KEY$3.HOME);
+mappedKeyCodes$3.set(KEY_CODE$3.ARROW_LEFT, KEY$3.ARROW_LEFT);
+mappedKeyCodes$3.set(KEY_CODE$3.ARROW_UP, KEY$3.ARROW_UP);
+mappedKeyCodes$3.set(KEY_CODE$3.ARROW_RIGHT, KEY$3.ARROW_RIGHT);
+mappedKeyCodes$3.set(KEY_CODE$3.ARROW_DOWN, KEY$3.ARROW_DOWN);
+mappedKeyCodes$3.set(KEY_CODE$3.DELETE, KEY$3.DELETE);
+mappedKeyCodes$3.set(KEY_CODE$3.ESCAPE, KEY$3.ESCAPE);
+mappedKeyCodes$3.set(KEY_CODE$3.TAB, KEY$3.TAB);
+var navigationKeys$3 = new Set();
 // IE11 has no support for new Set with iterable so we need to initialize this
 // by hand.
-navigationKeys.add(KEY.PAGE_UP);
-navigationKeys.add(KEY.PAGE_DOWN);
-navigationKeys.add(KEY.END);
-navigationKeys.add(KEY.HOME);
-navigationKeys.add(KEY.ARROW_LEFT);
-navigationKeys.add(KEY.ARROW_UP);
-navigationKeys.add(KEY.ARROW_RIGHT);
-navigationKeys.add(KEY.ARROW_DOWN);
+navigationKeys$3.add(KEY$3.PAGE_UP);
+navigationKeys$3.add(KEY$3.PAGE_DOWN);
+navigationKeys$3.add(KEY$3.END);
+navigationKeys$3.add(KEY$3.HOME);
+navigationKeys$3.add(KEY$3.ARROW_LEFT);
+navigationKeys$3.add(KEY$3.ARROW_UP);
+navigationKeys$3.add(KEY$3.ARROW_RIGHT);
+navigationKeys$3.add(KEY$3.ARROW_DOWN);
 /**
  * normalizeKey returns the normalized string for a navigational action.
  */
-function normalizeKey(evt) {
+function normalizeKey$3(evt) {
     var key = evt.key;
     // If the event already has a normalized key, return it
-    if (normalizedKeys.has(key)) {
+    if (normalizedKeys$3.has(key)) {
         return key;
     }
     // tslint:disable-next-line:deprecation
-    var mappedKey = mappedKeyCodes.get(evt.keyCode);
+    var mappedKey = mappedKeyCodes$3.get(evt.keyCode);
     if (mappedKey) {
         return mappedKey;
     }
-    return KEY.UNKNOWN;
+    return KEY$3.UNKNOWN;
 }
 
 /**
@@ -28483,7 +29201,7 @@ const createSetFromIndex = (index) => {
     const entry = index === numbers$5.UNSET_INDEX ? new Set() : index;
     return isIndexSet(entry) ? new Set(entry) : new Set([entry]);
 };
-class MDCListFoundation extends MDCFoundation {
+class MDCListFoundation extends MDCFoundation$a {
     constructor(adapter) {
         super(Object.assign(Object.assign({}, MDCListFoundation.defaultAdapter), adapter));
         this.isMulti_ = false;
@@ -28606,14 +29324,14 @@ class MDCListFoundation extends MDCFoundation {
      * Key handler for the list.
      */
     handleKeydown(event, isRootListItem, listItemIndex) {
-        const isArrowLeft = normalizeKey(event) === 'ArrowLeft';
-        const isArrowUp = normalizeKey(event) === 'ArrowUp';
-        const isArrowRight = normalizeKey(event) === 'ArrowRight';
-        const isArrowDown = normalizeKey(event) === 'ArrowDown';
-        const isHome = normalizeKey(event) === 'Home';
-        const isEnd = normalizeKey(event) === 'End';
-        const isEnter = normalizeKey(event) === 'Enter';
-        const isSpace = normalizeKey(event) === 'Spacebar';
+        const isArrowLeft = normalizeKey$3(event) === 'ArrowLeft';
+        const isArrowUp = normalizeKey$3(event) === 'ArrowUp';
+        const isArrowRight = normalizeKey$3(event) === 'ArrowRight';
+        const isArrowDown = normalizeKey$3(event) === 'ArrowDown';
+        const isHome = normalizeKey$3(event) === 'Home';
+        const isEnd = normalizeKey$3(event) === 'End';
+        const isEnter = normalizeKey$3(event) === 'Enter';
+        const isSpace = normalizeKey$3(event) === 'Spacebar';
         if (this.adapter.isRootFocused()) {
             if (isArrowUp || isEnd) {
                 event.preventDefault();
@@ -29330,7 +30048,7 @@ class ListBase extends BaseElement {
     }
 }
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], ListBase.prototype, "emptyMessage", void 0);
 __decorate$1([
     i$2('.mdc-deprecated-list')
@@ -29342,7 +30060,7 @@ __decorate$1([
     o$2('', true, '[tabindex="0"]')
 ], ListBase.prototype, "tabbableElements", void 0);
 __decorate$1([
-    e$6({ type: Boolean }),
+    n$2({ type: Boolean }),
     observer(function (value) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setUseActivatedClass(value);
@@ -29350,7 +30068,7 @@ __decorate$1([
     })
 ], ListBase.prototype, "activatable", void 0);
 __decorate$1([
-    e$6({ type: Boolean }),
+    n$2({ type: Boolean }),
     observer(function (newValue, oldValue) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setMulti(newValue);
@@ -29361,7 +30079,7 @@ __decorate$1([
     })
 ], ListBase.prototype, "multi", void 0);
 __decorate$1([
-    e$6({ type: Boolean }),
+    n$2({ type: Boolean }),
     observer(function (value) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setWrapFocus(value);
@@ -29369,7 +30087,7 @@ __decorate$1([
     })
 ], ListBase.prototype, "wrapFocus", void 0);
 __decorate$1([
-    e$6({ type: String }),
+    n$2({ type: String }),
     observer(function (_newValue, oldValue) {
         if (oldValue !== undefined) {
             this.updateItems();
@@ -29377,16 +30095,16 @@ __decorate$1([
     })
 ], ListBase.prototype, "itemRoles", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], ListBase.prototype, "innerRole", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], ListBase.prototype, "innerAriaLabel", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], ListBase.prototype, "rootTabbable", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true }),
+    n$2({ type: Boolean, reflect: true }),
     observer(function (value) {
         var _a, _b;
         if (value) {
@@ -29520,6 +30238,79 @@ var Corner;
     Corner[Corner["BOTTOM_START"] = 9] = "BOTTOM_START";
     Corner[Corner["BOTTOM_END"] = 13] = "BOTTOM_END";
 })(Corner || (Corner = {}));
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$9 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -30118,7 +30909,7 @@ var MDCMenuSurfaceFoundation = /** @class */ (function (_super) {
         return typeof num === 'number' && isFinite(num);
     };
     return MDCMenuSurfaceFoundation;
-}(MDCFoundation));
+}(MDCFoundation$9));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCMenuSurfaceFoundation$1 = MDCMenuSurfaceFoundation;
 
@@ -30347,7 +31138,7 @@ __decorate$1([
     i$2('slot')
 ], MenuSurfaceBase.prototype, "slotElement", void 0);
 __decorate$1([
-    e$6({ type: Boolean }),
+    n$2({ type: Boolean }),
     observer(function (isAbsolute) {
         if (this.mdcFoundation && !this.fixed) {
             this.mdcFoundation.setIsHoisted(isAbsolute);
@@ -30355,10 +31146,10 @@ __decorate$1([
     })
 ], MenuSurfaceBase.prototype, "absolute", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], MenuSurfaceBase.prototype, "fullwidth", void 0);
 __decorate$1([
-    e$6({ type: Boolean }),
+    n$2({ type: Boolean }),
     observer(function (isFixed) {
         if (this.mdcFoundation && !this.absolute) {
             this.mdcFoundation.setFixedPosition(isFixed);
@@ -30366,7 +31157,7 @@ __decorate$1([
     })
 ], MenuSurfaceBase.prototype, "fixed", void 0);
 __decorate$1([
-    e$6({ type: Number }),
+    n$2({ type: Number }),
     observer(function (value) {
         if (this.mdcFoundation && this.y !== null && value !== null) {
             this.mdcFoundation.setAbsolutePosition(value, this.y);
@@ -30375,7 +31166,7 @@ __decorate$1([
     })
 ], MenuSurfaceBase.prototype, "x", void 0);
 __decorate$1([
-    e$6({ type: Number }),
+    n$2({ type: Number }),
     observer(function (value) {
         if (this.mdcFoundation && this.x !== null && value !== null) {
             this.mdcFoundation.setAbsolutePosition(this.x, value);
@@ -30384,7 +31175,7 @@ __decorate$1([
     })
 ], MenuSurfaceBase.prototype, "y", void 0);
 __decorate$1([
-    e$6({ type: Boolean }),
+    n$2({ type: Boolean }),
     observer(function (value) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setQuickOpen(value);
@@ -30392,13 +31183,13 @@ __decorate$1([
     })
 ], MenuSurfaceBase.prototype, "quick", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true }),
+    n$2({ type: Boolean, reflect: true }),
     observer(function (isOpen, wasOpen) {
         this.onOpenChanged(isOpen, wasOpen);
     })
 ], MenuSurfaceBase.prototype, "open", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], MenuSurfaceBase.prototype, "stayOpenOnBodyClick", void 0);
 __decorate$1([
     t$1(),
@@ -30414,7 +31205,7 @@ __decorate$1([
     })
 ], MenuSurfaceBase.prototype, "bitwiseCorner", void 0);
 __decorate$1([
-    e$6({ type: String }),
+    n$2({ type: String }),
     observer(function (value) {
         if (this.mdcFoundation) {
             const isValidValue = value === 'START' || value === 'END';
@@ -30430,7 +31221,7 @@ __decorate$1([
     })
 ], MenuSurfaceBase.prototype, "menuCorner", void 0);
 __decorate$1([
-    e$6({ type: String }),
+    n$2({ type: String }),
     observer(function (value) {
         if (this.mdcFoundation) {
             if (value) {
@@ -30526,6 +31317,79 @@ var DefaultFocusState;
     DefaultFocusState[DefaultFocusState["FIRST_ITEM"] = 2] = "FIRST_ITEM";
     DefaultFocusState[DefaultFocusState["LAST_ITEM"] = 3] = "LAST_ITEM";
 })(DefaultFocusState || (DefaultFocusState = {}));
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$8 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -30708,7 +31572,7 @@ var MDCMenuFoundation = /** @class */ (function (_super) {
         }
     };
     return MDCMenuFoundation;
-}(MDCFoundation));
+}(MDCFoundation$8));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCMenuFoundation$1 = MDCMenuFoundation;
 
@@ -31048,58 +31912,58 @@ __decorate$1([
     i$2('slot')
 ], MenuBase.prototype, "slotElement", void 0);
 __decorate$1([
-    e$6({ type: Object })
+    n$2({ type: Object })
 ], MenuBase.prototype, "anchor", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], MenuBase.prototype, "open", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], MenuBase.prototype, "quick", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], MenuBase.prototype, "wrapFocus", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], MenuBase.prototype, "innerRole", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], MenuBase.prototype, "innerAriaLabel", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], MenuBase.prototype, "corner", void 0);
 __decorate$1([
-    e$6({ type: Number })
+    n$2({ type: Number })
 ], MenuBase.prototype, "x", void 0);
 __decorate$1([
-    e$6({ type: Number })
+    n$2({ type: Number })
 ], MenuBase.prototype, "y", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], MenuBase.prototype, "absolute", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], MenuBase.prototype, "multi", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], MenuBase.prototype, "activatable", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], MenuBase.prototype, "fixed", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], MenuBase.prototype, "forceGroupSelection", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], MenuBase.prototype, "fullwidth", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], MenuBase.prototype, "menuCorner", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], MenuBase.prototype, "stayOpenOnBodyClick", void 0);
 __decorate$1([
-    e$6({ type: String }),
+    n$2({ type: String }),
     observer(function (value) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setDefaultFocusState(DefaultFocusState[value]);
@@ -31198,8 +32062,81 @@ class FormElement extends BaseElement {
 }
 FormElement.shadowRootOptions = { mode: 'open', delegatesFocus: true };
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], FormElement.prototype, "disabled", void 0);
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$7 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -31523,7 +32460,7 @@ var MDCObserverFoundation = /** @class */ (function (_super) {
         }
     };
     return MDCObserverFoundation;
-}(MDCFoundation));
+}(MDCFoundation$7));
 
 /**
  * @license
@@ -31859,18 +32796,18 @@ class SwitchBase extends FormElement {
     }
 }
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], SwitchBase.prototype, "processing", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], SwitchBase.prototype, "selected", void 0);
 __decorate$1([
     ariaProperty,
-    e$6({ type: String, attribute: 'aria-label' })
+    n$2({ type: String, attribute: 'aria-label' })
 ], SwitchBase.prototype, "ariaLabel", void 0);
 __decorate$1([
     ariaProperty,
-    e$6({ type: String, attribute: 'aria-labelledby' })
+    n$2({ type: String, attribute: 'aria-labelledby' })
 ], SwitchBase.prototype, "ariaLabelledBy", void 0);
 __decorate$1([
     e$3('mwc-ripple')
@@ -31879,10 +32816,10 @@ __decorate$1([
     t$1()
 ], SwitchBase.prototype, "shouldRenderRipple", void 0);
 __decorate$1([
-    e$6({ type: String, reflect: true })
+    n$2({ type: String, reflect: true })
 ], SwitchBase.prototype, "name", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SwitchBase.prototype, "value", void 0);
 __decorate$1([
     i$2('input')
@@ -31913,6 +32850,79 @@ Switch.styles = [styles$8];
 Switch = __decorate$1([
     e$7('mwc-switch')
 ], Switch);
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$6 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -32034,7 +33044,7 @@ var MDCNotchedOutlineFoundation = /** @class */ (function (_super) {
         this.adapter.removeNotchWidthProperty();
     };
     return MDCNotchedOutlineFoundation;
-}(MDCFoundation));
+}(MDCFoundation$6));
 
 /**
  * @license
@@ -32087,10 +33097,10 @@ __decorate$1([
     i$2('.mdc-notched-outline')
 ], NotchedOutlineBase.prototype, "mdcRoot", void 0);
 __decorate$1([
-    e$6({ type: Number })
+    n$2({ type: Number })
 ], NotchedOutlineBase.prototype, "width", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], NotchedOutlineBase.prototype, "open", void 0);
 __decorate$1([
     i$2('.mdc-notched-outline__notch')
@@ -32114,6 +33124,79 @@ NotchedOutline.styles = [styles$7];
 NotchedOutline = __decorate$1([
     e$7('mwc-notched-outline')
 ], NotchedOutline);
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$5 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -32257,7 +33340,7 @@ var MDCFloatingLabelFoundation = /** @class */ (function (_super) {
         this.adapter.removeClass(LABEL_SHAKE);
     };
     return MDCFloatingLabelFoundation;
-}(MDCFoundation));
+}(MDCFoundation$5));
 
 /**
  * @license
@@ -32314,6 +33397,79 @@ class FloatingLabelDirective extends i$1 {
     }
 }
 const floatingLabel = e$1(FloatingLabelDirective);
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$4 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -32427,7 +33583,7 @@ var MDCLineRippleFoundation = /** @class */ (function (_super) {
         }
     };
     return MDCLineRippleFoundation;
-}(MDCFoundation));
+}(MDCFoundation$4));
 
 /**
  * @license
@@ -32484,6 +33640,79 @@ class LineRippleDirective extends i$1 {
     }
 }
 const lineRipple = e$1(LineRippleDirective);
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$3 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -33140,7 +34369,7 @@ var MDCTextFieldFoundation = /** @class */ (function (_super) {
         };
     };
     return MDCTextFieldFoundation;
-}(MDCFoundation));
+}(MDCFoundation$3));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCTextFieldFoundation$1 = MDCTextFieldFoundation;
 
@@ -33148,13 +34377,13 @@ var MDCTextFieldFoundation$1 = MDCTextFieldFoundation;
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const e=o=>void 0===o.strings,f={},s=(o,l=f)=>o._$AH=l;
+ */const e=o=>void 0===o.strings,s={},a=(o,l=s)=>o._$AH=l;
 
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const l=e$1(class extends i$1{constructor(r){if(super(r),r.type!==t.PROPERTY&&r.type!==t.ATTRIBUTE&&r.type!==t.BOOLEAN_ATTRIBUTE)throw Error("The `live` directive is not allowed on child or event bindings");if(!e(r))throw Error("`live` bindings can only contain a single expression")}render(r){return r}update(i,[t$1]){if(t$1===T||t$1===A)return t$1;const o=i.element,l=i.name;if(i.type===t.PROPERTY){if(t$1===o[l])return T}else if(i.type===t.BOOLEAN_ATTRIBUTE){if(!!t$1===o.hasAttribute(l))return T}else if(i.type===t.ATTRIBUTE&&o.getAttribute(l)===t$1+"")return T;return s(i),t$1}});
+ */const l=e$1(class extends i$1{constructor(r){if(super(r),r.type!==t.PROPERTY&&r.type!==t.ATTRIBUTE&&r.type!==t.BOOLEAN_ATTRIBUTE)throw Error("The `live` directive is not allowed on child or event bindings");if(!e(r))throw Error("`live` bindings can only contain a single expression")}render(r){return r}update(i,[t$1]){if(t$1===T||t$1===A)return t$1;const o=i.element,l=i.name;if(i.type===t.PROPERTY){if(t$1===o[l])return T}else if(i.type===t.BOOLEAN_ATTRIBUTE){if(!!t$1===o.hasAttribute(l))return T}else if(i.type===t.ATTRIBUTE&&o.getAttribute(l)===t$1+"")return T;return a(i),t$1}});
 
 /**
  * @license
@@ -33646,16 +34875,16 @@ __decorate$1([
     i$2('.mdc-notched-outline__notch')
 ], TextFieldBase.prototype, "notchElement", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "value", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "type", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "placeholder", void 0);
 __decorate$1([
-    e$6({ type: String }),
+    n$2({ type: String }),
     observer(function (_newVal, oldVal) {
         if (oldVal !== undefined && this.label !== oldVal) {
             this.layout();
@@ -33663,25 +34892,25 @@ __decorate$1([
     })
 ], TextFieldBase.prototype, "label", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "icon", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "iconTrailing", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], TextFieldBase.prototype, "disabled", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], TextFieldBase.prototype, "required", void 0);
 __decorate$1([
-    e$6({ type: Number })
+    n$2({ type: Number })
 ], TextFieldBase.prototype, "minLength", void 0);
 __decorate$1([
-    e$6({ type: Number })
+    n$2({ type: Number })
 ], TextFieldBase.prototype, "maxLength", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true }),
+    n$2({ type: Boolean, reflect: true }),
     observer(function (_newVal, oldVal) {
         if (oldVal !== undefined && this.outlined !== oldVal) {
             this.layout();
@@ -33689,58 +34918,58 @@ __decorate$1([
     })
 ], TextFieldBase.prototype, "outlined", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "helper", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], TextFieldBase.prototype, "validateOnInitialRender", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "validationMessage", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], TextFieldBase.prototype, "autoValidate", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "pattern", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "min", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "max", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "step", void 0);
 __decorate$1([
-    e$6({ type: Number })
+    n$2({ type: Number })
 ], TextFieldBase.prototype, "size", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], TextFieldBase.prototype, "helperPersistent", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], TextFieldBase.prototype, "charCounter", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], TextFieldBase.prototype, "endAligned", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "prefix", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "suffix", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "name", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "inputMode", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], TextFieldBase.prototype, "readOnly", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], TextFieldBase.prototype, "autocapitalize", void 0);
 __decorate$1([
     t$1()
@@ -33928,28 +35157,28 @@ let SclWizardingTextfield = class SclWizardingTextfield extends TextField {
     }
 };
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], SclWizardingTextfield.prototype, "nullable", void 0);
 __decorate$1([
-    e$6({ type: Array })
+    n$2({ type: Array })
 ], SclWizardingTextfield.prototype, "multipliers", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SclWizardingTextfield.prototype, "multiplier", null);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SclWizardingTextfield.prototype, "unit", void 0);
 __decorate$1([
     t$1()
 ], SclWizardingTextfield.prototype, "null", null);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SclWizardingTextfield.prototype, "maybeValue", null);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SclWizardingTextfield.prototype, "defaultValue", void 0);
 __decorate$1([
-    e$6({ type: Array })
+    n$2({ type: Array })
 ], SclWizardingTextfield.prototype, "reservedValues", void 0);
 __decorate$1([
     i$2('mwc-switch')
@@ -33963,834 +35192,6 @@ __decorate$1([
 SclWizardingTextfield = __decorate$1([
     e$7('scl-wizarding-textfield')
 ], SclWizardingTextfield);
-
-const tAbstractConductingEquipment = [
-    'TransformerWinding',
-    'ConductingEquipment',
-];
-const tEquipment = [
-    'GeneralEquipment',
-    'PowerTransformer',
-    ...tAbstractConductingEquipment,
-];
-const tEquipmentContainer = ['Substation', 'VoltageLevel', 'Bay'];
-const tGeneralEquipmentContainer = ['Process', 'Line'];
-const tAbstractEqFuncSubFunc = ['EqSubFunction', 'EqFunction'];
-const tPowerSystemResource = [
-    'SubFunction',
-    'Function',
-    'TapChanger',
-    'SubEquipment',
-    ...tEquipment,
-    ...tEquipmentContainer,
-    ...tGeneralEquipmentContainer,
-    ...tAbstractEqFuncSubFunc,
-];
-const tLNodeContainer = ['ConnectivityNode', ...tPowerSystemResource];
-const tCertificate = ['GOOSESecurity', 'SMVSecurity'];
-const tNaming = ['SubNetwork', ...tCertificate, ...tLNodeContainer];
-const tAbstractDataAttribute = ['BDA', 'DA'];
-const tControlWithIEDName = ['SampledValueControl', 'GSEControl'];
-const tControlWithTriggerOpt = ['LogControl', 'ReportControl'];
-const tControl = [...tControlWithIEDName, ...tControlWithTriggerOpt];
-const tControlBlock = ['GSE', 'SMV'];
-const tUnNaming = [
-    'ConnectedAP',
-    'PhysConn',
-    'SDO',
-    'DO',
-    'DAI',
-    'SDI',
-    'DOI',
-    'Inputs',
-    'RptEnabled',
-    'Server',
-    'ServerAt',
-    'SettingControl',
-    'Communication',
-    'Log',
-    'LDevice',
-    'DataSet',
-    'AccessPoint',
-    'IED',
-    'NeutralPoint',
-    ...tControl,
-    ...tControlBlock,
-    ...tAbstractDataAttribute,
-];
-const tAnyLN = ['LN0', 'LN'];
-const tAnyContentFromOtherNamespace = [
-    'Text',
-    'Private',
-    'Hitem',
-    'AccessControl',
-];
-const tCert = ['Subject', 'IssuerName'];
-const tDurationInMilliSec = ['MinTime', 'MaxTime'];
-const tIDNaming = ['LNodeType', 'DOType', 'DAType', 'EnumType'];
-const tServiceYesNo = [
-    'FileHandling',
-    'TimeSyncProt',
-    'CommProt',
-    'SGEdit',
-    'ConfSG',
-    'GetDirectory',
-    'GetDataObjectDefinition',
-    'DataObjectDirectory',
-    'GetDataSetValue',
-    'SetDataSetValue',
-    'DataSetDirectory',
-    'ReadWrite',
-    'TimerActivatedControl',
-    'GetCBValues',
-    'GSEDir',
-    'ConfLdName',
-];
-const tServiceWithMaxAndMaxAttributes = ['DynDataSet', 'ConfDataSet'];
-const tServiceWithMax = [
-    'GSSE',
-    'GOOSE',
-    'ConfReportControl',
-    'SMVsc',
-    ...tServiceWithMaxAndMaxAttributes,
-];
-const tServiceWithMaxNonZero = ['ConfLogControl', 'ConfSigRef'];
-const tServiceSettings = [
-    'ReportSettings',
-    'LogSettings',
-    'GSESettings',
-    'SMVSettings',
-];
-const tBaseElement = ['SCL', ...tNaming, ...tUnNaming, ...tIDNaming];
-const sCLTags = [
-    ...tBaseElement,
-    ...tAnyContentFromOtherNamespace,
-    'Header',
-    'LNode',
-    'Val',
-    'Voltage',
-    'Services',
-    ...tCert,
-    ...tDurationInMilliSec,
-    'Association',
-    'FCDA',
-    'ClientLN',
-    'IEDName',
-    'ExtRef',
-    'Protocol',
-    ...tAnyLN,
-    ...tServiceYesNo,
-    'DynAssociation',
-    'SettingGroups',
-    ...tServiceWithMax,
-    ...tServiceWithMaxNonZero,
-    ...tServiceSettings,
-    'ConfLNs',
-    'ClientServices',
-    'SupSubscription',
-    'ValueHandling',
-    'RedProt',
-    'McSecurity',
-    'KDC',
-    'Address',
-    'P',
-    'ProtNs',
-    'EnumVal',
-    'Terminal',
-    'BitRate',
-    'Authentication',
-    'DataTypeTemplates',
-    'History',
-    'OptFields',
-    'SmvOpts',
-    'TrgOps',
-    'SamplesPerSec',
-    'SmpRate',
-    'SecPerSamples',
-];
-const tagSet = new Set(sCLTags);
-function isSCLTag(tag) {
-    return tagSet.has(tag);
-}
-const tBaseNameSequence = ['Text', 'Private'];
-const tNamingSequence = [...tBaseNameSequence];
-const tUnNamingSequence = [...tBaseNameSequence];
-const tIDNamingSequence = [...tBaseNameSequence];
-const tAbstractDataAttributeSequence = [...tUnNamingSequence, 'Val'];
-const tLNodeContainerSequence = [...tNamingSequence, 'LNode'];
-const tPowerSystemResourceSequence = [...tLNodeContainerSequence];
-const tEquipmentSequence = [...tPowerSystemResourceSequence];
-const tEquipmentContainerSequence = [
-    ...tPowerSystemResourceSequence,
-    'PowerTransformer',
-    'GeneralEquipment',
-];
-const tAbstractConductingEquipmentSequence = [
-    ...tEquipmentSequence,
-    'Terminal',
-];
-const tControlBlockSequence = [...tUnNamingSequence, 'Address'];
-const tControlSequence = [...tNamingSequence];
-const tControlWithIEDNameSequence = [...tControlSequence, 'IEDName'];
-const tAnyLNSequence = [
-    ...tUnNamingSequence,
-    'DataSet',
-    'ReportControl',
-    'LogControl',
-    'DOI',
-    'Inputs',
-    'Log',
-];
-const tGeneralEquipmentContainerSequence = [
-    ...tPowerSystemResourceSequence,
-    'GeneralEquipment',
-    'Function',
-];
-const tControlWithTriggerOptSequence = [...tControlSequence, 'TrgOps'];
-const tAbstractEqFuncSubFuncSequence = [
-    ...tPowerSystemResourceSequence,
-    'GeneralEquipment',
-    'EqSubFunction',
-];
-const relatives = {
-    AccessControl: {
-        parents: ['LDevice'],
-        children: [],
-    },
-    AccessPoint: {
-        parents: ['IED'],
-        children: [
-            ...tNamingSequence,
-            'Server',
-            'LN',
-            'ServerAt',
-            'Services',
-            'GOOSESecurity',
-            'SMVSecurity',
-        ],
-    },
-    Address: {
-        parents: ['ConnectedAP', 'GSE', 'SMV'],
-        children: ['P'],
-    },
-    Association: {
-        parents: ['Server'],
-        children: [],
-    },
-    Authentication: {
-        parents: ['Server'],
-        children: [],
-    },
-    BDA: {
-        parents: ['DAType'],
-        children: [...tAbstractDataAttributeSequence],
-    },
-    BitRate: {
-        parents: ['SubNetwork'],
-        children: [],
-    },
-    Bay: {
-        parents: ['VoltageLevel'],
-        children: [
-            ...tEquipmentContainerSequence,
-            'ConductingEquipment',
-            'ConnectivityNode',
-            'Function',
-        ],
-    },
-    ClientLN: {
-        parents: ['RptEnabled'],
-        children: [],
-    },
-    ClientServices: {
-        parents: ['Services'],
-        children: ['TimeSyncProt', 'McSecurity'],
-    },
-    CommProt: {
-        parents: ['Services'],
-        children: [],
-    },
-    Communication: {
-        parents: ['SCL'],
-        children: [...tUnNamingSequence, 'SubNetwork'],
-    },
-    ConductingEquipment: {
-        parents: ['Process', 'Line', 'SubFunction', 'Function', 'Bay'],
-        children: [
-            ...tAbstractConductingEquipmentSequence,
-            'EqFunction',
-            'SubEquipment',
-        ],
-    },
-    ConfDataSet: {
-        parents: ['Services'],
-        children: [],
-    },
-    ConfLdName: {
-        parents: ['Services'],
-        children: [],
-    },
-    ConfLNs: {
-        parents: ['Services'],
-        children: [],
-    },
-    ConfLogControl: {
-        parents: ['Services'],
-        children: [],
-    },
-    ConfReportControl: {
-        parents: ['Services'],
-        children: [],
-    },
-    ConfSG: {
-        parents: ['SettingGroups'],
-        children: [],
-    },
-    ConfSigRef: {
-        parents: ['Services'],
-        children: [],
-    },
-    ConnectedAP: {
-        parents: ['SubNetwork'],
-        children: [...tUnNamingSequence, 'Address', 'GSE', 'SMV', 'PhysConn'],
-    },
-    ConnectivityNode: {
-        parents: ['Bay', 'Line'],
-        children: [...tLNodeContainerSequence],
-    },
-    DA: {
-        parents: ['DOType'],
-        children: [...tAbstractDataAttributeSequence],
-    },
-    DAI: {
-        parents: ['DOI', 'SDI'],
-        children: [...tUnNamingSequence, 'Val'],
-    },
-    DAType: {
-        parents: ['DataTypeTemplates'],
-        children: [...tIDNamingSequence, 'BDA', 'ProtNs'],
-    },
-    DO: {
-        parents: ['LNodeType'],
-        children: [...tUnNamingSequence],
-    },
-    DOI: {
-        parents: [...tAnyLN],
-        children: [...tUnNamingSequence, 'SDI', 'DAI'],
-    },
-    DOType: {
-        parents: ['DataTypeTemplates'],
-        children: [...tIDNamingSequence, 'SDO', 'DA'],
-    },
-    DataObjectDirectory: {
-        parents: ['Services'],
-        children: [],
-    },
-    DataSet: {
-        parents: [...tAnyLN],
-        children: [...tNamingSequence, 'FCDA'],
-    },
-    DataSetDirectory: {
-        parents: ['Services'],
-        children: [],
-    },
-    DataTypeTemplates: {
-        parents: ['SCL'],
-        children: ['LNodeType', 'DOType', 'DAType', 'EnumType'],
-    },
-    DynAssociation: {
-        parents: ['Services'],
-        children: [],
-    },
-    DynDataSet: {
-        parents: ['Services'],
-        children: [],
-    },
-    EnumType: {
-        parents: ['DataTypeTemplates'],
-        children: [...tIDNamingSequence, 'EnumVal'],
-    },
-    EnumVal: {
-        parents: ['EnumType'],
-        children: [],
-    },
-    EqFunction: {
-        parents: [
-            'GeneralEquipment',
-            'TapChanger',
-            'TransformerWinding',
-            'PowerTransformer',
-            'SubEquipment',
-            'ConductingEquipment',
-        ],
-        children: [...tAbstractEqFuncSubFuncSequence],
-    },
-    EqSubFunction: {
-        parents: ['EqSubFunction', 'EqFunction'],
-        children: [...tAbstractEqFuncSubFuncSequence],
-    },
-    ExtRef: {
-        parents: ['Inputs'],
-        children: [],
-    },
-    FCDA: {
-        parents: ['DataSet'],
-        children: [],
-    },
-    FileHandling: {
-        parents: ['Services'],
-        children: [],
-    },
-    Function: {
-        parents: ['Bay', 'VoltageLevel', 'Substation', 'Process', 'Line'],
-        children: [
-            ...tPowerSystemResourceSequence,
-            'SubFunction',
-            'GeneralEquipment',
-            'ConductingEquipment',
-        ],
-    },
-    GeneralEquipment: {
-        parents: [
-            'SubFunction',
-            'Function',
-            ...tGeneralEquipmentContainer,
-            ...tAbstractEqFuncSubFunc,
-            ...tEquipmentContainer,
-        ],
-        children: [...tEquipmentSequence, 'EqFunction'],
-    },
-    GetCBValues: {
-        parents: ['Services'],
-        children: [],
-    },
-    GetDataObjectDefinition: {
-        parents: ['Services'],
-        children: [],
-    },
-    GetDataSetValue: {
-        parents: ['Services'],
-        children: [],
-    },
-    GetDirectory: {
-        parents: ['Services'],
-        children: [],
-    },
-    GOOSE: {
-        parents: ['Services'],
-        children: [],
-    },
-    GOOSESecurity: {
-        parents: ['AccessPoint'],
-        children: [...tNamingSequence, 'Subject', 'IssuerName'],
-    },
-    GSE: {
-        parents: ['ConnectedAP'],
-        children: [...tControlBlockSequence, 'MinTime', 'MaxTime'],
-    },
-    GSEDir: {
-        parents: ['Services'],
-        children: [],
-    },
-    GSEControl: {
-        parents: ['LN0'],
-        children: [...tControlWithIEDNameSequence, 'Protocol'],
-    },
-    GSESettings: {
-        parents: ['Services'],
-        children: [],
-    },
-    GSSE: {
-        parents: ['Services'],
-        children: [],
-    },
-    Header: {
-        parents: ['SCL'],
-        children: ['Text', 'History'],
-    },
-    History: {
-        parents: ['Header'],
-        children: ['Hitem'],
-    },
-    Hitem: {
-        parents: ['History'],
-        children: [],
-    },
-    IED: {
-        parents: ['SCL'],
-        children: [...tUnNamingSequence, 'Services', 'AccessPoint', 'KDC'],
-    },
-    IEDName: {
-        parents: ['GSEControl', 'SampledValueControl'],
-        children: [],
-    },
-    Inputs: {
-        parents: [...tAnyLN],
-        children: [...tUnNamingSequence, 'ExtRef'],
-    },
-    IssuerName: {
-        parents: ['GOOSESecurity', 'SMVSecurity'],
-        children: [],
-    },
-    KDC: {
-        parents: ['IED'],
-        children: [],
-    },
-    LDevice: {
-        parents: ['Server'],
-        children: [...tUnNamingSequence, 'LN0', 'LN', 'AccessControl'],
-    },
-    LN: {
-        parents: ['AccessPoint', 'LDevice'],
-        children: [...tAnyLNSequence],
-    },
-    LN0: {
-        parents: ['LDevice'],
-        children: [
-            ...tAnyLNSequence,
-            'GSEControl',
-            'SampledValueControl',
-            'SettingControl',
-        ],
-    },
-    LNode: {
-        parents: [...tLNodeContainer],
-        children: [...tUnNamingSequence],
-    },
-    LNodeType: {
-        parents: ['DataTypeTemplates'],
-        children: [...tIDNamingSequence, 'DO'],
-    },
-    Line: {
-        parents: ['Process', 'SCL'],
-        children: [
-            ...tGeneralEquipmentContainerSequence,
-            'Voltage',
-            'ConductingEquipment',
-        ],
-    },
-    Log: {
-        parents: [...tAnyLN],
-        children: [...tUnNamingSequence],
-    },
-    LogControl: {
-        parents: [...tAnyLN],
-        children: [...tControlWithTriggerOptSequence],
-    },
-    LogSettings: {
-        parents: ['Services'],
-        children: [],
-    },
-    MaxTime: {
-        parents: ['GSE'],
-        children: [],
-    },
-    McSecurity: {
-        parents: ['GSESettings', 'SMVSettings', 'ClientServices'],
-        children: [],
-    },
-    MinTime: {
-        parents: ['GSE'],
-        children: [],
-    },
-    NeutralPoint: {
-        parents: ['TransformerWinding'],
-        children: [...tUnNamingSequence],
-    },
-    OptFields: {
-        parents: ['ReportControl'],
-        children: [],
-    },
-    P: {
-        parents: ['Address', 'PhysConn'],
-        children: [],
-    },
-    PhysConn: {
-        parents: ['ConnectedAP'],
-        children: [...tUnNamingSequence, 'P'],
-    },
-    PowerTransformer: {
-        parents: [...tEquipmentContainer],
-        children: [
-            ...tEquipmentSequence,
-            'TransformerWinding',
-            'SubEquipment',
-            'EqFunction',
-        ],
-    },
-    Private: {
-        parents: [],
-        children: [],
-    },
-    Process: {
-        parents: ['Process', 'SCL'],
-        children: [
-            ...tGeneralEquipmentContainerSequence,
-            'ConductingEquipment',
-            'Substation',
-            'Line',
-            'Process',
-        ],
-    },
-    ProtNs: {
-        parents: ['DAType', 'DA'],
-        children: [],
-    },
-    Protocol: {
-        parents: ['GSEControl', 'SampledValueControl'],
-        children: [],
-    },
-    ReadWrite: {
-        parents: ['Services'],
-        children: [],
-    },
-    RedProt: {
-        parents: ['Services'],
-        children: [],
-    },
-    ReportControl: {
-        parents: [...tAnyLN],
-        children: [...tControlWithTriggerOptSequence, 'OptFields', 'RptEnabled'],
-    },
-    ReportSettings: {
-        parents: ['Services'],
-        children: [],
-    },
-    RptEnabled: {
-        parents: ['ReportControl'],
-        children: [...tUnNamingSequence, 'ClientLN'],
-    },
-    SamplesPerSec: {
-        parents: ['SMVSettings'],
-        children: [],
-    },
-    SampledValueControl: {
-        parents: ['LN0'],
-        children: [...tControlWithIEDNameSequence, 'SmvOpts'],
-    },
-    SecPerSamples: {
-        parents: ['SMVSettings'],
-        children: [],
-    },
-    SCL: {
-        parents: [],
-        children: [
-            ...tBaseNameSequence,
-            'Header',
-            'Substation',
-            'Communication',
-            'IED',
-            'DataTypeTemplates',
-            'Line',
-            'Process',
-        ],
-    },
-    SDI: {
-        parents: ['DOI', 'SDI'],
-        children: [...tUnNamingSequence, 'SDI', 'DAI'],
-    },
-    SDO: {
-        parents: ['DOType'],
-        children: [...tNamingSequence],
-    },
-    Server: {
-        parents: ['AccessPoint'],
-        children: [
-            ...tUnNamingSequence,
-            'Authentication',
-            'LDevice',
-            'Association',
-        ],
-    },
-    ServerAt: {
-        parents: ['AccessPoint'],
-        children: [...tUnNamingSequence],
-    },
-    Services: {
-        parents: ['IED', 'AccessPoint'],
-        children: [
-            'DynAssociation',
-            'SettingGroups',
-            'GetDirectory',
-            'GetDataObjectDefinition',
-            'DataObjectDirectory',
-            'GetDataSetValue',
-            'SetDataSetValue',
-            'DataSetDirectory',
-            'ConfDataSet',
-            'DynDataSet',
-            'ReadWrite',
-            'TimerActivatedControl',
-            'ConfReportControl',
-            'GetCBValues',
-            'ConfLogControl',
-            'ReportSettings',
-            'LogSettings',
-            'GSESettings',
-            'SMVSettings',
-            'GSEDir',
-            'GOOSE',
-            'GSSE',
-            'SMVsc',
-            'FileHandling',
-            'ConfLNs',
-            'ClientServices',
-            'ConfLdName',
-            'SupSubscription',
-            'ConfSigRef',
-            'ValueHandling',
-            'RedProt',
-            'TimeSyncProt',
-            'CommProt',
-        ],
-    },
-    SetDataSetValue: {
-        parents: ['Services'],
-        children: [],
-    },
-    SettingControl: {
-        parents: ['LN0'],
-        children: [...tUnNamingSequence],
-    },
-    SettingGroups: {
-        parents: ['Services'],
-        children: ['SGEdit', 'ConfSG'],
-    },
-    SGEdit: {
-        parents: ['SettingGroups'],
-        children: [],
-    },
-    SmpRate: {
-        parents: ['SMVSettings'],
-        children: [],
-    },
-    SMV: {
-        parents: ['ConnectedAP'],
-        children: [...tControlBlockSequence],
-    },
-    SmvOpts: {
-        parents: ['SampledValueControl'],
-        children: [],
-    },
-    SMVsc: {
-        parents: ['Services'],
-        children: [],
-    },
-    SMVSecurity: {
-        parents: ['AccessPoint'],
-        children: [...tNamingSequence, 'Subject', 'IssuerName'],
-    },
-    SMVSettings: {
-        parents: ['Services'],
-        children: ['SmpRate', 'SamplesPerSec', 'SecPerSamples', 'McSecurity'],
-    },
-    SubEquipment: {
-        parents: [
-            'TapChanger',
-            'PowerTransformer',
-            'ConductingEquipment',
-            'TransformerWinding',
-            ...tAbstractConductingEquipment,
-        ],
-        children: [...tPowerSystemResourceSequence, 'EqFunction'],
-    },
-    SubFunction: {
-        parents: ['SubFunction', 'Function'],
-        children: [
-            ...tPowerSystemResourceSequence,
-            'GeneralEquipment',
-            'ConductingEquipment',
-            'SubFunction',
-        ],
-    },
-    SubNetwork: {
-        parents: ['Communication'],
-        children: [...tNamingSequence, 'BitRate', 'ConnectedAP'],
-    },
-    Subject: {
-        parents: ['GOOSESecurity', 'SMVSecurity'],
-        children: [],
-    },
-    Substation: {
-        parents: ['SCL'],
-        children: [...tEquipmentContainerSequence, 'VoltageLevel', 'Function'],
-    },
-    SupSubscription: {
-        parents: ['Services'],
-        children: [],
-    },
-    TapChanger: {
-        parents: ['TransformerWinding'],
-        children: [...tPowerSystemResourceSequence, 'SubEquipment', 'EqFunction'],
-    },
-    Terminal: {
-        parents: [...tEquipment],
-        children: [...tUnNamingSequence],
-    },
-    Text: {
-        parents: sCLTags.filter(tag => tag !== 'Text' && tag !== 'Private'),
-        children: [],
-    },
-    TimerActivatedControl: {
-        parents: ['Services'],
-        children: [],
-    },
-    TimeSyncProt: {
-        parents: ['Services', 'ClientServices'],
-        children: [],
-    },
-    TransformerWinding: {
-        parents: ['PowerTransformer'],
-        children: [
-            ...tAbstractConductingEquipmentSequence,
-            'TapChanger',
-            'NeutralPoint',
-            'EqFunction',
-            'SubEquipment',
-        ],
-    },
-    TrgOps: {
-        parents: ['ReportControl'],
-        children: [],
-    },
-    Val: {
-        parents: ['DAI', 'DA', 'BDA'],
-        children: [],
-    },
-    ValueHandling: {
-        parents: ['Services'],
-        children: [],
-    },
-    Voltage: {
-        parents: ['VoltageLevel'],
-        children: [],
-    },
-    VoltageLevel: {
-        parents: ['Substation'],
-        children: [...tEquipmentContainerSequence, 'Voltage', 'Bay', 'Function'],
-    },
-};
-function getReference(parent, tag) {
-    var _a, _b, _c;
-    const parentTag = parent.tagName;
-    const children = Array.from(parent.children);
-    if (parentTag === 'Services' ||
-        parentTag === 'SettingGroups' ||
-        !isSCLTag(parentTag))
-        return (_a = children.find(child => child.tagName === tag)) !== null && _a !== void 0 ? _a : null;
-    const sequence = (_c = (_b = relatives[parentTag]) === null || _b === void 0 ? void 0 : _b.children) !== null && _c !== void 0 ? _c : [];
-    let index = sequence.findIndex(element => element === tag);
-    if (index < 0)
-        return null;
-    let nextSibling;
-    while (index < sequence.length && !nextSibling) {
-        // eslint-disable-next-line no-loop-func
-        nextSibling = children.find(child => child.tagName === sequence[index]);
-        // eslint-disable-next-line no-plusplus
-        index++;
-    }
-    return nextSibling !== null && nextSibling !== void 0 ? nextSibling : null;
-}
 
 /* eslint-disable import/no-extraneous-dependencies */
 function renderBayWizard(options) {
@@ -34868,6 +35269,246 @@ function editBayWizard(element) {
             }),
         },
     ];
+}
+
+/**
+ * @license
+ * Copyright 2020 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+/**
+ * KEY provides normalized string values for keys.
+ */
+var KEY$2 = {
+    UNKNOWN: 'Unknown',
+    BACKSPACE: 'Backspace',
+    ENTER: 'Enter',
+    SPACEBAR: 'Spacebar',
+    PAGE_UP: 'PageUp',
+    PAGE_DOWN: 'PageDown',
+    END: 'End',
+    HOME: 'Home',
+    ARROW_LEFT: 'ArrowLeft',
+    ARROW_UP: 'ArrowUp',
+    ARROW_RIGHT: 'ArrowRight',
+    ARROW_DOWN: 'ArrowDown',
+    DELETE: 'Delete',
+    ESCAPE: 'Escape',
+    TAB: 'Tab',
+};
+var normalizedKeys$2 = new Set();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+normalizedKeys$2.add(KEY$2.BACKSPACE);
+normalizedKeys$2.add(KEY$2.ENTER);
+normalizedKeys$2.add(KEY$2.SPACEBAR);
+normalizedKeys$2.add(KEY$2.PAGE_UP);
+normalizedKeys$2.add(KEY$2.PAGE_DOWN);
+normalizedKeys$2.add(KEY$2.END);
+normalizedKeys$2.add(KEY$2.HOME);
+normalizedKeys$2.add(KEY$2.ARROW_LEFT);
+normalizedKeys$2.add(KEY$2.ARROW_UP);
+normalizedKeys$2.add(KEY$2.ARROW_RIGHT);
+normalizedKeys$2.add(KEY$2.ARROW_DOWN);
+normalizedKeys$2.add(KEY$2.DELETE);
+normalizedKeys$2.add(KEY$2.ESCAPE);
+normalizedKeys$2.add(KEY$2.TAB);
+var KEY_CODE$2 = {
+    BACKSPACE: 8,
+    ENTER: 13,
+    SPACEBAR: 32,
+    PAGE_UP: 33,
+    PAGE_DOWN: 34,
+    END: 35,
+    HOME: 36,
+    ARROW_LEFT: 37,
+    ARROW_UP: 38,
+    ARROW_RIGHT: 39,
+    ARROW_DOWN: 40,
+    DELETE: 46,
+    ESCAPE: 27,
+    TAB: 9,
+};
+var mappedKeyCodes$2 = new Map();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+mappedKeyCodes$2.set(KEY_CODE$2.BACKSPACE, KEY$2.BACKSPACE);
+mappedKeyCodes$2.set(KEY_CODE$2.ENTER, KEY$2.ENTER);
+mappedKeyCodes$2.set(KEY_CODE$2.SPACEBAR, KEY$2.SPACEBAR);
+mappedKeyCodes$2.set(KEY_CODE$2.PAGE_UP, KEY$2.PAGE_UP);
+mappedKeyCodes$2.set(KEY_CODE$2.PAGE_DOWN, KEY$2.PAGE_DOWN);
+mappedKeyCodes$2.set(KEY_CODE$2.END, KEY$2.END);
+mappedKeyCodes$2.set(KEY_CODE$2.HOME, KEY$2.HOME);
+mappedKeyCodes$2.set(KEY_CODE$2.ARROW_LEFT, KEY$2.ARROW_LEFT);
+mappedKeyCodes$2.set(KEY_CODE$2.ARROW_UP, KEY$2.ARROW_UP);
+mappedKeyCodes$2.set(KEY_CODE$2.ARROW_RIGHT, KEY$2.ARROW_RIGHT);
+mappedKeyCodes$2.set(KEY_CODE$2.ARROW_DOWN, KEY$2.ARROW_DOWN);
+mappedKeyCodes$2.set(KEY_CODE$2.DELETE, KEY$2.DELETE);
+mappedKeyCodes$2.set(KEY_CODE$2.ESCAPE, KEY$2.ESCAPE);
+mappedKeyCodes$2.set(KEY_CODE$2.TAB, KEY$2.TAB);
+var navigationKeys$2 = new Set();
+// IE11 has no support for new Set with iterable so we need to initialize this
+// by hand.
+navigationKeys$2.add(KEY$2.PAGE_UP);
+navigationKeys$2.add(KEY$2.PAGE_DOWN);
+navigationKeys$2.add(KEY$2.END);
+navigationKeys$2.add(KEY$2.HOME);
+navigationKeys$2.add(KEY$2.ARROW_LEFT);
+navigationKeys$2.add(KEY$2.ARROW_UP);
+navigationKeys$2.add(KEY$2.ARROW_RIGHT);
+navigationKeys$2.add(KEY$2.ARROW_DOWN);
+/**
+ * normalizeKey returns the normalized string for a navigational action.
+ */
+function normalizeKey$2(evt) {
+    var key = evt.key;
+    // If the event already has a normalized key, return it
+    if (normalizedKeys$2.has(key)) {
+        return key;
+    }
+    // tslint:disable-next-line:deprecation
+    var mappedKey = mappedKeyCodes$2.get(evt.keyCode);
+    if (mappedKey) {
+        return mappedKey;
+    }
+    return KEY$2.UNKNOWN;
+}
+
+/**
+ * @license
+ * Copyright 2020 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+/**
+ * KEY provides normalized string values for keys.
+ */
+var KEY$1 = {
+    UNKNOWN: 'Unknown',
+    BACKSPACE: 'Backspace',
+    ENTER: 'Enter',
+    SPACEBAR: 'Spacebar',
+    PAGE_UP: 'PageUp',
+    PAGE_DOWN: 'PageDown',
+    END: 'End',
+    HOME: 'Home',
+    ARROW_LEFT: 'ArrowLeft',
+    ARROW_UP: 'ArrowUp',
+    ARROW_RIGHT: 'ArrowRight',
+    ARROW_DOWN: 'ArrowDown',
+    DELETE: 'Delete',
+    ESCAPE: 'Escape',
+    TAB: 'Tab',
+};
+var normalizedKeys$1 = new Set();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+normalizedKeys$1.add(KEY$1.BACKSPACE);
+normalizedKeys$1.add(KEY$1.ENTER);
+normalizedKeys$1.add(KEY$1.SPACEBAR);
+normalizedKeys$1.add(KEY$1.PAGE_UP);
+normalizedKeys$1.add(KEY$1.PAGE_DOWN);
+normalizedKeys$1.add(KEY$1.END);
+normalizedKeys$1.add(KEY$1.HOME);
+normalizedKeys$1.add(KEY$1.ARROW_LEFT);
+normalizedKeys$1.add(KEY$1.ARROW_UP);
+normalizedKeys$1.add(KEY$1.ARROW_RIGHT);
+normalizedKeys$1.add(KEY$1.ARROW_DOWN);
+normalizedKeys$1.add(KEY$1.DELETE);
+normalizedKeys$1.add(KEY$1.ESCAPE);
+normalizedKeys$1.add(KEY$1.TAB);
+var KEY_CODE$1 = {
+    BACKSPACE: 8,
+    ENTER: 13,
+    SPACEBAR: 32,
+    PAGE_UP: 33,
+    PAGE_DOWN: 34,
+    END: 35,
+    HOME: 36,
+    ARROW_LEFT: 37,
+    ARROW_UP: 38,
+    ARROW_RIGHT: 39,
+    ARROW_DOWN: 40,
+    DELETE: 46,
+    ESCAPE: 27,
+    TAB: 9,
+};
+var mappedKeyCodes$1 = new Map();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+mappedKeyCodes$1.set(KEY_CODE$1.BACKSPACE, KEY$1.BACKSPACE);
+mappedKeyCodes$1.set(KEY_CODE$1.ENTER, KEY$1.ENTER);
+mappedKeyCodes$1.set(KEY_CODE$1.SPACEBAR, KEY$1.SPACEBAR);
+mappedKeyCodes$1.set(KEY_CODE$1.PAGE_UP, KEY$1.PAGE_UP);
+mappedKeyCodes$1.set(KEY_CODE$1.PAGE_DOWN, KEY$1.PAGE_DOWN);
+mappedKeyCodes$1.set(KEY_CODE$1.END, KEY$1.END);
+mappedKeyCodes$1.set(KEY_CODE$1.HOME, KEY$1.HOME);
+mappedKeyCodes$1.set(KEY_CODE$1.ARROW_LEFT, KEY$1.ARROW_LEFT);
+mappedKeyCodes$1.set(KEY_CODE$1.ARROW_UP, KEY$1.ARROW_UP);
+mappedKeyCodes$1.set(KEY_CODE$1.ARROW_RIGHT, KEY$1.ARROW_RIGHT);
+mappedKeyCodes$1.set(KEY_CODE$1.ARROW_DOWN, KEY$1.ARROW_DOWN);
+mappedKeyCodes$1.set(KEY_CODE$1.DELETE, KEY$1.DELETE);
+mappedKeyCodes$1.set(KEY_CODE$1.ESCAPE, KEY$1.ESCAPE);
+mappedKeyCodes$1.set(KEY_CODE$1.TAB, KEY$1.TAB);
+var navigationKeys$1 = new Set();
+// IE11 has no support for new Set with iterable so we need to initialize this
+// by hand.
+navigationKeys$1.add(KEY$1.PAGE_UP);
+navigationKeys$1.add(KEY$1.PAGE_DOWN);
+navigationKeys$1.add(KEY$1.END);
+navigationKeys$1.add(KEY$1.HOME);
+navigationKeys$1.add(KEY$1.ARROW_LEFT);
+navigationKeys$1.add(KEY$1.ARROW_UP);
+navigationKeys$1.add(KEY$1.ARROW_RIGHT);
+navigationKeys$1.add(KEY$1.ARROW_DOWN);
+/**
+ * normalizeKey returns the normalized string for a navigational action.
+ */
+function normalizeKey$1(evt) {
+    var key = evt.key;
+    // If the event already has a normalized key, return it
+    if (normalizedKeys$1.has(key)) {
+        return key;
+    }
+    // tslint:disable-next-line:deprecation
+    var mappedKey = mappedKeyCodes$1.get(evt.keyCode);
+    if (mappedKey) {
+        return mappedKey;
+    }
+    return KEY$1.UNKNOWN;
 }
 
 /**
@@ -35144,14 +35785,14 @@ function clearBuffer(state) {
  */
 function handleKeydown(opts, state) {
     var event = opts.event, isTargetListItem = opts.isTargetListItem, focusedItemIndex = opts.focusedItemIndex, focusItemAtIndex = opts.focusItemAtIndex, sortedIndexByFirstChar = opts.sortedIndexByFirstChar, isItemAtIndexDisabled = opts.isItemAtIndexDisabled;
-    var isArrowLeft = normalizeKey(event) === 'ArrowLeft';
-    var isArrowUp = normalizeKey(event) === 'ArrowUp';
-    var isArrowRight = normalizeKey(event) === 'ArrowRight';
-    var isArrowDown = normalizeKey(event) === 'ArrowDown';
-    var isHome = normalizeKey(event) === 'Home';
-    var isEnd = normalizeKey(event) === 'End';
-    var isEnter = normalizeKey(event) === 'Enter';
-    var isSpace = normalizeKey(event) === 'Spacebar';
+    var isArrowLeft = normalizeKey$1(event) === 'ArrowLeft';
+    var isArrowUp = normalizeKey$1(event) === 'ArrowUp';
+    var isArrowRight = normalizeKey$1(event) === 'ArrowRight';
+    var isArrowDown = normalizeKey$1(event) === 'ArrowDown';
+    var isHome = normalizeKey$1(event) === 'Home';
+    var isEnd = normalizeKey$1(event) === 'End';
+    var isEnter = normalizeKey$1(event) === 'Enter';
+    var isSpace = normalizeKey$1(event) === 'Spacebar';
     if (event.altKey || event.ctrlKey || event.metaKey || isArrowLeft ||
         isArrowUp || isArrowRight || isArrowDown || isHome || isEnd || isEnter) {
         return -1;
@@ -35189,6 +35830,199 @@ function handleKeydown(opts, state) {
         return matchItem(matchItemOpts, state);
     }
     return -1;
+}
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$2 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
+
+/**
+ * @license
+ * Copyright 2020 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+/**
+ * KEY provides normalized string values for keys.
+ */
+var KEY = {
+    UNKNOWN: 'Unknown',
+    BACKSPACE: 'Backspace',
+    ENTER: 'Enter',
+    SPACEBAR: 'Spacebar',
+    PAGE_UP: 'PageUp',
+    PAGE_DOWN: 'PageDown',
+    END: 'End',
+    HOME: 'Home',
+    ARROW_LEFT: 'ArrowLeft',
+    ARROW_UP: 'ArrowUp',
+    ARROW_RIGHT: 'ArrowRight',
+    ARROW_DOWN: 'ArrowDown',
+    DELETE: 'Delete',
+    ESCAPE: 'Escape',
+    TAB: 'Tab',
+};
+var normalizedKeys = new Set();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+normalizedKeys.add(KEY.BACKSPACE);
+normalizedKeys.add(KEY.ENTER);
+normalizedKeys.add(KEY.SPACEBAR);
+normalizedKeys.add(KEY.PAGE_UP);
+normalizedKeys.add(KEY.PAGE_DOWN);
+normalizedKeys.add(KEY.END);
+normalizedKeys.add(KEY.HOME);
+normalizedKeys.add(KEY.ARROW_LEFT);
+normalizedKeys.add(KEY.ARROW_UP);
+normalizedKeys.add(KEY.ARROW_RIGHT);
+normalizedKeys.add(KEY.ARROW_DOWN);
+normalizedKeys.add(KEY.DELETE);
+normalizedKeys.add(KEY.ESCAPE);
+normalizedKeys.add(KEY.TAB);
+var KEY_CODE = {
+    BACKSPACE: 8,
+    ENTER: 13,
+    SPACEBAR: 32,
+    PAGE_UP: 33,
+    PAGE_DOWN: 34,
+    END: 35,
+    HOME: 36,
+    ARROW_LEFT: 37,
+    ARROW_UP: 38,
+    ARROW_RIGHT: 39,
+    ARROW_DOWN: 40,
+    DELETE: 46,
+    ESCAPE: 27,
+    TAB: 9,
+};
+var mappedKeyCodes = new Map();
+// IE11 has no support for new Map with iterable so we need to initialize this
+// by hand.
+mappedKeyCodes.set(KEY_CODE.BACKSPACE, KEY.BACKSPACE);
+mappedKeyCodes.set(KEY_CODE.ENTER, KEY.ENTER);
+mappedKeyCodes.set(KEY_CODE.SPACEBAR, KEY.SPACEBAR);
+mappedKeyCodes.set(KEY_CODE.PAGE_UP, KEY.PAGE_UP);
+mappedKeyCodes.set(KEY_CODE.PAGE_DOWN, KEY.PAGE_DOWN);
+mappedKeyCodes.set(KEY_CODE.END, KEY.END);
+mappedKeyCodes.set(KEY_CODE.HOME, KEY.HOME);
+mappedKeyCodes.set(KEY_CODE.ARROW_LEFT, KEY.ARROW_LEFT);
+mappedKeyCodes.set(KEY_CODE.ARROW_UP, KEY.ARROW_UP);
+mappedKeyCodes.set(KEY_CODE.ARROW_RIGHT, KEY.ARROW_RIGHT);
+mappedKeyCodes.set(KEY_CODE.ARROW_DOWN, KEY.ARROW_DOWN);
+mappedKeyCodes.set(KEY_CODE.DELETE, KEY.DELETE);
+mappedKeyCodes.set(KEY_CODE.ESCAPE, KEY.ESCAPE);
+mappedKeyCodes.set(KEY_CODE.TAB, KEY.TAB);
+var navigationKeys = new Set();
+// IE11 has no support for new Set with iterable so we need to initialize this
+// by hand.
+navigationKeys.add(KEY.PAGE_UP);
+navigationKeys.add(KEY.PAGE_DOWN);
+navigationKeys.add(KEY.END);
+navigationKeys.add(KEY.HOME);
+navigationKeys.add(KEY.ARROW_LEFT);
+navigationKeys.add(KEY.ARROW_UP);
+navigationKeys.add(KEY.ARROW_RIGHT);
+navigationKeys.add(KEY.ARROW_DOWN);
+/**
+ * normalizeKey returns the normalized string for a navigational action.
+ */
+function normalizeKey(evt) {
+    var key = evt.key;
+    // If the event already has a normalized key, return it
+    if (normalizedKeys.has(key)) {
+        return key;
+    }
+    // tslint:disable-next-line:deprecation
+    var mappedKey = mappedKeyCodes.get(evt.keyCode);
+    if (mappedKey) {
+        return mappedKey;
+    }
+    return KEY.UNKNOWN;
 }
 
 /**
@@ -35683,7 +36517,7 @@ var MDCSelectFoundation = /** @class */ (function (_super) {
         this.recentlyClicked = true;
     };
     return MDCSelectFoundation;
-}(MDCFoundation));
+}(MDCFoundation$2));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCSelectFoundation$1 = MDCSelectFoundation;
 
@@ -36225,8 +37059,8 @@ class SelectBase extends FormElement {
         }
     }
     onKeydown(evt) {
-        const arrowUp = normalizeKey(evt) === KEY.ARROW_UP;
-        const arrowDown = normalizeKey(evt) === KEY.ARROW_DOWN;
+        const arrowUp = normalizeKey$2(evt) === KEY$2.ARROW_UP;
+        const arrowDown = normalizeKey$2(evt) === KEY$2.ARROW_DOWN;
         if (arrowDown || arrowUp) {
             const shouldSelectNextItem = arrowUp && this.index > 0;
             const shouldSelectPrevItem = arrowDown && this.index < this.items.length - 1;
@@ -36361,7 +37195,7 @@ __decorate$1([
     i$2('.mdc-select__anchor')
 ], SelectBase.prototype, "anchorElement", void 0);
 __decorate$1([
-    e$6({ type: Boolean, attribute: 'disabled', reflect: true }),
+    n$2({ type: Boolean, attribute: 'disabled', reflect: true }),
     observer(function (value) {
         if (this.mdcFoundation) {
             this.mdcFoundation.setDisabled(value);
@@ -36369,7 +37203,7 @@ __decorate$1([
     })
 ], SelectBase.prototype, "disabled", void 0);
 __decorate$1([
-    e$6({ type: Boolean }),
+    n$2({ type: Boolean }),
     observer(function (_newVal, oldVal) {
         if (oldVal !== undefined && this.outlined !== oldVal) {
             this.layout(false);
@@ -36377,7 +37211,7 @@ __decorate$1([
     })
 ], SelectBase.prototype, "outlined", void 0);
 __decorate$1([
-    e$6({ type: String }),
+    n$2({ type: String }),
     observer(function (_newVal, oldVal) {
         if (oldVal !== undefined && this.label !== oldVal) {
             this.layout(false);
@@ -36391,7 +37225,7 @@ __decorate$1([
     t$1()
 ], SelectBase.prototype, "outlineWidth", void 0);
 __decorate$1([
-    e$6({ type: String }),
+    n$2({ type: String }),
     observer(function (value) {
         if (this.mdcFoundation) {
             const initialization = this.selected === null && !!value;
@@ -36404,37 +37238,37 @@ __decorate$1([
     })
 ], SelectBase.prototype, "value", void 0);
 __decorate$1([
-    e$6()
+    n$2()
 ], SelectBase.prototype, "name", void 0);
 __decorate$1([
     t$1()
 ], SelectBase.prototype, "selectedText", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SelectBase.prototype, "icon", void 0);
 __decorate$1([
     t$1()
 ], SelectBase.prototype, "menuOpen", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SelectBase.prototype, "helper", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], SelectBase.prototype, "validateOnInitialRender", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SelectBase.prototype, "validationMessage", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], SelectBase.prototype, "required", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], SelectBase.prototype, "naturalMenuWidth", void 0);
 __decorate$1([
     t$1()
 ], SelectBase.prototype, "isUiValid", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], SelectBase.prototype, "fixedMenuPosition", void 0);
 __decorate$1([
     e$5({ capture: true })
@@ -36551,19 +37385,19 @@ let SclWizardingSelect = class SclWizardingSelect extends Select {
     }
 };
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], SclWizardingSelect.prototype, "nullable", void 0);
 __decorate$1([
     t$1()
 ], SclWizardingSelect.prototype, "null", null);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SclWizardingSelect.prototype, "maybeValue", null);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SclWizardingSelect.prototype, "defaultValue", void 0);
 __decorate$1([
-    e$6({ type: Array })
+    n$2({ type: Array })
 ], SclWizardingSelect.prototype, "reservedValues", void 0);
 __decorate$1([
     i$2('mwc-switch')
@@ -36571,6 +37405,79 @@ __decorate$1([
 SclWizardingSelect = __decorate$1([
     e$7('scl-wizarding-select')
 ], SclWizardingSelect);
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCFoundation$1 = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
 
 /**
  * @license
@@ -36672,7 +37579,7 @@ var MDCFormFieldFoundation = /** @class */ (function (_super) {
         });
     };
     return MDCFormFieldFoundation;
-}(MDCFoundation));
+}(MDCFoundation$1));
 // tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
 var MDCFormFieldFoundation$1 = MDCFormFieldFoundation;
 
@@ -36747,16 +37654,16 @@ class FormfieldBase extends BaseElement {
     }
 }
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], FormfieldBase.prototype, "alignEnd", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], FormfieldBase.prototype, "spaceBetween", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], FormfieldBase.prototype, "nowrap", void 0);
 __decorate$1([
-    e$6({ type: String }),
+    n$2({ type: String }),
     observer(async function (label) {
         var _a;
         (_a = this.input) === null || _a === void 0 ? void 0 : _a.setAttribute('aria-label', label);
@@ -36984,34 +37891,34 @@ __decorate$1([
     i$2('input')
 ], CheckboxBase.prototype, "formElement", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], CheckboxBase.prototype, "checked", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], CheckboxBase.prototype, "indeterminate", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], CheckboxBase.prototype, "disabled", void 0);
 __decorate$1([
-    e$6({ type: String, reflect: true })
+    n$2({ type: String, reflect: true })
 ], CheckboxBase.prototype, "name", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], CheckboxBase.prototype, "value", void 0);
 __decorate$1([
     ariaProperty,
-    e$6({ type: String, attribute: 'aria-label' })
+    n$2({ type: String, attribute: 'aria-label' })
 ], CheckboxBase.prototype, "ariaLabel", void 0);
 __decorate$1([
     ariaProperty,
-    e$6({ type: String, attribute: 'aria-labelledby' })
+    n$2({ type: String, attribute: 'aria-labelledby' })
 ], CheckboxBase.prototype, "ariaLabelledBy", void 0);
 __decorate$1([
     ariaProperty,
-    e$6({ type: String, attribute: 'aria-describedby' })
+    n$2({ type: String, attribute: 'aria-describedby' })
 ], CheckboxBase.prototype, "ariaDescribedBy", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], CheckboxBase.prototype, "reducedTouchTarget", void 0);
 __decorate$1([
     t$1()
@@ -37164,22 +38071,22 @@ let SclWizardingCheckbox = class SclWizardingCheckbox extends s$1 {
     }
 };
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SclWizardingCheckbox.prototype, "label", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SclWizardingCheckbox.prototype, "helper", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], SclWizardingCheckbox.prototype, "nullable", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], SclWizardingCheckbox.prototype, "defaultChecked", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], SclWizardingCheckbox.prototype, "maybeValue", null);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], SclWizardingCheckbox.prototype, "disabled", void 0);
 __decorate$1([
     t$1()
@@ -37308,7 +38215,7 @@ function selectType(e, data, Val) {
       >`;
     });
     const selectValOptionUI = (e.target.parentElement.querySelector('scl-wizarding-select[label="Val"]'));
-    B(x `${enumVals}`, selectValOptionUI);
+    D(x `${enumVals}`, selectValOptionUI);
     selectValOptionUI.requestUpdate();
 }
 function selectBType(e, bType, type) {
@@ -37575,7 +38482,7 @@ function editBDaWizard(element) {
     const valKind = element.getAttribute('valKind');
     const valImport = element.getAttribute('valImport');
     const daOrEnumTypes = Array.from(doc.querySelectorAll('DAType, EnumType'))
-        .filter(isPublic$1)
+        .filter(isPublic$2)
         .filter(daOrEnumType => daOrEnumType.getAttribute('id'));
     const data = element.closest('DataTypeTemplates');
     return [
@@ -37893,10 +38800,10 @@ __decorate$1([
     i$2('mwc-checkbox')
 ], CheckListItemBase.prototype, "checkboxElement", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], CheckListItemBase.prototype, "left", void 0);
 __decorate$1([
-    e$6({ type: String, reflect: true })
+    n$2({ type: String, reflect: true })
 ], CheckListItemBase.prototype, "graphic", void 0);
 
 /**
@@ -40943,1075 +41850,6 @@ __decorate$1([
 
 window.customElements.define('oscd-filtered-list', OscdFilteredList);
 
-const voidSelector = ':not(*)';
-function selector(tagName, identity) {
-    if (typeof identity !== 'string')
-        return voidSelector;
-    if (isSCLTag(tagName))
-        return tags[tagName].selector(tagName, identity);
-    return tagName;
-}
-function crossProduct(...arrays) {
-    return arrays.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())), [[]]);
-}
-function pathParts(identity) {
-    var _a;
-    const path = identity.split('>');
-    const end = (_a = path.pop()) !== null && _a !== void 0 ? _a : '';
-    const start = path.join('>');
-    return [start, end];
-}
-function hitemSelector(tagName, identity) {
-    const [version, revision] = identity.split('\t');
-    if (!version || !revision)
-        return voidSelector;
-    return `${tagName}[version="${version}"][revision="${revision}"]`;
-}
-function terminalSelector(tagName, identity) {
-    const [parentIdentity, connectivityNode] = pathParts(identity);
-    const parentSelectors = relatives[tagName].parents.flatMap(parentTag => selector(parentTag, parentIdentity).split(','));
-    return crossProduct(parentSelectors, ['>'], [`${tagName}[connectivityNode="${connectivityNode}"]`])
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function lNodeSelector(tagName, identity) {
-    if (identity.endsWith(')')) {
-        const [parentIdentity, childIdentity] = pathParts(identity);
-        const [lnClass, lnType] = childIdentity
-            .substring(1, childIdentity.length - 1)
-            .split(' ');
-        if (!lnClass || !lnType)
-            return voidSelector;
-        const parentSelectors = relatives[tagName].parents.flatMap(parentTag => selector(parentTag, parentIdentity).split(','));
-        return crossProduct(parentSelectors, ['>'], [`${tagName}[iedName="None"][lnClass="${lnClass}"][lnType="${lnType}"]`])
-            .map(strings => strings.join(''))
-            .join(',');
-    }
-    const [iedName, ldInst, prefix, lnClass, lnInst] = identity.split(/[ /]/);
-    if (!iedName || !ldInst || !lnClass)
-        return voidSelector;
-    const [iedNameSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors,] = [
-        [`[iedName="${iedName}"]`],
-        ldInst === '(Client)'
-            ? [':not([ldInst])', '[ldInst=""]']
-            : [`[ldInst="${ldInst}"]`],
-        prefix ? [`[prefix="${prefix}"]`] : [':not([prefix])', '[prefix=""]'],
-        [`[lnClass="${lnClass}"]`],
-        lnInst ? [`[lnInst="${lnInst}"]`] : [':not([lnInst])', '[lnInst=""]'],
-    ];
-    return crossProduct([tagName], iedNameSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors)
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function kDCSelector(tagName, identity) {
-    const [parentIdentity, childIdentity] = pathParts(identity);
-    const [iedName, apName] = childIdentity.split(' ');
-    return `${selector('IED', parentIdentity)}>${tagName}[iedName="${iedName}"][apName="${apName}"]`;
-}
-function associationSelector(tagName, identity) {
-    const [parentIdentity, associationID] = pathParts(identity);
-    if (!associationID)
-        return voidSelector;
-    return `${selector('Server', parentIdentity)}>${tagName}[associationID="${associationID}"]`;
-}
-function lDeviceSelector(tagName, identity) {
-    const [iedName, inst] = identity.split('>>');
-    if (!inst)
-        return voidSelector;
-    return `IED[name="${iedName}"] ${tagName}[inst="${inst}"]`;
-}
-function iEDNameSelector(tagName, identity) {
-    const [parentIdentity, childIdentity] = pathParts(identity);
-    const [iedName, apRef, ldInst, prefix, lnClass, lnInst] = childIdentity.split(/[ /]/);
-    const [parentSelectors, apRefSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors,] = [
-        relatives[tagName].parents.flatMap(parentTag => selector(parentTag, parentIdentity).split(',')),
-        [`${iedName}`],
-        apRef ? [`[apRef="${apRef}"]`] : [':not([apRef])', '[apRef=""]'],
-        ldInst ? [`[ldInst="${ldInst}"]`] : [':not([ldInst])', '[ldInst=""]'],
-        prefix ? [`[prefix="${prefix}"]`] : [':not([prefix])', '[prefix=""]'],
-        [`[lnClass="${lnClass}"]`],
-        lnInst ? [`[lnInst="${lnInst}"]`] : [':not([lnInst])', '[lnInst=""]'],
-    ];
-    return crossProduct(parentSelectors, ['>'], [tagName], apRefSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors)
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function fCDASelector(tagName, identity) {
-    const [parentIdentity, childIdentity] = pathParts(identity);
-    const [ldInst, prefix, lnClass, lnInst] = childIdentity.split(/[ /.]/);
-    const matchDoDa = childIdentity.match(/.([A-Z][A-Za-z0-9.]*) ([A-Za-z0-9.]*) \(/);
-    const doName = matchDoDa && matchDoDa[1] ? matchDoDa[1] : '';
-    const daName = matchDoDa && matchDoDa[2] ? matchDoDa[2] : '';
-    const matchFx = childIdentity.match(/\(([A-Z]{2})/);
-    const matchIx = childIdentity.match(/ \[([0-9]{1,2})\]/);
-    const fc = matchFx && matchFx[1] ? matchFx[1] : '';
-    const ix = matchIx && matchIx[1] ? matchIx[1] : '';
-    const [parentSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors, doNameSelectors, daNameSelectors, fcSelectors, ixSelectors,] = [
-        relatives[tagName].parents.flatMap(parentTag => selector(parentTag, parentIdentity).split(',')),
-        [`[ldInst="${ldInst}"]`],
-        prefix ? [`[prefix="${prefix}"]`] : [':not([prefix])', '[prefix=""]'],
-        [`[lnClass="${lnClass}"]`],
-        lnInst ? [`[lnInst="${lnInst}"]`] : [':not([lnInst])', '[lnInst=""]'],
-        [`[doName="${doName}"]`],
-        daName ? [`[daName="${daName}"]`] : [':not([daName])', '[daName=""]'],
-        [`[fc="${fc}"]`],
-        ix ? [`[ix="${ix}"]`] : [':not([ix])', '[ix=""]'],
-    ];
-    return crossProduct(parentSelectors, ['>'], [tagName], ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors, doNameSelectors, daNameSelectors, fcSelectors, ixSelectors)
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function extRefSelector(tagName, identity) {
-    const [parentIdentity, childIdentity] = pathParts(identity);
-    const parentSelectors = relatives[tagName].parents.flatMap(parentTag => selector(parentTag, parentIdentity).split(','));
-    if (childIdentity.endsWith(']')) {
-        const [intAddr] = childIdentity.split('[');
-        const intAddrSelectors = [`[intAddr="${intAddr}"]`];
-        return crossProduct(parentSelectors, ['>'], [tagName], intAddrSelectors)
-            .map(strings => strings.join(''))
-            .join(',');
-    }
-    let iedName;
-    let ldInst;
-    let prefix;
-    let lnClass;
-    let lnInst;
-    let doName;
-    let daName;
-    let serviceType;
-    let srcCBName;
-    let srcLDInst;
-    let srcPrefix;
-    let srcLNClass;
-    let srcLNInst;
-    let intAddr;
-    if (!childIdentity.includes(':') && !childIdentity.includes('@')) {
-        [iedName, ldInst, prefix, lnClass, lnInst, doName, daName] =
-            childIdentity.split(/[ /]/);
-    }
-    else if (childIdentity.includes(':') && !childIdentity.includes('@')) {
-        [
-            serviceType,
-            srcCBName,
-            srcLDInst,
-            srcPrefix,
-            srcLNClass,
-            srcLNInst,
-            iedName,
-            ldInst,
-            prefix,
-            lnClass,
-            lnInst,
-            doName,
-            daName,
-        ] = childIdentity.split(/[ /:]/);
-    }
-    else if (!childIdentity.includes(':') && childIdentity.includes('@')) {
-        [iedName, ldInst, prefix, lnClass, lnInst, doName, daName, intAddr] =
-            childIdentity.split(/[ /@]/);
-    }
-    else {
-        [
-            serviceType,
-            srcCBName,
-            srcLDInst,
-            srcPrefix,
-            srcLNClass,
-            srcLNInst,
-            iedName,
-            ldInst,
-            prefix,
-            lnClass,
-            lnInst,
-            doName,
-            daName,
-            intAddr,
-        ] = childIdentity.split(/[ /:@]/);
-    }
-    const [iedNameSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors, doNameSelectors, daNameSelectors, serviceTypeSelectors, srcCBNameSelectors, srcLDInstSelectors, srcPrefixSelectors, srcLNClassSelectors, srcLNInstSelectors, intAddrSelectors,] = [
-        iedName ? [`[iedName="${iedName}"]`] : [':not([iedName])'],
-        ldInst ? [`[ldInst="${ldInst}"]`] : [':not([ldInst])', '[ldInst=""]'],
-        prefix ? [`[prefix="${prefix}"]`] : [':not([prefix])', '[prefix=""]'],
-        lnClass ? [`[lnClass="${lnClass}"]`] : [':not([lnClass])'],
-        lnInst ? [`[lnInst="${lnInst}"]`] : [':not([lnInst])', '[lnInst=""]'],
-        doName ? [`[doName="${doName}"]`] : [':not([doName])'],
-        daName ? [`[daName="${daName}"]`] : [':not([daName])', '[daName=""]'],
-        serviceType
-            ? [`[serviceType="${serviceType}"]`]
-            : [':not([serviceType])', '[serviceType=""]'],
-        srcCBName
-            ? [`[srcCBName="${srcCBName}"]`]
-            : [':not([srcCBName])', '[srcCBName=""]'],
-        srcLDInst
-            ? [`[srcLDInst="${srcLDInst}"]`]
-            : [':not([srcLDInst])', '[srcLDInst=""]'],
-        srcPrefix
-            ? [`[srcPrefix="${srcPrefix}"]`]
-            : [':not([srcPrefix])', '[srcPrefix=""]'],
-        srcLNClass
-            ? [`[srcLNClass="${srcLNClass}"]`]
-            : [':not([srcLNClass])', '[srcLNClass=""]'],
-        srcLNInst
-            ? [`[srcLNInst="${srcLNInst}"]`]
-            : [':not([srcLNInst])', '[srcLNInst=""]'],
-        intAddr ? [`[intAddr="${intAddr}"]`] : [':not([intAddr])', '[intAddr=""]'],
-    ];
-    return crossProduct(parentSelectors, ['>'], [tagName], iedNameSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors, doNameSelectors, daNameSelectors, serviceTypeSelectors, srcCBNameSelectors, srcLDInstSelectors, srcPrefixSelectors, srcLNClassSelectors, srcLNInstSelectors, intAddrSelectors)
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function lNSelector(tagName, identity) {
-    const [parentIdentity, childIdentity] = pathParts(identity);
-    const parentSelectors = relatives[tagName].parents.flatMap(parentTag => selector(parentTag, parentIdentity).split(','));
-    const [prefix, lnClass, inst] = childIdentity.split(' ');
-    if (!lnClass)
-        return voidSelector;
-    const [prefixSelectors, lnClassSelectors, instSelectors] = [
-        prefix ? [`[prefix="${prefix}"]`] : [':not([prefix])', '[prefix=""]'],
-        [`[lnClass="${lnClass}"]`],
-        [`[inst="${inst}"]`],
-    ];
-    return crossProduct(parentSelectors, ['>'], [tagName], prefixSelectors, lnClassSelectors, instSelectors)
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function clientLNSelector(tagName, identity) {
-    const [parentIdentity, childIdentity] = pathParts(identity);
-    const parentSelectors = relatives[tagName].parents.flatMap(parentTag => selector(parentTag, parentIdentity).split(','));
-    const [iedName, apRef, ldInst, prefix, lnClass, lnInst] = childIdentity.split(/[ /]/);
-    const [iedNameSelectors, apRefSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors,] = [
-        iedName ? [`[iedName="${iedName}"]`] : [':not([iedName])', '[iedName=""]'],
-        apRef ? [`[apRef="${apRef}"]`] : [':not([apRef])', '[apRef=""]'],
-        ldInst ? [`[ldInst="${ldInst}"]`] : [':not([ldInst])', '[ldInst=""]'],
-        prefix ? [`[prefix="${prefix}"]`] : [':not([prefix])', '[prefix=""]'],
-        [`[lnClass="${lnClass}"]`],
-        lnInst ? [`[lnInst="${lnInst}"]`] : [':not([lnInst])', '[lnInst=""]'],
-    ];
-    return crossProduct(parentSelectors, ['>'], [tagName], iedNameSelectors, apRefSelectors, ldInstSelectors, prefixSelectors, lnClassSelectors, lnInstSelectors)
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function ixNamingSelector(tagName, identity, depth = -1) {
-    var _a;
-    // eslint-disable-next-line no-param-reassign
-    if (depth === -1)
-        depth = identity.split('>').length;
-    const [parentIdentity, childIdentity] = pathParts(identity);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_0, name, _1, ix] = (_a = childIdentity.match(/([^[]*)(\[([0-9]*)\])?/)) !== null && _a !== void 0 ? _a : [];
-    if (!name)
-        return voidSelector;
-    if (depth === 0)
-        return `${tagName}[name="${name}"]`;
-    const parentSelectors = relatives[tagName].parents
-        .flatMap(parentTag => parentTag === 'SDI'
-        ? ixNamingSelector(parentTag, parentIdentity, depth - 1).split(',')
-        : selector(parentTag, parentIdentity).split(','))
-        // eslint-disable-next-line no-shadow
-        .filter(selector => !selector.startsWith(voidSelector));
-    if (parentSelectors.length === 0)
-        return voidSelector;
-    const [nameSelectors, ixSelectors] = [
-        [`[name="${name}"]`],
-        ix ? [`[ix="${ix}"]`] : ['[ix=""]', ':not([ix])'],
-    ];
-    return crossProduct(parentSelectors, ['>'], [tagName], nameSelectors, ixSelectors)
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function valSelector(tagName, identity) {
-    const [parentIdentity, childIdentity] = pathParts(identity);
-    const [sGroup, indexText] = childIdentity.split(' ');
-    const index = parseFloat(indexText);
-    const parentSelectors = relatives[tagName].parents.flatMap(parentTag => selector(parentTag, parentIdentity).split(','));
-    const [nameSelectors, ixSelectors] = [
-        sGroup ? [`[sGroup="${sGroup}"]`] : [''],
-        index ? [`:nth-child(${index + 1})`] : [''],
-    ];
-    return crossProduct(parentSelectors, ['>'], [tagName], nameSelectors, ixSelectors)
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function connectedAPSelector(tagName, identity) {
-    const [iedName, apName] = identity.split(' ');
-    if (!iedName || !apName)
-        return voidSelector;
-    return `${tagName}[iedName="${iedName}"][apName="${apName}"]`;
-}
-function controlBlockSelector(tagName, identity) {
-    const [ldInst, cbName] = identity.split(' ');
-    if (!ldInst || !cbName)
-        return voidSelector;
-    return `${tagName}[ldInst="${ldInst}"][cbName="${cbName}"]`;
-}
-function physConnSelector(tagName, identity) {
-    const [parentIdentity, pcType] = pathParts(identity);
-    const [parentSelectors, typeSelectors] = [
-        relatives[tagName].parents.flatMap(parentTag => selector(parentTag, parentIdentity).split(',')),
-        pcType ? [`[type="${pcType}"]`] : [''],
-    ];
-    return crossProduct(parentSelectors, ['>'], [tagName], typeSelectors)
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function pSelector(tagName, identity) {
-    const [parentIdentity, childIdentity] = pathParts(identity);
-    const [type] = childIdentity.split(' ');
-    const index = childIdentity &&
-        childIdentity.match(/\[([0-9]+)\]/) &&
-        childIdentity.match(/\[([0-9]+)\]/)[1]
-        ? parseFloat(childIdentity.match(/\[([0-9]+)\]/)[1])
-        : NaN;
-    const [parentSelectors, typeSelectors, ixSelectors] = [
-        relatives[tagName].parents.flatMap(parentTag => selector(parentTag, parentIdentity).split(',')),
-        [`[type="${type}"]`],
-        index ? [`:nth-child(${index + 1})`] : [''],
-    ];
-    return crossProduct(parentSelectors, ['>'], [tagName], typeSelectors, ixSelectors)
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function enumValSelector(tagName, identity) {
-    const [parentIdentity, ord] = pathParts(identity);
-    return `${selector('EnumType', parentIdentity)}>${tagName}[ord="${ord}"]`;
-}
-function protNsSelector(tagName, identity) {
-    const [parentIdentity, childIdentity] = pathParts(identity);
-    const [type, value] = childIdentity.split('\t');
-    const [parentSelectors] = [
-        relatives[tagName].parents.flatMap(parentTag => selector(parentTag, parentIdentity).split(',')),
-    ];
-    return crossProduct(parentSelectors, ['>'], [tagName], [`[type="${type}"]`], ['>'], [value])
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function sCLSelector() {
-    return ':root';
-}
-function namingSelector(tagName, identity, depth = -1) {
-    // eslint-disable-next-line no-param-reassign
-    if (depth === -1)
-        depth = identity.split('>').length;
-    const [parentIdentity, name] = pathParts(identity);
-    if (!name)
-        return voidSelector;
-    if (depth === 0)
-        return `${tagName}[name="${name}"]`;
-    // eslint-disable-next-line prefer-destructuring
-    const parents = relatives[tagName].parents;
-    if (!parents)
-        return voidSelector;
-    const parentSelectors = parents
-        .flatMap(parentTag => tags[parentTag].selector === tags.Substation.selector
-        ? namingSelector(parentTag, parentIdentity, depth - 1).split(',')
-        : selector(parentTag, parentIdentity).split(','))
-        // eslint-disable-next-line no-shadow
-        .filter(selector => !selector.startsWith(voidSelector));
-    if (parentSelectors.length === 0)
-        return voidSelector;
-    return crossProduct(parentSelectors, ['>'], [tagName], [`[name="${name}"]`])
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function singletonSelector(tagName, identity) {
-    // eslint-disable-next-line prefer-destructuring
-    const parents = relatives[tagName].parents;
-    if (!parents)
-        return voidSelector;
-    const parentSelectors = parents
-        .flatMap(parentTag => selector(parentTag, identity).split(','))
-        // eslint-disable-next-line no-shadow
-        .filter(selector => !selector.startsWith(voidSelector));
-    if (parentSelectors.length === 0)
-        return voidSelector;
-    return crossProduct(parentSelectors, ['>'], [tagName])
-        .map(strings => strings.join(''))
-        .join(',');
-}
-function idNamingSelector(tagName, identity) {
-    const id = identity.replace(/^#/, '');
-    if (!id)
-        return voidSelector;
-    return `${tagName}[id="${id}"]`;
-}
-
-const tags = {
-    AccessControl: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    AccessPoint: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    Address: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    Association: {
-        identity: associationIdentity,
-        selector: associationSelector,
-    },
-    Authentication: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    BDA: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    BitRate: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    Bay: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    ClientLN: {
-        identity: clientLNIdentity,
-        selector: clientLNSelector,
-    },
-    ClientServices: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    CommProt: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    Communication: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    ConductingEquipment: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    ConfDataSet: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    ConfLdName: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    ConfLNs: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    ConfLogControl: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    ConfReportControl: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    ConfSG: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    ConfSigRef: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    ConnectedAP: {
-        identity: connectedAPIdentity,
-        selector: connectedAPSelector,
-    },
-    ConnectivityNode: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    DA: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    DAI: {
-        identity: ixNamingIdentity,
-        selector: ixNamingSelector,
-    },
-    DAType: {
-        identity: idNamingIdentity,
-        selector: idNamingSelector,
-    },
-    DO: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    DOI: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    DOType: {
-        identity: idNamingIdentity,
-        selector: idNamingSelector,
-    },
-    DataObjectDirectory: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    DataSet: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    DataSetDirectory: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    DataTypeTemplates: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    DynAssociation: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    DynDataSet: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    EnumType: {
-        identity: idNamingIdentity,
-        selector: idNamingSelector,
-    },
-    EnumVal: {
-        identity: enumValIdentity,
-        selector: enumValSelector,
-    },
-    EqFunction: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    EqSubFunction: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    ExtRef: {
-        identity: extRefIdentity,
-        selector: extRefSelector,
-    },
-    FCDA: {
-        identity: fCDAIdentity,
-        selector: fCDASelector,
-    },
-    FileHandling: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    Function: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    GeneralEquipment: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    GetCBValues: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    GetDataObjectDefinition: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    GetDataSetValue: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    GetDirectory: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    GOOSE: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    GOOSESecurity: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    GSE: {
-        identity: controlBlockIdentity,
-        selector: controlBlockSelector,
-    },
-    GSEDir: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    GSEControl: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    GSESettings: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    GSSE: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    Header: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    History: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    Hitem: {
-        identity: hitemIdentity,
-        selector: hitemSelector,
-    },
-    IED: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    IEDName: {
-        identity: iEDNameIdentity,
-        selector: iEDNameSelector,
-    },
-    Inputs: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    IssuerName: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    KDC: {
-        identity: kDCIdentity,
-        selector: kDCSelector,
-    },
-    LDevice: {
-        identity: lDeviceIdentity,
-        selector: lDeviceSelector,
-    },
-    LN: {
-        identity: lNIdentity,
-        selector: lNSelector,
-    },
-    LN0: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    LNode: {
-        identity: lNodeIdentity,
-        selector: lNodeSelector,
-    },
-    LNodeType: {
-        identity: idNamingIdentity,
-        selector: idNamingSelector,
-    },
-    Line: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    Log: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    LogControl: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    LogSettings: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    MaxTime: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    McSecurity: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    MinTime: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    NeutralPoint: {
-        identity: terminalIdentity,
-        selector: terminalSelector,
-    },
-    OptFields: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    P: {
-        identity: pIdentity,
-        selector: pSelector,
-    },
-    PhysConn: {
-        identity: physConnIdentity,
-        selector: physConnSelector,
-    },
-    PowerTransformer: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    Private: {
-        identity: () => NaN,
-        selector: () => voidSelector,
-    },
-    Process: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    ProtNs: {
-        identity: protNsIdentity,
-        selector: protNsSelector,
-    },
-    Protocol: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    ReadWrite: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    RedProt: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    ReportControl: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    ReportSettings: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    RptEnabled: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SamplesPerSec: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SampledValueControl: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    SecPerSamples: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SCL: {
-        identity: sCLIdentity,
-        selector: sCLSelector,
-    },
-    SDI: {
-        identity: ixNamingIdentity,
-        selector: ixNamingSelector,
-    },
-    SDO: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    Server: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    ServerAt: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    Services: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SetDataSetValue: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SettingControl: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SettingGroups: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SGEdit: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SmpRate: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SMV: {
-        identity: controlBlockIdentity,
-        selector: controlBlockSelector,
-    },
-    SmvOpts: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SMVsc: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SMVSecurity: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    SMVSettings: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    SubEquipment: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    SubFunction: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    SubNetwork: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    Subject: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    Substation: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    SupSubscription: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    TapChanger: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    Terminal: {
-        identity: terminalIdentity,
-        selector: terminalSelector,
-    },
-    Text: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    TimerActivatedControl: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    TimeSyncProt: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    TransformerWinding: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-    TrgOps: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    Val: {
-        identity: valIdentity,
-        selector: valSelector,
-    },
-    ValueHandling: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    Voltage: {
-        identity: singletonIdentity,
-        selector: singletonSelector,
-    },
-    VoltageLevel: {
-        identity: namingIdentity,
-        selector: namingSelector,
-    },
-};
-
-/** @returns a string uniquely identifying `e` in its document, or NaN if `e`
- * is unidentifiable. */
-function identity(e) {
-    if (e === null)
-        return NaN;
-    if (e.closest('Private'))
-        return NaN;
-    const tag = e.tagName;
-    if (isSCLTag(tag))
-        return tags[tag].identity(e);
-    return NaN;
-}
-function hitemIdentity(e) {
-    return `${e.getAttribute('version')}\t${e.getAttribute('revision')}`;
-}
-function terminalIdentity(e) {
-    return `${identity(e.parentElement)}>${e.getAttribute('connectivityNode')}`;
-}
-function lNodeIdentity(e) {
-    const [iedName, ldInst, prefix, lnClass, lnInst, lnType] = [
-        'iedName',
-        'ldInst',
-        'prefix',
-        'lnClass',
-        'lnInst',
-        'lnType',
-    ].map(name => e.getAttribute(name));
-    if (iedName === 'None')
-        return `${identity(e.parentElement)}>(${lnClass} ${lnType})`;
-    return `${iedName} ${ldInst || '(Client)'}/${prefix !== null && prefix !== void 0 ? prefix : ''} ${lnClass} ${lnInst !== null && lnInst !== void 0 ? lnInst : ''}`;
-}
-function kDCIdentity(e) {
-    return `${identity(e.parentElement)}>${e.getAttribute('iedName')} ${e.getAttribute('apName')}`;
-}
-function associationIdentity(e) {
-    var _a;
-    return `${identity(e.parentElement)}>${(_a = e.getAttribute('associationID')) !== null && _a !== void 0 ? _a : ''}`;
-}
-function lDeviceIdentity(e) {
-    return `${identity(e.closest('IED'))}>>${e.getAttribute('inst')}`;
-}
-function iEDNameIdentity(e) {
-    const iedName = e.textContent;
-    const [apRef, ldInst, prefix, lnClass, lnInst] = [
-        'apRef',
-        'ldInst',
-        'prefix',
-        'lnClass',
-        'lnInst',
-    ].map(name => e.getAttribute(name));
-    return `${identity(e.parentElement)}>${iedName} ${apRef || ''} ${ldInst || ''}/${prefix !== null && prefix !== void 0 ? prefix : ''} ${lnClass !== null && lnClass !== void 0 ? lnClass : ''} ${lnInst !== null && lnInst !== void 0 ? lnInst : ''}`;
-}
-function fCDAIdentity(e) {
-    const [ldInst, prefix, lnClass, lnInst, doName, daName, fc, ix] = [
-        'ldInst',
-        'prefix',
-        'lnClass',
-        'lnInst',
-        'doName',
-        'daName',
-        'fc',
-        'ix',
-    ].map(name => e.getAttribute(name));
-    const dataPath = `${ldInst}/${prefix !== null && prefix !== void 0 ? prefix : ''} ${lnClass} ${lnInst !== null && lnInst !== void 0 ? lnInst : ''}.${doName} ${daName || ''}`;
-    return `${identity(e.parentElement)}>${dataPath} (${fc}${ix ? ` [${ix}]` : ''})`;
-}
-function extRefIdentity(e) {
-    if (!e.parentElement)
-        return NaN;
-    const parentIdentity = identity(e.parentElement);
-    const iedName = e.getAttribute('iedName');
-    const intAddr = e.getAttribute('intAddr');
-    const intAddrIndex = Array.from(e.parentElement.querySelectorAll(`ExtRef[intAddr="${intAddr}"]`)).indexOf(e);
-    if (!iedName)
-        return `${parentIdentity}>${intAddr}[${intAddrIndex}]`;
-    const [ldInst, prefix, lnClass, lnInst, doName, daName, serviceType, srcLDInst, srcPrefix, srcLNClass, srcLNInst, srcCBName,] = [
-        'ldInst',
-        'prefix',
-        'lnClass',
-        'lnInst',
-        'doName',
-        'daName',
-        'serviceType',
-        'srcLDInst',
-        'srcPrefix',
-        'srcLNClass',
-        'srcLNInst',
-        'srcCBName',
-    ].map(name => e.getAttribute(name));
-    const cbPath = srcCBName
-        ? `${serviceType}:${srcCBName} ${srcLDInst !== null && srcLDInst !== void 0 ? srcLDInst : ''}/${srcPrefix !== null && srcPrefix !== void 0 ? srcPrefix : ''} ${srcLNClass !== null && srcLNClass !== void 0 ? srcLNClass : ''} ${srcLNInst !== null && srcLNInst !== void 0 ? srcLNInst : ''}`
-        : '';
-    const dataPath = `${iedName} ${ldInst}/${prefix !== null && prefix !== void 0 ? prefix : ''} ${lnClass} ${lnInst !== null && lnInst !== void 0 ? lnInst : ''} ${doName} ${daName || ''}`;
-    return `${parentIdentity}>${cbPath ? `${cbPath} ` : ''}${dataPath}${
-    // eslint-disable-next-line no-useless-concat
-    intAddr ? '@' + `${intAddr}` : ''}`;
-}
-function lNIdentity(e) {
-    const [prefix, lnClass, inst] = ['prefix', 'lnClass', 'inst'].map(name => e.getAttribute(name));
-    return `${identity(e.parentElement)}>${prefix !== null && prefix !== void 0 ? prefix : ''} ${lnClass} ${inst}`;
-}
-function clientLNIdentity(e) {
-    const [apRef, iedName, ldInst, prefix, lnClass, lnInst] = [
-        'apRef',
-        'iedName',
-        'ldInst',
-        'prefix',
-        'lnClass',
-        'lnInst',
-    ].map(name => e.getAttribute(name));
-    return `${identity(e.parentElement)}>${iedName} ${apRef || ''} ${ldInst}/${prefix !== null && prefix !== void 0 ? prefix : ''} ${lnClass} ${lnInst}`;
-}
-function ixNamingIdentity(e) {
-    const [name, ix] = ['name', 'ix'].map(naming => e.getAttribute(naming));
-    return `${identity(e.parentElement)}>${name}${ix ? `[${ix}]` : ''}`;
-}
-function valIdentity(e) {
-    if (!e.parentElement)
-        return NaN;
-    const sGroup = e.getAttribute('sGroup');
-    const index = Array.from(e.parentElement.children)
-        .filter(child => child.getAttribute('sGroup') === sGroup)
-        .findIndex(child => child.isSameNode(e));
-    return `${identity(e.parentElement)}>${sGroup ? `${sGroup}.` : ''} ${index}`;
-}
-function connectedAPIdentity(e) {
-    const [iedName, apName] = ['iedName', 'apName'].map(name => e.getAttribute(name));
-    return `${iedName} ${apName}`;
-}
-function controlBlockIdentity(e) {
-    const [ldInst, cbName] = ['ldInst', 'cbName'].map(name => e.getAttribute(name));
-    return `${ldInst} ${cbName}`;
-}
-function physConnIdentity(e) {
-    if (!e.parentElement)
-        return NaN;
-    if (!e.parentElement.querySelector('PhysConn[type="RedConn"]'))
-        return NaN;
-    const pcType = e.getAttribute('type');
-    if (e.parentElement.children.length > 1 &&
-        pcType !== 'Connection' &&
-        pcType !== 'RedConn')
-        return NaN;
-    return `${identity(e.parentElement)}>${pcType}`;
-}
-function pIdentity(e) {
-    if (!e.parentElement)
-        return NaN;
-    const eParent = e.parentElement;
-    const eType = e.getAttribute('type');
-    if (eParent.tagName === 'PhysConn')
-        return `${identity(e.parentElement)}>${eType}`;
-    const index = Array.from(e.parentElement.children)
-        .filter(child => child.getAttribute('type') === eType)
-        .findIndex(child => child.isSameNode(e));
-    return `${identity(e.parentElement)}>${eType} [${index}]`;
-}
-function enumValIdentity(e) {
-    return `${identity(e.parentElement)}>${e.getAttribute('ord')}`;
-}
-function protNsIdentity(e) {
-    return `${identity(e.parentElement)}>${e.getAttribute('type') || '8-MMS'}\t${e.textContent}`;
-}
-function sCLIdentity() {
-    return '';
-}
-function namingIdentity(e) {
-    return e.parentElement.tagName === 'SCL'
-        ? e.getAttribute('name')
-        : `${identity(e.parentElement)}>${e.getAttribute('name')}`;
-}
-function singletonIdentity(e) {
-    return identity(e.parentElement).toString();
-}
-function idNamingIdentity(e) {
-    return `#${e.id}`;
-}
-
 /* eslint-disable import/no-extraneous-dependencies */
 function getPElement(parent, type) {
     var _a;
@@ -42335,7 +42173,7 @@ function existConnectedAp(accessPoint) {
     const iedName = (_a = accessPoint.closest('IED')) === null || _a === void 0 ? void 0 : _a.getAttribute('name');
     const apName = accessPoint.getAttribute('name');
     const connAp = accessPoint.ownerDocument.querySelector(`ConnectedAP[iedName="${iedName}"][apName="${apName}"]`);
-    return (_b = (connAp && isPublic$1(connAp))) !== null && _b !== void 0 ? _b : false;
+    return (_b = (connAp && isPublic$2(connAp))) !== null && _b !== void 0 ? _b : false;
 }
 /** @returns single page  [[`Wizard`]] for creating SCL element ConnectedAP. */
 function createConnectedApWizard(element) {
@@ -42486,7 +42324,7 @@ function createDaWizard(element) {
     const qchg = null;
     const dupd = null;
     const doTypes = Array.from(doc.querySelectorAll('DAType, EnumType'))
-        .filter(isPublic$1)
+        .filter(isPublic$2)
         .filter(doType => doType.getAttribute('id'));
     const data = element.closest('DataTypeTemplates');
     return [
@@ -42582,7 +42420,7 @@ function editDAWizard(element) {
     const qchg = element.getAttribute('qchg');
     const dupd = element.getAttribute('dupd');
     const doTypes = Array.from(doc.querySelectorAll('DAType, EnumType'))
-        .filter(isPublic$1)
+        .filter(isPublic$2)
         .filter(doType => doType.getAttribute('id'));
     const data = element.closest('DataTypeTemplates');
     return [
@@ -42611,7 +42449,7 @@ function createDATypeAction(parent) {
         });
         const daType = createElement(parent.ownerDocument, 'DAType', daTypeAttrs);
         return [
-            { parent, node: daType, reference: getReference$1(parent, 'DAType') },
+            { parent, node: daType, reference: getReference(parent, 'DAType') },
         ];
     };
 }
@@ -42785,7 +42623,7 @@ function createDOTypeAction(parent) {
         });
         const doType = createElement(parent.ownerDocument, 'DOType', doTypeAttrs);
         return [
-            { parent, node: doType, reference: getReference$1(parent, 'DOType') },
+            { parent, node: doType, reference: getReference(parent, 'DOType') },
         ];
     };
 }
@@ -42833,7 +42671,7 @@ function createEnumTypeAction(parent) {
         });
         const enumType = createElement(parent.ownerDocument, 'EnumType', enumTypeAttrs);
         return [
-            { parent, node: enumType, reference: getReference$1(parent, 'EnumType') },
+            { parent, node: enumType, reference: getReference(parent, 'EnumType') },
         ];
     };
 }
@@ -43755,25 +43593,25 @@ __decorate$1([
 ], IconButtonToggleBase.prototype, "mdcRoot", void 0);
 __decorate$1([
     ariaProperty,
-    e$6({ type: String, attribute: 'aria-label' })
+    n$2({ type: String, attribute: 'aria-label' })
 ], IconButtonToggleBase.prototype, "ariaLabel", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], IconButtonToggleBase.prototype, "disabled", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], IconButtonToggleBase.prototype, "onIcon", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], IconButtonToggleBase.prototype, "offIcon", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], IconButtonToggleBase.prototype, "ariaLabelOn", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], IconButtonToggleBase.prototype, "ariaLabelOff", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], IconButtonToggleBase.prototype, "on", void 0);
 __decorate$1([
     e$3('mwc-ripple')
@@ -44117,6 +43955,79 @@ class SingleSelectionController {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+var MDCFoundation = /** @class */ (function () {
+    function MDCFoundation(adapter) {
+        if (adapter === void 0) { adapter = {}; }
+        this.adapter = adapter;
+    }
+    Object.defineProperty(MDCFoundation, "cssClasses", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports every
+            // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "strings", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "numbers", {
+        get: function () {
+            // Classes extending MDCFoundation should implement this method to return an object which exports all
+            // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCFoundation, "defaultAdapter", {
+        get: function () {
+            // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
+            // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
+            // validation.
+            return {};
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCFoundation.prototype.init = function () {
+        // Subclasses should override this method to perform initialization routines (registering events, etc.)
+    };
+    MDCFoundation.prototype.destroy = function () {
+        // Subclasses should override this method to perform de-initialization routines (de-registering events, etc.)
+    };
+    return MDCFoundation;
+}());
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 var strings = {
     NATIVE_CONTROL_SELECTOR: '.mdc-radio__native-control',
 };
@@ -44426,31 +44337,31 @@ __decorate$1([
     t$1()
 ], RadioBase.prototype, "useStateLayerCustomProperties", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], RadioBase.prototype, "global", void 0);
 __decorate$1([
-    e$6({ type: Boolean, reflect: true })
+    n$2({ type: Boolean, reflect: true })
 ], RadioBase.prototype, "checked", null);
 __decorate$1([
-    e$6({ type: Boolean }),
+    n$2({ type: Boolean }),
     observer(function (disabled) {
         this.mdcFoundation.setDisabled(disabled);
     })
 ], RadioBase.prototype, "disabled", void 0);
 __decorate$1([
-    e$6({ type: String }),
+    n$2({ type: String }),
     observer(function (value) {
         this._handleUpdatedValue(value);
     })
 ], RadioBase.prototype, "value", void 0);
 __decorate$1([
-    e$6({ type: String })
+    n$2({ type: String })
 ], RadioBase.prototype, "name", void 0);
 __decorate$1([
-    e$6({ type: Boolean })
+    n$2({ type: Boolean })
 ], RadioBase.prototype, "reducedTouchTarget", void 0);
 __decorate$1([
-    e$6({ type: Number })
+    n$2({ type: Number })
 ], RadioBase.prototype, "formElementTabIndex", void 0);
 __decorate$1([
     t$1()
@@ -44463,11 +44374,11 @@ __decorate$1([
 ], RadioBase.prototype, "ripple", void 0);
 __decorate$1([
     ariaProperty,
-    e$6({ attribute: 'aria-label' })
+    n$2({ attribute: 'aria-label' })
 ], RadioBase.prototype, "ariaLabel", void 0);
 __decorate$1([
     ariaProperty,
-    e$6({ attribute: 'aria-labelledby' })
+    n$2({ attribute: 'aria-labelledby' })
 ], RadioBase.prototype, "ariaLabelledBy", void 0);
 __decorate$1([
     e$5({ passive: true })
@@ -44557,7 +44468,7 @@ function showLogicalNodeTypes(evt, parent) {
     else
         instanceFilter.classList.add('hidden');
     const doc = parent.ownerDocument;
-    B(x `${isLogicalNodeInstance
+    D(x `${isLogicalNodeInstance
         ? // eslint-disable-next-line no-use-before-define
             renderInstances(parent)
         : renderTypicals(doc)}`, lnFilterList(button));
@@ -44589,7 +44500,7 @@ function createSingleLNode(parent, ln) {
         return {
             parent,
             node,
-            reference: getReference$1(parent, 'LNode'),
+            reference: getReference(parent, 'LNode'),
         };
     }
     const { iedName, ldInst, prefix, lnClass, inst } = logicalNodeParameters(ln);
@@ -44603,7 +44514,7 @@ function createSingleLNode(parent, ln) {
     return {
         parent,
         node,
-        reference: getReference$1(parent, 'LNode'),
+        reference: getReference(parent, 'LNode'),
     };
 }
 function createAction$a(parent) {
@@ -44615,10 +44526,10 @@ function createAction$a(parent) {
             .map(item => item.value)
             .map(id => {
             if (id.endsWith('LLN0'))
-                return parent.ownerDocument.querySelector(selector('LN0', id));
+                return find(parent.ownerDocument, 'LN0', id);
             if (id.startsWith('#'))
-                return parent.ownerDocument.querySelector(selector('LNodeType', id));
-            return parent.ownerDocument.querySelector(selector('LN', id));
+                return find(parent.ownerDocument, 'LNodeType', id);
+            return find(parent.ownerDocument, 'LN', id);
         })
             .filter(item => item !== null);
         return selectedLNs
@@ -44632,12 +44543,12 @@ function filterIED(evt, parent) {
     // update global array selectedIEDs
     selectedIEDs.length = 0;
     selectedIEDs.push(...ieds);
-    B(renderInstances(parent), lnFilterList(evt.target));
+    D(renderInstances(parent), lnFilterList(evt.target));
 }
 function renderListItem(value) {
     const { iedName, ldInst, prefix, lnClass, inst } = logicalNodeParameters(value.anyLn);
     return x `<mwc-check-list-item
-    value="${identity$1(value.anyLn)}"
+    value="${identity(value.anyLn)}"
     twoline
     ?disabled=${value.selected}
     ?selected=${value.childLNode}
@@ -44649,7 +44560,7 @@ function renderTypicals(doc) {
     return Array.from(doc.querySelectorAll(':root > DataTypeTemplates > LNodeType')).map(lNodeType => {
         const lnClass = lNodeType.getAttribute('lnClass');
         const id = lNodeType.getAttribute('id');
-        return x `<mwc-check-list-item twoline value="${identity$1(lNodeType)}"
+        return x `<mwc-check-list-item twoline value="${identity(lNodeType)}"
       ><span>${lnClass}</span
       ><span slot="secondary">#${id}</span></mwc-check-list-item
     >`;
@@ -44738,7 +44649,7 @@ function createLNodeTypeAction(parent) {
         });
         const lNodeType = createElement(parent.ownerDocument, 'LNodeType', lNodeTypeAttrs);
         return [
-            { parent, node: lNodeType, reference: getReference$1(parent, 'LNodeType') },
+            { parent, node: lNodeType, reference: getReference(parent, 'LNodeType') },
         ];
     };
 }
@@ -45742,13 +45653,13 @@ __decorate$1([
     i$2('textarea')
 ], TextAreaBase.prototype, "formElement", void 0);
 __decorate$1([
-    e$6({ type: Number })
+    n$2({ type: Number })
 ], TextAreaBase.prototype, "rows", void 0);
 __decorate$1([
-    e$6({ type: Number })
+    n$2({ type: Number })
 ], TextAreaBase.prototype, "cols", void 0);
 __decorate$1([
-    e$6({ converter: booleanOrStringConverter })
+    n$2({ converter: booleanOrStringConverter })
 ], TextAreaBase.prototype, "charCounter", void 0);
 
 /**
@@ -46686,7 +46597,7 @@ WizardCodeForm.styles = i$5 `
     }
   `;
 __decorate$1([
-    e$6({ attribute: false })
+    n$2({ attribute: false })
 ], WizardCodeForm.prototype, "wizardRequest", void 0);
 __decorate$1([
     t$1()

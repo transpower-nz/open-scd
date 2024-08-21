@@ -139,16 +139,6 @@
       "src": "plugins/oscd-designer-ce/oscd-designer.js"
     },
     {
-      "name": "Designer",
-      "translations": {
-        "de": "Designer"
-      },
-      "icon": "add_box",
-      "active": true,
-      "requireDoc": true,
-      "src": "plugins/oscd-designer/oscd-designer.js"
-    },
-    {
       "name": "Substation",
       "icon": "margin",
       "active": true,
