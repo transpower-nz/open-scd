@@ -34,10 +34,6 @@
 	path = plugins/scl-substation-editor
 	url = https://github.com/OpenEnergyTools/scl-substation-editor
 	branch = gh-pages
-[submodule "plugins/scl-wizarding"]
-	path = plugins/scl-wizarding
-	url = https://github.com/openenergytools/scl-wizarding
-	branch = gh-pages
 [submodule "plugins/scl-communication"]
 	path = plugins/scl-communication
 	url = https://github.com/openenergytools/scl-communication
@@ -142,4 +138,8 @@
 [submodule "plugins/scl-ied-editor"]
 	path = plugins/scl-ied-editor
 	url = https://github.com/OpenEnergyTools/scl-ied-editor
+	branch = gh-pages
+[submodule "plugins/scl-wizarding"]
+	path = plugins/scl-wizarding
+	url = https://github.com/OpenEnergyTools/scl-wizarding
 	branch = gh-pages
