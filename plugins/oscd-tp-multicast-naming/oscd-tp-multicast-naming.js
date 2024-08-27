@@ -49862,9 +49862,9 @@ class TPMulticastNaming extends s$3 {
             'APP ID',
             'VLAN Id',
             'VLAN Priority',
+            'Conf Rev',
             'Min Time',
             'Max Time',
-            'Conf Rev',
         ]);
         // content
         const items = this.selectedItems.length === 0 ? this.gridItems : this.selectedItems;
