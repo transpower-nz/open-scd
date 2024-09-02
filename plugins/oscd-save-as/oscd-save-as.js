@@ -106,6 +106,50 @@ const o$2=({finisher:e,descriptor:t})=>(o,n)=>{var r;if(void 0===n){const n=null
  * SPDX-License-Identifier: BSD-3-Clause
  */var n$1;null!=(null===(n$1=window.HTMLSlotElement)||void 0===n$1?void 0:n$1.prototype.assignedElements)?(o,n)=>o.assignedElements(n):(o,n)=>o.assignedNodes(n).filter((o=>o.nodeType===Node.ELEMENT_NODE));
 
+function promisifyRequest(request) {
+    return new Promise((resolve, reject) => {
+        // @ts-ignore - file size hacks
+        request.oncomplete = request.onsuccess = () => resolve(request.result);
+        // @ts-ignore - file size hacks
+        request.onabort = request.onerror = () => reject(request.error);
+    });
+}
+function createStore(dbName, storeName) {
+    const request = indexedDB.open(dbName);
+    request.onupgradeneeded = () => request.result.createObjectStore(storeName);
+    const dbp = promisifyRequest(request);
+    return (txMode, callback) => dbp.then((db) => callback(db.transaction(storeName, txMode).objectStore(storeName)));
+}
+let defaultGetStoreFunc;
+function defaultGetStore() {
+    if (!defaultGetStoreFunc) {
+        defaultGetStoreFunc = createStore('keyval-store', 'keyval');
+    }
+    return defaultGetStoreFunc;
+}
+/**
+ * Get a value by its key.
+ *
+ * @param key
+ * @param customStore Method to get a custom store. Use with caution (see the docs).
+ */
+function get(key, customStore = defaultGetStore()) {
+    return customStore('readonly', (store) => promisifyRequest(store.get(key)));
+}
+/**
+ * Set a value with a key.
+ *
+ * @param key
+ * @param value
+ * @param customStore Method to get a custom store. Use with caution (see the docs).
+ */
+function set(key, value, customStore = defaultGetStore()) {
+    return customStore('readwrite', (store) => {
+        store.put(value, key);
+        return promisifyRequest(store.transaction);
+    });
+}
+
 /**
  * @license
  * Copyright 2018 Google LLC
@@ -840,11 +884,34 @@ function fileSize(kBSize) {
         return `${(kBSize / 1e3).toFixed(2)} kB`;
     return 'Unknown size';
 }
+function formatXml(xml, tab) {
+    let formatted = '';
+    let indent = '';
+    // eslint-disable-next-line no-param-reassign
+    if (!tab)
+        tab = '\t';
+    xml.split(/>\s*</).forEach(node => {
+        if (node.match(/^\/\w/))
+            indent = indent.substring(tab.length);
+        formatted += `${indent}<${node}>\r\n`;
+        if (node.match(/^<?\w[^>]*[^/]$/))
+            indent += tab;
+    });
+    return formatted.substring(1, formatted.length - 3);
+}
 /**
  * WebComponent for OpenSCD to allow saving to a file system location
  * using the File System API
  */
 class SaveAs extends s$1 {
+    // eslint-disable-next-line class-methods-use-this
+    set fileHandle(handle) {
+        set('oscd-save-as-file-handle', handle);
+    }
+    // eslint-disable-next-line class-methods-use-this
+    get fileHandle() {
+        return get('oscd-save-as-file-handle');
+    }
     async getSaveFileLocation() {
         if (!this.doc)
             return;
@@ -866,7 +933,7 @@ class SaveAs extends s$1 {
             };
             const fileHandle = await window.showSaveFilePicker(opts);
             if (fileHandle && fileHandle.kind === 'file') {
-                this.fileHandle = fileHandle;
+                await (this.fileHandle = fileHandle);
                 this.fileSave();
             }
         }
@@ -881,7 +948,6 @@ class SaveAs extends s$1 {
         super();
         this.editCount = -1;
         this.usedDirectory = '';
-        this.fileHandle = null;
         this.userMessage = '';
         this.usedFileNames = [];
         document.addEventListener('keydown', event => this.handleKeyPress(event));
@@ -903,7 +969,7 @@ class SaveAs extends s$1 {
         // Currently using a fragment on the plugin source file name
         // probably not a very stable approach, but perhaps more easy to
         // avoid a conflict with the name
-        if (plugin.src.endsWith('Save') && this.fileHandle) {
+        if (plugin.src.endsWith('Save') && (await this.fileHandle)) {
             this.fileSave();
         }
         else {
@@ -912,13 +978,18 @@ class SaveAs extends s$1 {
     }
     // TODO: Unsure how to type the file handle correctly
     async fileSave() {
-        if (!this.doc || !this.fileHandle)
+        if (!this.doc)
             return;
+        const fileHandle = await this.fileHandle;
+        if (!fileHandle) {
+            this.getSaveFileLocation();
+            return;
+        }
         try {
-            const writableStream = await this.fileHandle.createWritable();
-            const xmlFile = new XMLSerializer().serializeToString(this.doc);
+            const writableStream = await fileHandle.createWritable();
+            const xmlFile = formatXml(new XMLSerializer().serializeToString(this.doc));
             await writableStream.write(xmlFile);
-            this.userMessage = `File ${this.fileHandle.name} saved (${fileSize(xmlFile.length)}).`;
+            this.userMessage = `File ${fileHandle.name} saved (${fileSize(xmlFile.length)}).`;
             await writableStream.close();
         }
         catch (error) {
@@ -930,6 +1001,16 @@ class SaveAs extends s$1 {
         }
         if (this.userMessageUI)
             this.userMessageUI.show();
+    }
+    async updated(changedProperties) {
+        super.updated(changedProperties);
+        // If a new document has opened we don't  try to save any more
+        // until we have a new "Save As" dialogue.
+        // If the same filename is opened this doesn't seem to work quite
+        // right, see https://github.com/openscd/open-scd-core/issues/92
+        if (changedProperties.has('docName')) {
+            this.fileHandle = null;
+        }
     }
     render() {
         return x `
@@ -954,10 +1035,10 @@ __decorate([
 ], SaveAs.prototype, "usedDirectory", void 0);
 __decorate([
     n$2({ attribute: false })
-], SaveAs.prototype, "fileHandle", void 0);
-__decorate([
-    n$2({ attribute: false })
 ], SaveAs.prototype, "userMessage", void 0);
+__decorate([
+    n$2()
+], SaveAs.prototype, "fileHandle", null);
 __decorate([
     i$1('#userMessage')
 ], SaveAs.prototype, "userMessageUI", void 0);

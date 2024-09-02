@@ -15201,9 +15201,10 @@ let ReportControlElementEditor = class ReportControlElementEditor extends s$3 {
     }
     renderReportControlContent() {
         var _a, _b;
-        const [name, desc, buffered, rptID, indexed, bufTime, intgPd] = [
+        const [name, desc, confRev, buffered, rptID, indexed, bufTime, intgPd] = [
             'name',
             'desc',
+            'confRev',
             'buffered',
             'rptID',
             'indexed',
@@ -15230,8 +15231,17 @@ let ReportControlElementEditor = class ReportControlElementEditor extends s$3 {
         nullable
         supportingText="ReportControl Description"
         @input=${this.onReportControlInputChange}
-      ></scl-text-field
-      ><scl-checkbox
+      ></scl-text-field>
+      <scl-text-field
+        class="input gsecontrol"
+        label="confRev"
+        .value=${confRev}
+        supportingText="Configuration Revision"
+        pattern="${patterns.unsigned}"
+        nullable
+        @input=${this.onReportControlInputChange}
+      ></scl-text-field>
+      <scl-checkbox
         class="report attributes"
         label="buffered"
         .value=${buffered}
@@ -21339,7 +21349,7 @@ function addFCDAs(dataSet, paths) {
             ldInst,
             prefix,
             lnClass,
-            lnInst,
+            ...(lnClass !== 'LLN0' && { lnInst }),
             doName,
             daName,
             fc,
@@ -22973,9 +22983,10 @@ let GseControlElementEditor = class GseControlElementEditor extends s$3 {
     </div>`;
     }
     renderGseControlContent() {
-        const [name, desc, type, appID, fixedOffs, securityEnabled] = [
+        const [name, desc, confRev, type, appID, fixedOffs, securityEnabled] = [
             'name',
             'desc',
+            'confRev',
             'type',
             'appID',
             'fixedOffs',
@@ -22998,7 +23009,7 @@ let GseControlElementEditor = class GseControlElementEditor extends s$3 {
         required
         pattern="${patterns.asciName}"
         maxLength="${maxLength.cbName}"
-        mimLength="0"
+        minLength="0"
         dialogInitialFocus
         @input=${this.onGSEControlInputChange}
       ></scl-text-field>
@@ -23020,6 +23031,15 @@ let GseControlElementEditor = class GseControlElementEditor extends s$3 {
         .selectOptions=${['GOOSE', 'GSSE']}
         @input=${this.onGSEControlInputChange}
       ></scl-select>
+      <scl-text-field
+        class="input gsecontrol"
+        label="confRev"
+        .value=${confRev}
+        supportingText="Configuration Revision"
+        pattern="${patterns.unsigned}"
+        nullable
+        @input=${this.onGSEControlInputChange}
+      ></scl-text-field>
       <scl-text-field
         class="input gsecontrol"
         label="appID"
@@ -23711,9 +23731,10 @@ let SampledValueControlElementEditor = class SampledValueControlElementEditor ex
     </div>`;
     }
     renderSmvControlContent() {
-        const [name, desc, multicast, smvID, smpMod, smpRate, nofASDU, securityEnabled,] = [
+        const [name, desc, confRev, multicast, smvID, smpMod, smpRate, nofASDU, securityEnabled,] = [
             'name',
             'desc',
+            'confRev',
             'multicast',
             'smvID',
             'smpMod',
@@ -23750,6 +23771,15 @@ let SampledValueControlElementEditor = class SampledValueControlElementEditor ex
             supportingText="Whether Sample Value Stream is multicast"
             @input="${this.onSampledValueControlInputChange}"
           ></scl-checkbox>`}
+      <scl-text-field
+        class="input gsecontrol"
+        label="confRev"
+        .value=${confRev}
+        supportingText="Configuration Revision"
+        pattern="${patterns.unsigned}"
+        nullable
+        @input=${this.onSampledValueControlInputChange}
+      ></scl-text-field>
       <scl-text-field
         class="smvcontrol attribute"
         label="smvID"

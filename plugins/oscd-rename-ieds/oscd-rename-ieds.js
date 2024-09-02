@@ -4728,21 +4728,12 @@ class RenameIEDsPlugin extends s$1 {
         await this.getRootNode().host
             .updateComplete;
     }
-    duplicatedIedName() {
-        const newNames = new Map();
+    duplicatedIedName(iedName) {
         if (!this.iedListUI || !this.doc)
             return false;
-        this.doc.querySelectorAll(':root > IED').forEach(ied => {
-            newNames.set(ied.getAttribute('name'), ied.getAttribute('name'));
-        });
-        Array.from(this.iedListUI.querySelectorAll('md-filled-text-field')).forEach(listIed => {
-            var _a;
-            const id = (_a = listIed.getAttribute('data-identity')) !== null && _a !== void 0 ? _a : '';
-            newNames.set(id, listIed.value);
-        });
-        const iedNames = Array.from(newNames.values());
-        const uniqueIedNames = [...new Set(iedNames)];
-        return iedNames.length !== uniqueIedNames.length;
+        const newNames = Array.from(this.iedListUI.querySelectorAll('md-filled-text-field')).map(listIed => listIed.value);
+        const iedNames = Array.from(newNames).filter(name => name === iedName);
+        return iedNames.length !== 1;
     }
     customCheckValidity(iedElement) {
         if (!(iedElement && iedElement.validity))
@@ -4756,7 +4747,7 @@ class RenameIEDsPlugin extends s$1 {
         else if (iedElement.validity.tooLong || iedElement.validity.tooShort) {
             iedElement.setCustomValidity('IED name must be > 1 character and < 64 characters.');
         }
-        else if (this.duplicatedIedName()) {
+        else if (this.duplicatedIedName(iedElement.value)) {
             iedElement.setCustomValidity('IED name must be unique.');
         }
         else {
@@ -4791,7 +4782,9 @@ ${secondLine}"
             @input="${(event) => {
             const iedElement = event.target;
             this.customCheckValidity(iedElement);
-            this.allIedNamesValid = Array.from(this.iedListUI.querySelectorAll('md-filled-text-field')).every(listIed => this.customCheckValidity(listIed));
+            this.allIedNamesValid = Array.from(this.iedListUI.querySelectorAll('md-filled-text-field'))
+                .map(listIed => this.customCheckValidity(listIed))
+                .reduce((acc, current) => acc && current);
             if (iedElement.value !== oldName) {
                 if (!this.iedsToRename.includes(`${oldName}`))
                     this.iedsToRename.push(`${oldName}`);

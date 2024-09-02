@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult } from 'lit';
+import { LitElement, PropertyValues, TemplateResult } from 'lit';
 import '@material/mwc-snackbar';
 import type { Snackbar } from '@material/mwc-snackbar';
 /**
@@ -11,8 +11,9 @@ export default class SaveAs extends LitElement {
     docName: string;
     editCount: number;
     usedDirectory: string;
-    fileHandle: object | null;
     userMessage: string;
+    set fileHandle(handle: object | null | undefined);
+    get fileHandle(): Promise<object | null | undefined>;
     usedFileNames: string[];
     userMessageUI?: Snackbar;
     getSaveFileLocation(): Promise<void>;
@@ -20,5 +21,6 @@ export default class SaveAs extends LitElement {
     private handleKeyPress;
     run(): Promise<void>;
     fileSave(): Promise<void>;
+    protected updated(changedProperties: PropertyValues): Promise<void>;
     render(): TemplateResult;
 }

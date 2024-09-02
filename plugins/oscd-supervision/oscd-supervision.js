@@ -15054,7 +15054,9 @@ function getOtherIedControlElements(ied, controlType) {
     if (!ied)
         return [];
     const iedName = getNameAttribute(ied);
-    return Array.from(ied.ownerDocument.querySelectorAll(`LN0 > ${controlTag[controlType]}`)).filter(cb => getNameAttribute(cb.closest('IED')) !== iedName);
+    return Array.from(ied.ownerDocument.querySelectorAll(`LN0 > ${controlTag[controlType]}`))
+        .filter(cb => getNameAttribute(cb.closest('IED')) !== iedName)
+        .sort((a, b) => `${identity(a)}`.localeCompare(`${identity(b)}`));
 }
 /**
  * Retrieve supervision LNs for GOOSE or SMV.
@@ -15065,7 +15067,7 @@ function getOtherIedControlElements(ied, controlType) {
 function getSupervisionLNs(ied, controlType) {
     if (!ied)
         return [];
-    return Array.from(ied.querySelectorAll(`LN[lnClass="${supervisionLnType[controlType]}"]`));
+    return Array.from(ied.querySelectorAll(`LN[lnClass="${supervisionLnType[controlType]}"]`)).sort((a, b) => `${identity(a)}`.localeCompare(`${identity(b)}`));
 }
 /**
  * Retrieve control block references for a given IED whose references is used

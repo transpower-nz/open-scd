@@ -49663,16 +49663,16 @@ class TPMulticastNaming extends s$3 {
                     controlName.startsWith('Test') ||
                     controlName.startsWith('SPSBus') ||
                     controlName.startsWith('TCh')) {
-                    serviceName = 'Bus/Bay GOOSE Slow';
+                    serviceName = 'Slow';
                     useCase = 'Bus';
                 }
                 else if (controlName.startsWith('Ctl')) {
-                    serviceName = 'Bus/Bay GOOSE Fast';
+                    serviceName = 'Fast';
                     useCase = 'Bus';
                 }
                 else if (controlName.startsWith('ARecl') ||
                     controlName.startsWith('SwgrPos')) {
-                    serviceName = 'P1 to P2 ARecl/SwgrPos';
+                    serviceName = '';
                     serviceType = 'InterProt';
                     useCase = 'Bus';
                 }
@@ -49680,12 +49680,11 @@ class TPMulticastNaming extends s$3 {
                     (smvIDFunction === '' ||
                         smvIDFunction === 'Phase' ||
                         smvIDFunction === 'NCT_UB_ET')) {
-                    serviceName = 'Bus/Bay SV';
+                    serviceName = '';
                     useCase = 'Bus';
                 }
                 // Allocate if adequate definition is not available
-                if (serviceName &&
-                    serviceType &&
+                if (serviceName !== undefined &&
                     useCase === 'Bus' &&
                     busName !== 'NOBUSES') {
                     const { busVlans } = getAllocatedVlans(this.doc);
@@ -49741,19 +49740,19 @@ class TPMulticastNaming extends s$3 {
                 controlName.startsWith('TripCBFail') ||
                 controlName.startsWith('SPSStn') ||
                 controlName.startsWith('AdjBusCouplerInd') ||
-                controlName.startsWith('VReg')) {
-                serviceName = 'Station GOOSE';
+                controlName.startsWith('VReg') ||
+                controlName.startsWith('SwydLighting')) {
+                serviceName = '';
                 useCase = 'Station';
             }
             else if (serviceType === 'SMV' && smvIDFunction === 'VTSelStn') {
-                serviceName = 'Station SV';
+                serviceName = '';
                 useCase = 'Station';
             }
             // Allocate if adequate definition is not available
-            if (serviceName && serviceType && useCase === 'Station') {
+            if (serviceName !== undefined && useCase === 'Station') {
                 const { stationVlans } = getAllocatedVlans(this.doc);
-                const existingVlans = stationVlans;
-                const existingVlan = existingVlans === null || existingVlans === void 0 ? void 0 : existingVlans.find(vlan => vlan.serviceName === serviceName);
+                const existingVlan = stationVlans === null || stationVlans === void 0 ? void 0 : stationVlans.find(vlan => vlan.serviceName === serviceName && vlan.serviceType === serviceType);
                 const vlanId = getProtectionNumber(iedName) === '1'
                     ? existingVlan === null || existingVlan === void 0 ? void 0 : existingVlan.prot1Id
                     : existingVlan === null || existingVlan === void 0 ? void 0 : existingVlan.prot2Id;

@@ -11902,10 +11902,23 @@ class SubscriberLaterBinding extends s$h {
             controlBlocks.forEach(thisCb => {
                 dataSet.querySelectorAll('FCDA').forEach(fcda => {
                     const key = `${identity(thisCb)} ${identity(fcda)}`;
-                    fcdaData.set(fcda, {
-                        key,
-                        cb: thisCb
-                    });
+                    if (fcdaData.has(fcda)) {
+                        fcdaData.set(fcda, [
+                            ...fcdaData.get(fcda),
+                            {
+                                key,
+                                cb: thisCb
+                            }
+                        ]);
+                    }
+                    else {
+                        fcdaData.set(fcda, [
+                            {
+                                key,
+                                cb: thisCb
+                            }
+                        ]);
+                    }
                     this.controlBlockFcdaInfo.set(key, 0);
                     const iedName = fcda.closest('IED').getAttribute('name');
                     const cbName = thisCb.getAttribute('name');
@@ -11944,11 +11957,14 @@ class SubscriberLaterBinding extends s$h {
                 const fcda = fcdaCompare.get(extRefMatcher);
                 if (!fcda)
                     return;
-                const { key, cb } = fcdaData.get(fcda);
-                if (matchSrcAttributes(extRef, cb)) {
-                    const currentCountValue = this.controlBlockFcdaInfo.get(key);
-                    this.controlBlockFcdaInfo.set(key, currentCountValue + 1);
-                }
+                const fcdaMatches = fcdaData.get(fcda);
+                fcdaMatches.forEach(match => {
+                    const { key, cb } = match;
+                    if (matchSrcAttributes(extRef, cb)) {
+                        const currentCountValue = this.controlBlockFcdaInfo.get(key);
+                        this.controlBlockFcdaInfo.set(key, currentCountValue + 1);
+                    }
+                });
             }
         });
     }

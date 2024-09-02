@@ -21,7 +21,7 @@ export default class RenameIEDsPlugin extends LitElement {
     iedListItems?: NodeList[];
     run(): Promise<void>;
     docUpdate(): Promise<void>;
-    duplicatedIedName(): boolean;
+    duplicatedIedName(iedName: string): boolean;
     customCheckValidity(iedElement: MdFilledTextField): boolean;
     protected renderIedItem(ied: Element): TemplateResult;
     render(): TemplateResult;
