@@ -21,6 +21,7 @@ import type { SelectionList } from '@openenergytools/filterable-lists/dist/selec
 import type { MdIconButton } from '@material/web/iconbutton/icon-button.js';
 import type { MdMenu } from '@material/web/menu/menu';
 import type { Snackbar } from '@material/mwc-snackbar/mwc-snackbar.js';
+import type { MdListItem } from '@material/web/list/list-item.js';
 import { ControlBlockInfo } from './foundation/getMappingInfo.js';
 type IED = {
     originalName: string;
@@ -99,6 +100,7 @@ export default class Stencil extends LitElement {
     functionIedNamesUI: TextField[];
     snackBarMessageUI: Snackbar;
     errorDialogUI: MdDialog;
+    selectedApplicationUI: MdListItem;
     constructor();
     addApplication(): void;
     saveStencilAsFile(): void;

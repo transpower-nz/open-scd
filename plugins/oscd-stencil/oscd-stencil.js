@@ -15456,6 +15456,7 @@ class Stencil extends s$d {
                     func.privates.some(priv => priv['OpenSCD-Stencil-Id'] === id &&
                         priv['OpenSCD-Stencil-Version'] === version));
             })
+                .filter(ied => !Array.from(this.functionToIed.values()).includes(ied.getAttribute('name')))
                 .map(ied => {
                 const { firstLine, secondLine } = getIedDescription(ied);
                 return {
@@ -15485,49 +15486,40 @@ class Stencil extends s$d {
     >`;
     }
     renderIedsForUse() {
-        var _a, _b, _c;
         return x$1 `${this.selectedApplication && this.selectedAppVersion
             ? x$1 `<div id="appContainer">
-            <h2>${this.selectedApplication.category}</h2>
-            <div id="appUseInfo">
-              <h3>${this.selectedApplication.name}</h3>
-              <p>
-                ${this.selectedApplication.description}${((_a = this.selectedAppVersion) === null || _a === void 0 ? void 0 : _a.description) === undefined ||
-                ((_b = this.selectedAppVersion) === null || _b === void 0 ? void 0 : _b.description) === ''
-                ? ''
-                : ` - ${(_c = this.selectedAppVersion) === null || _c === void 0 ? void 0 : _c.description}`}
-              </p>
-            </div>
             <h2>Select IEDs for Function</h2>
-            <md-list id="iedsAndFunctions">
-              ${Object.keys(this.selectedAppVersion.IEDS).map(iedFunction => {
+            <md-list id="iedsAndFunctions" class="scrollable">
+              ${Object.keys(this.selectedAppVersion.IEDS)
+                .sort((iedA, iedB) => iedA.toLowerCase().localeCompare(iedB.toLowerCase()))
+                .map(iedFunction => {
                 const ied = this.selectedAppVersion.IEDS[iedFunction];
                 return x$1 `
-                  <md-list-item
-                    type="button"
-                    @click=${() => {
+                    <md-list-item
+                      type="button"
+                      @click=${() => {
                     this.applicationSelectedFunction = iedFunction;
                     this.applicationSelectedFunctionReqs = ied;
                     // = (<HTMLElement>event.target).closest('md-list-item')
                     this.iedSelectorUI.show();
                 }}
-                  >
-                    <div slot="headline">
-                      ${iedFunction}${this.functionToIed.get(iedFunction)
+                    >
+                      <div slot="headline">
+                        ${iedFunction}${this.functionToIed.get(iedFunction)
                     ? `  ⮕  ${this.functionToIed.get(iedFunction)}`
                     : T$1}
-                    </div>
-                    <div slot="supporting-text">
-                      ${ied.manufacturer} - ${ied.type}
-                    </div>
-                    <md-icon slot="start">developer_board</md-icon>
-                    <md-icon slot="end"
-                      >${this.functionToIed.get(iedFunction) !== undefined
+                      </div>
+                      <div slot="supporting-text">
+                        ${ied.manufacturer} - ${ied.type}
+                      </div>
+                      <md-icon slot="start">developer_board</md-icon>
+                      <md-icon slot="end"
+                        >${this.functionToIed.get(iedFunction) !== undefined
                     ? 'check_box'
                     : 'check_box_outline_blank'}</md-icon
-                    >
-                  </md-list-item>
-                `;
+                      >
+                    </md-list-item>
+                  `;
             })}
             </md-list>
             <md-outlined-button
@@ -15555,10 +15547,10 @@ class Stencil extends s$d {
             return x$1 ``;
         const toIedNames = this.selectedAppVersion.ControlBlocks.map(cb => cb.to)
             .filter((item, i, ar) => ar.indexOf(item) === i)
-            .sort();
+            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
         const rowIedNames = this.selectedAppVersion.ControlBlocks.map(cb => cb.from)
             .filter((item, i, ar) => ar.indexOf(item) === i)
-            .sort();
+            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
         const iedFromWithCBs = new Map();
         rowIedNames.forEach(ied => {
             iedFromWithCBs.set(ied, [
@@ -15570,6 +15562,7 @@ class Stencil extends s$d {
             cbs: iedFromWithCBs.get(iedName)
         }));
         return x$1 `<div id="controlBlockMappings" class="columngroup">
+      <h2>Application Details</h2>
       <label
         ><md-checkbox
           touch-target="wrapper"
@@ -15603,44 +15596,45 @@ class Stencil extends s$d {
                     colspan="${toIedNames.length}"
                   ></th>
                 </tr>
-                ${row.cbs.map(cbName => x$1 `<tr>
-                      <th
-                        scope="row"
-                        class="cbname"
-                        data-fromIed="${row.fromIed}"
-                        data-fromCb="${cbName}"
-                      >
-                        ${cbName.substring(2)}
-                      </th>
-                      ${toIedNames.map(toIed => {
+                ${row
+            .cbs.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+            .map(cbName => x$1 `<tr>
+                        <th
+                          scope="row"
+                          class="cbname"
+                          data-fromIed="${row.fromIed}"
+                          data-fromCb="${cbName}"
+                        >
+                          ${cbName.substring(2)}
+                        </th>
+                        ${toIedNames.map(toIed => {
             const mappedCb = this.selectedAppVersion.ControlBlocks.find(cb => cb.id === cbName &&
                 cb.from === row.fromIed &&
                 cb.to === toIed);
             return x$1 `<td
-                          class="${mappedCb ? 'mapcell' : ''} ${row.fromIed ===
-                toIed
-                ? 'diagonal'
-                : ''}"
-                        >
-                          ${mappedCb
+                            class="${mappedCb
+                ? 'mapcell'
+                : ''} ${row.fromIed === toIed ? 'diagonal' : ''}"
+                          >
+                            ${mappedCb
                 ? x$1 `<md-icon
-                                  class="cb ${mappedCb &&
+                                    class="cb ${mappedCb &&
                     mappedCb.type === 'SampledValueControl'
                     ? 'sv'
                     : ''}"
-                                  >check</md-icon
-                                >
-                                ${this.showSupervisions
+                                    >check</md-icon
+                                  >
+                                  ${this.showSupervisions
                     ? x$1 `<p id="supervisionInfo">
-                                      ${mappedCb.supervision === 'None'
+                                        ${mappedCb.supervision === 'None'
                         ? 'None'
                         : mappedCb.supervision.substring(2)}
-                                    </p>`
+                                      </p>`
                     : T$1}`
                 : T$1}
-                        </td>`;
+                          </td>`;
         })}
-                    </tr>`)}`)}
+                      </tr>`)}`)}
         </tbody>
       </table>
     </div>`;
@@ -15648,7 +15642,7 @@ class Stencil extends s$d {
     renderStencilSelectionAndUse() {
         if (this.stencilData.applications.length === 0)
             return x$1 `<p>No applications exist in the current stencil.</p>`;
-        return x$1 `<section>
+        return x$1 `<section id="appSelection">
         <div id="appMaker">
           <div>
             <h2 id="appMenuHeader">
@@ -15682,17 +15676,21 @@ class Stencil extends s$d {
                 </md-menu-item>
               </md-menu>
             </h2>
-            <md-list id="applications"
+            <md-list id="applications" class="scrollable"
               >${this.stencilData.applications
             .filter(app => app.versions.some(version => version.deprecated && this.showDeprecated) || !this.showDeprecated)
             .map(app => app.category)
             .filter((item, i, ar) => ar.indexOf(item) === i)
+            .sort((catA, catB) => catA.toLowerCase().localeCompare(catB.toLowerCase()))
             .map(appCategory => x$1 ` <md-list-item data-cat="${appCategory}">
                         <div slot="headline">${appCategory}</div>
                         <md-icon slot="start">ad_group</md-icon>
                       </md-list-item>
                       ${this.stencilData.applications
             .filter(app => app.category === appCategory)
+            .sort((vAppsA, vAppsB) => `${vAppsA.name}`
+            .toLowerCase()
+            .localeCompare(`${vAppsB.name}`.toLowerCase()))
             .flatMap(app => {
             let availableVersion = null;
             if (this.showDeprecated === false)
@@ -15734,6 +15732,51 @@ class Stencil extends s$d {
                           </md-list-item>`;
         })}`)}</md-list
             >
+            <md-outlined-button
+              class="button"
+              @click=${() => {
+            // application that already matches parameters
+            var _a, _b;
+            if (!this.selectedApplication)
+                return;
+            const otherAppVersions = [
+                ...this.selectedApplication.versions.filter(appVer => { var _a; return appVer.version !== ((_a = this.selectedAppVersion) === null || _a === void 0 ? void 0 : _a.version); })
+            ];
+            if (otherAppVersions.length > 0) {
+                // there are other applications with different version
+                this.stencilData = {
+                    name: this.stencilName.value.trim(),
+                    version: this.stencilVersion.value.trim(),
+                    applications: [
+                        ...this.stencilData.applications,
+                        {
+                            category: (_a = this.appCategory.value.trim()) !== null && _a !== void 0 ? _a : 'UnknownCategory',
+                            name: (_b = this.appName.value.trim()) !== null && _b !== void 0 ? _b : 'UnknownName',
+                            // could also update the description this way!
+                            description: this.appDesc.value.trim(),
+                            versions: otherAppVersions
+                        }
+                    ]
+                };
+            }
+            else {
+                // this was the last application, safe to remove
+                const otherApplications = [
+                    ...this.stencilData.applications.filter(app => app !== this.selectedApplication)
+                ];
+                this.stencilData = {
+                    name: this.stencilData.name,
+                    version: this.stencilData.version,
+                    applications: otherApplications
+                };
+            }
+            this.selectedApplicationUI.classList.remove('selected');
+            this.selectedApplication = null;
+            this.selectedAppVersion = undefined;
+        }}
+              >Delete Application
+              <md-icon slot="icon">delete</md-icon>
+            </md-outlined-button>
           </div>
           ${this.renderIedsForUse()}
         </div>
@@ -15786,20 +15829,10 @@ class Stencil extends s$d {
     `;
     }
     renderCbSelectionTable() {
-        // const iedFromWithCBs = new Map<string, string[]>();
-        // this.iedMappingStencilData.forEach(cb => {
-        //   const existingCbs = iedFromWithCBs.get(cb.from);
-        //   if (existingCbs && !existingCbs.includes(cb.id)) {
-        //     existingCbs.push(cb.id);
-        //     iedFromWithCBs.set(cb.from, existingCbs);
-        //   } else {
-        //     iedFromWithCBs.set(cb.from, [cb.id]);
-        //   }
-        // });
         const toIedNames = this.iedMappingStencilData
             .map(cb => cb.to)
             .filter((item, i, ar) => ar.indexOf(item) === i)
-            .sort();
+            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
         const rowIedNames = this.iedMappingStencilData
             .map(cb => cb.from)
             .filter((item, i, ar) => ar.indexOf(item) === i)
@@ -15853,36 +15886,40 @@ class Stencil extends s$d {
                       colspan="${toIedNames.length}"
                     ></th>
                   </tr>
-                  ${row.cbs.map(cbName => x$1 `<tr>
-                        <th
-                          scope="row"
-                          class="cbname"
-                          data-fromIed="${row.fromIed}"
-                          data-fromCb="${cbName}"
-                        >
-                          ${cbName.substring(2)}
-                        </th>
-                        ${toIedNames.map(toIed => {
+                  ${row
+            .cbs.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+            .map(cbName => x$1 `<tr>
+                          <th
+                            scope="row"
+                            class="cbname"
+                            data-fromIed="${row.fromIed}"
+                            data-fromCb="${cbName}"
+                          >
+                            ${cbName.substring(2)}
+                          </th>
+                          ${toIedNames.map(toIed => {
             const mappedCb = this.iedMappingStencilData.find(cb => cb.id === cbName &&
                 cb.from === row.fromIed &&
                 cb.to === toIed);
             return x$1 `<td
-                            class="${mappedCb
+                              class="${mappedCb
                 ? 'mapcell'
-                : ''} ${row.fromIed === toIed ? 'diagonal' : ''}"
-                          >
-                            ${mappedCb && this.templateCreationStage < 2
+                : ''} ${row.fromIed === toIed
+                ? 'diagonal'
+                : ''}"
+                            >
+                              ${mappedCb && this.templateCreationStage < 2
                 ? x$1 `<md-checkbox
-                                    class="cb ${mappedCb &&
+                                      class="cb ${mappedCb &&
                     mappedCb.type === 'SampledValueControl'
                     ? 'sv'
                     : ''}"
-                                    data-fromIed="${row.fromIed}"
-                                    data-fromCb="${cbName}"
-                                    data-toIed="${toIed}"
-                                    touch-target="wrapper"
-                                    ?checked=${true}
-                                    @change=${(event) => {
+                                      data-fromIed="${row.fromIed}"
+                                      data-fromCb="${cbName}"
+                                      data-toIed="${toIed}"
+                                      touch-target="wrapper"
+                                      ?checked=${true}
+                                      @change=${(event) => {
                     // eslint-disable-next-line prefer-destructuring
                     const target = event.target;
                     // const { fromcb, fromied, toied } =
@@ -15914,32 +15951,32 @@ class Stencil extends s$d {
                     }
                     // console.log(this.createCBsToRemove);
                 }}
-                                  ></md-checkbox>
+                                    ></md-checkbox>
 
-                                  ${this.showSupervisions
+                                    ${this.showSupervisions
                     ? x$1 `<p id="supervisionInfo">
-                                        ${mappedCb.supervision === 'None'
+                                          ${mappedCb.supervision === 'None'
                         ? 'None'
                         : mappedCb.supervision.substring(2)}
-                                      </p>`
+                                        </p>`
                     : T$1}`
                 : T$1}
-                            ${mappedCb &&
+                              ${mappedCb &&
                 !this.createCBsToRemove.find(cb => cb.id === cbName &&
                     cb.from === row.fromIed &&
                     cb.to === toIed) &&
                 this.templateCreationStage >= 2
                 ? x$1 `<md-icon
-                                  class="cb ${mappedCb &&
+                                    class="cb ${mappedCb &&
                     mappedCb.type === 'SampledValueControl'
                     ? 'sv'
                     : ''}"
-                                  >check</md-icon
-                                >`
+                                    >check</md-icon
+                                  >`
                 : T$1}
-                          </td>`;
+                            </td>`;
         })}
-                      </tr>`)}`)}
+                        </tr>`)}`)}
           </tbody>
         </table>
       </div>
@@ -15969,12 +16006,14 @@ class Stencil extends s$d {
     renderIedsToFunctionNaming() {
         return x$1 `<h1>Name IEDs with Functions</h1>
       <div class="group appinf" id="function">
-        ${this.uniqueIeds.map(ied => x$1 `<md-outlined-text-field
-              class="iedfunction"
-              data-ied="${ied}"
-              label="IED Function (was ${ied})"
-              value="${ied}"
-            ></md-outlined-text-field>`)}
+        ${this.uniqueIeds
+            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+            .map(ied => x$1 `<md-outlined-text-field
+                class="iedfunction"
+                data-ied="${ied}"
+                label="IED Function (was ${ied})"
+                value="${ied}"
+              ></md-outlined-text-field>`)}
       </div>
       <md-filled-button
         class="button"
@@ -16118,7 +16157,7 @@ class Stencil extends s$d {
             // this.clearSelection();
         }}
     >
-      <div slot="headline">Select IEDs to create a template mapping</div>
+      <div slot="headline">Select IEDs to create a stencil application</div>
       <form slot="content" id="selection" method="dialog">
         <selection-list
           id="selection-list"
@@ -16290,10 +16329,6 @@ Stencil.styles = i$a `
       width: 500px;
     }
 
-    #applications {
-      height: 100%;
-    }
-
     #stencilVersion {
       padding: 10px;
     }
@@ -16312,6 +16347,11 @@ Stencil.styles = i$a `
       flex-direction: row;
     }
 
+    #appSelection {
+      height: calc(100vh - 280px);
+      overflow-y: clip;
+    }
+
     #headline,
     #deprecated {
       display: flex;
@@ -16326,6 +16366,11 @@ Stencil.styles = i$a `
     .group {
       display: flex;
       flex-direction: row;
+    }
+
+    .group.appinf {
+      max-width: 95vw;
+      flex-wrap: wrap;
     }
 
     .columngroup {
@@ -16462,6 +16507,7 @@ Stencil.styles = i$a `
 
     #appContainer {
       padding-left: 20px;
+      overflow: clip;
     }
 
     #controlBlockMappings {
@@ -16471,6 +16517,30 @@ Stencil.styles = i$a `
 
     #supervisionInfo {
       font-size: 10px;
+    }
+
+    #applications,
+    #iedsAndFunctions {
+      height: calc(100vh - 410px);
+      overflow-y: scroll;
+    }
+
+    .scrollable {
+      scrollbar-width: auto;
+      scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+    }
+
+    .scrollable::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .scrollable::-webkit-scrollbar-track {
+      background: var(--scrollbarBG);
+    }
+
+    .scrollable::-webkit-scrollbar-thumb {
+      background: var(--thumbBG);
+      border-radius: 6px;
     }
   `;
 __decorate([
@@ -16590,6 +16660,9 @@ __decorate([
 __decorate([
     e$d('#error-dialog')
 ], Stencil.prototype, "errorDialogUI", void 0);
+__decorate([
+    e$d('#applications > md-list-item.selected')
+], Stencil.prototype, "selectedApplicationUI", void 0);
 
 export { Stencil as default };
 //# sourceMappingURL=oscd-stencil.js.map
