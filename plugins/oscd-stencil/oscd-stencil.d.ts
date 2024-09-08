@@ -11,6 +11,7 @@ import '@material/web/list/list-item.js';
 import '@material/web/iconbutton/icon-button.js';
 import '@material/web/menu/menu.js';
 import '@material/web/icon/icon.js';
+import '@material/web/switch/switch.js';
 import '@openenergytools/filterable-lists/dist/selection-list.js';
 import '@openenergytools/filterable-lists/dist/action-list.js';
 import type { MdCheckbox } from '@material/web/checkbox/checkbox.js';
@@ -56,6 +57,14 @@ type StencilData = {
     version: string;
     applications: VersionedApplications[];
 };
+type cbSelectionRowData = {
+    fromIed: string;
+    cbs: string[] | undefined;
+};
+type TableData = {
+    toIedNames: string[];
+    rowInfo: cbSelectionRowData[];
+};
 /**
  * A plugin to allow templates of GOOSE and SV using the
  * later binding method based on a JSON description of a configuration.
@@ -80,6 +89,8 @@ export default class Stencil extends LitElement {
     snackBarMessage: string;
     errorMessages: string[];
     showSupervisions: boolean;
+    allowEditColumns: boolean;
+    allowAppCreationToggles: boolean;
     tabBarUI: TabBar;
     outputStencilUI: TextField;
     outputStencilViewUI: TextField;
@@ -97,6 +108,12 @@ export default class Stencil extends LitElement {
     changeStencilUI: HTMLInputElement;
     menuAppButtonUI: MdIconButton;
     menuAppUI: MdMenu;
+    cbMappingsTableUI: HTMLTableElement | undefined;
+    tableUserMappingSelectionUI: HTMLElement | undefined;
+    tableUserMappingSelectionToIedsUI: HTMLElement[] | undefined;
+    tableUserMappingSelectionFromIedsUI: HTMLElement[] | undefined;
+    tableUserMappingSelectionFromCbsUI: HTMLElement[] | undefined;
+    tableUserMappingMappedCheckboxesUI: HTMLElement[] | undefined;
     functionIedNamesUI: TextField[];
     snackBarMessageUI: Snackbar;
     errorDialogUI: MdDialog;
@@ -123,7 +140,12 @@ export default class Stencil extends LitElement {
     renderApplicationDetails(): TemplateResult;
     renderStencilSelectionAndUse(): TemplateResult;
     renderUse(): TemplateResult;
-    renderCbSelectionTable(): TemplateResult;
+    renderRowCbUsed(cbName: string, row: cbSelectionRowData, toIedNames: string[], rowInfo: cbSelectionRowData[], mappingData: ControlBlockInfo[], readOnly?: boolean): TemplateResult<1>;
+    renderCbSelectionTableRows(toIedNames: string[], rowInfo: cbSelectionRowData[], mappingData: ControlBlockInfo[], readOnly?: boolean): TemplateResult;
+    updateDependentCheckboxes(source: 'to' | 'cb' | 'from' | 'map', toIedNames: string[], fromIedNamesAndCBs: cbSelectionRowData[], toIedName?: string, fromIedName?: string, cbName?: string): void;
+    getTableData(): TableData;
+    renderCbSelectionTable(toIedNames: string[], rowInfo: cbSelectionRowData[], mappingData: ControlBlockInfo[], readOnly?: boolean): TemplateResult;
+    renderCbSelection(): TemplateResult;
     renderIedsToFunctionNaming(): TemplateResult;
     renderOutputJSON(): TemplateResult;
     renderCreate(): TemplateResult;
