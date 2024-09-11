@@ -1,6 +1,6 @@
-type Mapping = {
-    FCDA: string;
+export type Mapping = {
     ExtRef: string;
+    FCDA: string;
 };
 export type ControlBlockInfo = {
     id: string;
@@ -12,6 +12,14 @@ export type ControlBlockInfo = {
     type: string;
     mappings: Mapping[];
     supervision: string;
+    selSupervision?: {
+        ExtRef: string;
+        name: string;
+    };
 };
-export declare function getMappingInfo(doc: XMLDocument, fromName: string, toName: string): ControlBlockInfo[];
-export {};
+/**
+ * A near copy of the same function in scl-lib.
+ * Excludes the service type match.
+ */
+export declare function matchSrcAttributes(extRef: Element, control: Element): boolean;
+export declare function getMappingInfo(doc: XMLDocument, fromName: string, toName: string, includeSELSupervision?: boolean): ControlBlockInfo[];

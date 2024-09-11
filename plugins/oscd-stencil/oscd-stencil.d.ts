@@ -104,6 +104,10 @@ export default class Stencil extends LitElement {
     appDeprecated: MdCheckbox;
     iedTemplateSelectorUI: MdDialog;
     iedSelectorUI: MdDialog;
+    iedStencilMetadataUI: MdDialog;
+    iedsStencilMetadataUI: SelectionList;
+    stencilMetadataIdUI: TextField;
+    stencilMetadataVerUI: TextField;
     selectionListUI: SelectionList;
     changeStencilUI: HTMLInputElement;
     menuAppButtonUI: MdIconButton;
@@ -135,6 +139,7 @@ export default class Stencil extends LitElement {
     protected restoreSettings(): void;
     protected storeSettings(): void;
     protected updated(changedProperties: PropertyValues): void;
+    renderAddStencilMetadata(): TemplateResult;
     renderFunctionIedSelector(): TemplateResult;
     renderIedsForUse(): TemplateResult;
     renderApplicationDetails(): TemplateResult;
