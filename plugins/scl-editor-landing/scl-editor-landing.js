@@ -8057,7 +8057,7 @@ class SclEditorLanding extends s$1 {
     }
     createNewProject() {
         var _a;
-        const docName = ((_a = this.newProjectName.value) === null || _a === void 0 ? void 0 : _a.match(/\.s[sc]d$/i))
+        const docName = ((_a = this.newProjectName.value) === null || _a === void 0 ? void 0 : _a.match(/\.[fs][sc]d$/i))
             ? this.newProjectName.value
             : `${this.newProjectName.value}.scd`;
         const version = (this.newDialog.querySelector('mwc-list').selected).value;
@@ -8132,8 +8132,8 @@ class SclEditorLanding extends s$1 {
 }
 SclEditorLanding.styles = i$5 `
     :host {
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       background-color: green;
     }
 
