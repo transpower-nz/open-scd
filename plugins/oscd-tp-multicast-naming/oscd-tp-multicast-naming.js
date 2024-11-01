@@ -49690,7 +49690,8 @@ class TPMulticastNaming extends s$3 {
                     const { busVlans } = getAllocatedVlans(this.doc);
                     const existingVlans = busVlans;
                     const existingVlan = existingVlans === null || existingVlans === void 0 ? void 0 : existingVlans.find(vlan => (vlan.busName === busName || busName === 'NOBUSES') &&
-                        vlan.serviceName === serviceName);
+                        vlan.serviceName === serviceName &&
+                        vlan.serviceType === serviceType);
                     const vlanId = getProtectionNumber(iedName) === '1'
                         ? existingVlan === null || existingVlan === void 0 ? void 0 : existingVlan.prot1Id
                         : existingVlan === null || existingVlan === void 0 ? void 0 : existingVlan.prot2Id;
