@@ -49743,7 +49743,7 @@ class TPMulticastNaming extends s$3 {
                 controlName.startsWith('AdjBusCouplerInd') ||
                 controlName.startsWith('VReg') ||
                 controlName.startsWith('SwydLighting') ||
-                controlName.startsWith('HalfCB_Ctl')) {
+                controlName.startsWith('CtlHalfCB')) {
                 serviceName = '';
                 useCase = 'Station';
             }
