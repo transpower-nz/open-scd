@@ -5754,7 +5754,7 @@ class Is extends he {
   }
 }
 me(Is, {}, ["default"], [], !0);
-const ba = "/oscd-plugins/type-designer/fonts.css", _a = "/oscd-plugins/type-designer/theme.css", va = "/oscd-plugins/type-designer/bare.css";
+const ba = "/fonts.css", _a = "/theme.css", va = "/bare.css";
 var N;
 let Af = (N = class {
   constructor(e) {
@@ -19407,7 +19407,7 @@ class zs extends he {
   }
 }
 me(zs, {}, [], [], !0);
-const of = "@oscd-plugins/type-designer", uf = "1.1.0", cf = "module", ff = {
+const of = "@oscd-plugins/type-designer", uf = "1.0.0", cf = "module", ff = {
   dev: "vite --mode STAND_ALONE",
   build: "vite build",
   "_build:watch": "NODE_ENV=development vite build --watch",

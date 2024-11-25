@@ -1,7 +1,7 @@
 {
 	"name": "@oscd-plugins/type-designer",
 	"private": true,
-	"version": "0.0.0",
+	"version": "1.1.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite --mode STAND_ALONE",
@@ -17,12 +17,20 @@
 		"@oscd-plugins/core": "workspace:^",
 		"@oscd-plugins/ui": "workspace:^",
 		"@oscd-plugins/uilib": "workspace:^",
+		"@smui-extra/accordion": "7.0.0",
 		"@smui/button": "7.0.0",
-		"concurrently": "^7.6.0"
+		"@smui/card": "7.0.0",
+		"@smui/form-field": "7.0.0",
+		"@smui/icon-button": "7.0.0",
+		"@smui/layout-grid": "7.0.0",
+		"@smui/paper": "7.0.0",
+		"@smui/switch": "7.0.0",
+		"@smui/textfield": "7.0.0"
 	},
 	"devDependencies": {
 		"@sveltejs/vite-plugin-svelte": "^3.1.1",
 		"@tsconfig/svelte": "^5.0.4",
+		"concurrently": "^7.6.0",
 		"sass": "^1.61.0",
 		"svelte": "^4.2.18",
 		"svelte-check": "^3.8.5",

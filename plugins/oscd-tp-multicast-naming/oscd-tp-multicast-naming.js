@@ -49180,7 +49180,13 @@ function getBusConnections(doc) {
     if (!doc)
         return new Map();
     const bcs = new Map();
-    Array.from(doc.querySelectorAll('Substation > VoltageLevel > Bay > Function[name="BusPhysConnection"]')).forEach(physConn => {
+    Array.from(doc.querySelectorAll('Substation > VoltageLevel > Bay > Function[name="BusPhysConnection"]'))
+        .sort((a, b) => {
+        const aName = a.closest('Bay').getAttribute('name');
+        const bName = b.closest('Bay').getAttribute('name');
+        return aName.localeCompare(bName);
+    })
+        .forEach(physConn => {
         var _a;
         const bayName = (_a = physConn.closest('Bay')) === null || _a === void 0 ? void 0 : _a.getAttribute('name');
         physConn.querySelectorAll('LNode').forEach(lNode => {
@@ -49661,7 +49667,7 @@ class TPMulticastNaming extends s$3 {
                 let serviceName;
                 if (controlName.startsWith('Ind') ||
                     controlName.startsWith('Test') ||
-                    controlName.startsWith('SPS') ||
+                    controlName.startsWith('SPSBus') ||
                     controlName.startsWith('TCh')) {
                     serviceName = 'Slow';
                     useCase = 'Bus';
@@ -49735,7 +49741,7 @@ class TPMulticastNaming extends s$3 {
                     .getAttribute('smvID')) === null || _a === void 0 ? void 0 : _a.replace(`${iedName}`, '').replace('_', '');
             const controlName = control.getAttribute('name');
             let useCase;
-            const serviceType = control.tagName === 'GSEControl' ? 'GSE' : 'SMV';
+            let serviceType = control.tagName === 'GSEControl' ? 'GSE' : 'SMV';
             let serviceName;
             if (controlName.startsWith('ILock') ||
                 controlName.startsWith('TripCBFail') ||
@@ -49749,6 +49755,12 @@ class TPMulticastNaming extends s$3 {
             }
             else if (serviceType === 'SMV' && smvIDFunction === 'VTSelStn') {
                 serviceName = '';
+                useCase = 'Station';
+            }
+            else if (serviceType === 'GSE' &&
+                controlName.startsWith('AdjSwgrPos')) {
+                serviceName = '';
+                serviceType = 'InterProt';
                 useCase = 'Station';
             }
             // Allocate if adequate definition is not available
