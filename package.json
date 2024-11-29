@@ -5,7 +5,7 @@
   "author": "Jakob Vogelsang",
   "version": "0.0.0",
   "scripts": {
-    "preinstall": "git submodule update --init --recursive && git submodule foreach git pull origin gh-pages",
+    "preinstall": "git submodule update --init --recursive --remote",
     "build": "rimraf dist && rollup -c rollup.config.js && cp favicon.ico dist",
     "deploy": "npm run preinstall && npm run build && gh-pages -d dist",
     "deploy:nobuild": "gh-pages -d dist",

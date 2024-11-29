@@ -223,7 +223,7 @@
       "icon": "lan",
       "active": true,
       "requireDoc": true,
-      "src": "plugins/oscd-plugins/communication-explorer/0.0.30/index.js"
+      "src": "plugins/oscd-plugins/communication-explorer/0.0.31/index.js"
     },
     {
       "name": "IED browser",
