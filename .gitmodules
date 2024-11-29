@@ -142,4 +142,4 @@
 [submodule "plugins/scl-wizarding"]
 	path = plugins/scl-wizarding
 	url = https://github.com/OpenEnergyTools/scl-wizarding
-	branch = gh-pages
+	branch = deploy
