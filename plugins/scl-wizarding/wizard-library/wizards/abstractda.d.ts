@@ -1,5 +1,5 @@
 import { TemplateResult } from 'lit';
-import { Edit } from '@openscd/open-scd-core';
+import { Edit } from '@openenergytools/open-scd-core';
 import '@material/mwc-list/mwc-list-item';
 import '../../foundation/components/scl-wizarding-textfield.js';
 import '../../foundation/components/scl-wizarding-select.js';

@@ -1,5 +1,5 @@
 import { TemplateResult } from 'lit';
-import { Edit } from '@openscd/open-scd-core';
+import { Edit } from '@openenergytools/open-scd-core';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import '../../foundation/components/scl-wizarding-textfield.js';

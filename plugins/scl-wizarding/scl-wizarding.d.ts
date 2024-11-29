@@ -13,4 +13,5 @@ export default class SclWizarding extends LitElement {
     private onWizard;
     constructor();
     render(): TemplateResult;
+    static styles: import("lit").CSSResult;
 }

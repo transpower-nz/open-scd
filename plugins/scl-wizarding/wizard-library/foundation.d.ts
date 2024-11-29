@@ -3,7 +3,7 @@ import { List } from '@material/mwc-list';
 import { Select } from '@material/mwc-select';
 import { TextArea } from '@material/mwc-textarea';
 import { TextField } from '@material/mwc-textfield';
-import { Edit } from '@openscd/open-scd-core';
+import { Edit } from '@openenergytools/open-scd-core';
 import { SclWizardingTextfield } from '../foundation/components/scl-wizarding-textfield.js';
 import { SclWizardingSelect } from '../foundation/components/scl-wizarding-select.js';
 import { SclWizardingCheckbox } from '../foundation/components/scl-wizarding-checkbox.js';
