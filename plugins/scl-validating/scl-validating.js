@@ -16720,7 +16720,7 @@ class SclValidatingPlugin extends s$1 {
         /** Whether template validator has had the initial run */
         this.waitForTemplateRun = true;
         /** Whether schema validator shall run after each change to the doc */
-        this.autoValidateSchema = true;
+        this.autoValidateSchema = false;
         /** Whether template validator shall run after each change to the doc */
         this.autoValidateTemplate = false;
     }
@@ -16869,7 +16869,6 @@ class SclValidatingPlugin extends s$1 {
               <mwc-formfield label="Auto validate on change" alignEnd>
                 <mwc-switch
                   class="auto schema"
-                  selected
                   @click="${() => {
             this.autoValidateSchema = !this.autoValidateSchema;
         }}"

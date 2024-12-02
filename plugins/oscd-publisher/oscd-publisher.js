@@ -15052,15 +15052,21 @@ let ReportControlElementEditor = class ReportControlElementEditor extends s$3 {
     }
     saveOptFieldChanges() {
         var _a;
-        const optFields = this.element.querySelector(':scope > OptFields');
-        if (!optFields)
+        if (!this.element)
             return;
+        const optFields = this.element.querySelector(':scope > OptFields');
         const optFieldAttrs = {};
         for (const input of (_a = this.optFieldsInputs) !== null && _a !== void 0 ? _a : [])
-            if (optFields.getAttribute(input.label) !== input.value)
+            if ((optFields === null || optFields === void 0 ? void 0 : optFields.getAttribute(input.label)) !== input.value)
                 optFieldAttrs[input.label] = input.value;
-        const updateEdit = { element: optFields, attributes: optFieldAttrs };
-        this.dispatchEvent(newEditEvent(updateEdit));
+        if (!optFields) {
+            const node = createElement$1(this.element.ownerDocument, 'OptFields', optFieldAttrs);
+            this.dispatchEvent(newEditEvent({ parent: this.element, node, reference: null }));
+        }
+        else {
+            const updateEdit = { element: optFields, attributes: optFieldAttrs };
+            this.dispatchEvent(newEditEvent(updateEdit));
+        }
         this.onOptFieldsInputChange();
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15078,14 +15084,19 @@ let ReportControlElementEditor = class ReportControlElementEditor extends s$3 {
         if (!this.element)
             return;
         const trgOps = this.element.querySelector(':scope > TrgOps');
-        if (!trgOps)
-            return;
         const trgOpsAttrs = {};
-        for (const input of (_a = this.trgOpsInputs) !== null && _a !== void 0 ? _a : [])
-            if (trgOps.getAttribute(input.label) !== input.value)
+        for (const input of (_a = this.trgOpsInputs) !== null && _a !== void 0 ? _a : []) {
+            if ((trgOps === null || trgOps === void 0 ? void 0 : trgOps.getAttribute(input.label)) !== input.value)
                 trgOpsAttrs[input.label] = input.value;
-        const updateEdit = { element: trgOps, attributes: trgOpsAttrs };
-        this.dispatchEvent(newEditEvent(updateEdit));
+        }
+        if (!trgOps) {
+            const node = createElement$1(this.element.ownerDocument, 'TrgOps', trgOpsAttrs);
+            this.dispatchEvent(newEditEvent({ parent: this.element, node, reference: null }));
+        }
+        else {
+            const updateEdit = { element: trgOps, attributes: trgOpsAttrs };
+            this.dispatchEvent(newEditEvent(updateEdit));
+        }
         this.onTrgOpsInputChange();
     }
     onReportControlInputChange() {
@@ -21806,7 +21817,7 @@ let DataSetElementEditor = class DataSetElementEditor extends s$3 {
         ?disabled=${!canAddFCDA(this.element)}
         @click=${() => { var _a; return (_a = this.doPickerDialog) === null || _a === void 0 ? void 0 : _a.show(); }}
       ></mwc-button
-      ><mwc-dialog id="dopicker" heading="Add Data Attributes">
+      ><mwc-dialog id="dopicker" heading="Add Data Objects">
         <oscd-tree-grid .tree=${dataObjectTree(server)}></oscd-tree-grid>
         <mwc-button
           slot="secondaryAction"
