@@ -15061,7 +15061,11 @@ let ReportControlElementEditor = class ReportControlElementEditor extends s$3 {
                 optFieldAttrs[input.label] = input.value;
         if (!optFields) {
             const node = createElement$1(this.element.ownerDocument, 'OptFields', optFieldAttrs);
-            this.dispatchEvent(newEditEvent({ parent: this.element, node, reference: null }));
+            this.dispatchEvent(newEditEvent({
+                parent: this.element,
+                node,
+                reference: getReference(this.element, 'OptFields'),
+            }));
         }
         else {
             const updateEdit = { element: optFields, attributes: optFieldAttrs };
@@ -15091,7 +15095,11 @@ let ReportControlElementEditor = class ReportControlElementEditor extends s$3 {
         }
         if (!trgOps) {
             const node = createElement$1(this.element.ownerDocument, 'TrgOps', trgOpsAttrs);
-            this.dispatchEvent(newEditEvent({ parent: this.element, node, reference: null }));
+            this.dispatchEvent(newEditEvent({
+                parent: this.element,
+                node,
+                reference: getReference(this.element, 'TrgOps'),
+            }));
         }
         else {
             const updateEdit = { element: trgOps, attributes: trgOpsAttrs };
