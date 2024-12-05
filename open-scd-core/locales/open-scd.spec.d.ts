@@ -1,1 +1,0 @@
-import './open-scd.js';
