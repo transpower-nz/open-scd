@@ -1,7 +1,7 @@
 [submodule "open-scd-core"]
 	path = open-scd-core
 	url = https://www.github.com/openenergytools/open-scd-core
-	branch = gh-pages
+	branch = deploy
 [submodule "plugins/scl-editor-landing"]
 	path = plugins/scl-editor-landing
 	url = https://www.github.com/openenergytools/scl-editor-landing
