@@ -90,10 +90,6 @@
 	path = plugins/oscd-network-config
 	url = https://github.com/danyill/oscd-network-config
 	branch = gh-pages
-[submodule "plugins/oscd-designer"]
-	path = plugins/oscd-designer
-	url = https://github.com/ca-d/oscd-designer
-	branch = gh-pages
 [submodule "oscd-communication"]
 	url = https://github.com/OpenEnergyTools/scl-communication
 [submodule "scl-communication"]
@@ -123,10 +119,6 @@
 	path = plugins/oscd-stencil
 	url = https://github.com/danyill/oscd-stencil
 	branch = gh-pages
-[submodule "plugins/oscd-designer-ce"]
-	path = plugins/oscd-designer-ce
-	url = https://github.com/OpenEnergyTools/oscd-designer
-	branch = gh-pages
 [submodule "plugins/scl-communication-editor"]
 	path = plugins/scl-communication-editor
 	url = https://github.com/OpenEnergyTools/scl-communication-editor
@@ -143,3 +135,11 @@
 	path = plugins/scl-wizarding
 	url = https://github.com/OpenEnergyTools/scl-wizarding
 	branch = deploy
+[submodule "plugins/oscd-designer-danyill"]
+	path = plugins/oscd-designer-danyill
+	url = https://github.com/danyill/oscd-designer
+	branch = gh-pages
+[submodule "plugins/scl-communication-editor-danyill"]
+	path = plugins/scl-communication-editor-danyill
+	url = https://github.com/danyill/scl-communication-editor
+	branch = gh-pages
