@@ -136,14 +136,14 @@
       "icon": "add_box",
       "active": true,
       "requireDoc": true,
-      "src": "plugins/oscd-designer-ce/oscd-designer.js"
+      "src": "plugins/oscd-designer-danyill/oscd-designer.js"
     },
     {
       "name": "Communication Editor",
       "icon": "edit",
       "active": true,
       "requireDoc": true,
-      "src": "plugins/scl-communication-editor/scl-communication-editor.js"
+      "src": "plugins/scl-communication-editor-danyill/scl-communication-editor.js"
     },
     {
       "name": "Communication Explorer",
