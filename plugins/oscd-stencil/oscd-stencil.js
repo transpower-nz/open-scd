@@ -15546,6 +15546,10 @@ class Stencil extends s$d {
         this.stencilData = JSON.parse(text);
         this.storeSettings();
         this.changeStencilUI.onchange = null;
+        this.selectedApplicationUI.classList.remove('selected');
+        this.selectedApplication = null;
+        this.selectedAppVersion = undefined;
+        this.resetApplyStencil();
     }
     // eslint-disable-next-line class-methods-use-this
     applyStencil() {
