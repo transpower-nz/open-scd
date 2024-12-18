@@ -15200,10 +15200,7 @@ function findSELMessageQuality(control, toIedName) {
 function getFCDA(cb, extRef) {
     const dsName = cb.getAttribute('datSet');
     const ds = cb.closest('LN0').querySelector(`DataSet[name="${dsName}"]`);
-    const fcdas = ds === null || ds === void 0 ? void 0 : ds.querySelectorAll('FCDA');
-    if (!fcdas)
-        return undefined;
-    return Array.from(fcdas).find((fcda) => matchDataAttributes(extRef, fcda));
+    return Array.from(ds.querySelectorAll('FCDA')).find((fcda) => matchDataAttributes(extRef, fcda));
 }
 function findSupervision(cb, ied) {
     var _a, _b;
