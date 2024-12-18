@@ -15182,8 +15182,8 @@ function matchSrcAttributes(extRef, control) {
         extRef.getAttribute('serviceType') === serviceType[control.tagName]) ||
         !extRef.getAttribute('serviceType'));
 }
-function isSELMessageQuality(extRef, toIedName) {
-    const toIed = extRef.ownerDocument.querySelector(`:root > IED[name="${toIedName}"]`);
+function isSELMessageQuality(extRef) {
+    const toIed = extRef.closest('IED');
     const isSEL = toIed && toIed.getAttribute('manufacturer') === 'SEL';
     const hasNoServiceType = !extRef.getAttribute('serviceType') ||
         extRef.getAttribute('serviceType') === '';
@@ -15195,7 +15195,7 @@ function findSELMessageQuality(control, toIedName) {
     return Array.from(doc.querySelectorAll(`:root>IED[name="${toIedName}"]>AccessPoint>Server>LDevice>LN0>Inputs>ExtRef[iedName="${fromIedName}"], 
       :root>IED[name="${toIedName}"]>AccessPoint>Server>LDevice>LN>Inputs>ExtRef[iedName="${fromIedName}"]`)).find(extRef => matchSrcAttributes(extRef, control) &&
         !isSubscribed(extRef) &&
-        isSELMessageQuality(extRef, fromIedName));
+        isSELMessageQuality(extRef));
 }
 function getFCDA(cb, extRef) {
     const dsName = cb.getAttribute('datSet');
@@ -15231,8 +15231,7 @@ function getMappingInfo(doc, fromName, toName, includeSELSupervision = true) {
         const extRefMappings = findControlBlockSubscription(cb, toName)
             .filter(extRef => {
             const iedNameMatch = extRef.closest('IED').getAttribute('name') === toName;
-            return (iedNameMatch &&
-                (isSubscribed(extRef) || isSELMessageQuality(extRef, toName)));
+            return iedNameMatch && isSubscribed(extRef);
         })
             .map(extRef => {
             var _a;
