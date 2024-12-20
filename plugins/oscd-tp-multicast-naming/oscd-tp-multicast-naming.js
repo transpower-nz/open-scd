@@ -49229,6 +49229,14 @@ function formatXml(xml, tab) {
     });
     return formatted.substring(1, formatted.length - 3);
 }
+function equalsOrWithUnderscore(templateName, cbName) {
+    console.log(templateName.length);
+    if (cbName === templateName ||
+        `${cbName.substring(0, templateName.length + 1)}` === `${templateName}_`) {
+        return true;
+    }
+    return false;
+}
 class TPMulticastNaming extends s$3 {
     constructor() {
         super(...arguments);
@@ -49665,19 +49673,19 @@ class TPMulticastNaming extends s$3 {
                 let serviceType;
                 serviceType = control.tagName === 'GSEControl' ? 'GSE' : 'SMV';
                 let serviceName;
-                if (controlName.startsWith('Ind') ||
-                    controlName.startsWith('Test') ||
-                    controlName.startsWith('SPSBus') ||
-                    controlName.startsWith('TCh')) {
+                if (equalsOrWithUnderscore('Ind', controlName) ||
+                    equalsOrWithUnderscore('Test', controlName) ||
+                    equalsOrWithUnderscore('SPSBus', controlName) ||
+                    equalsOrWithUnderscore('TCh', controlName)) {
                     serviceName = 'Slow';
                     useCase = 'Bus';
                 }
-                else if (controlName.startsWith('Ctl')) {
+                else if (equalsOrWithUnderscore('Ctl', controlName)) {
                     serviceName = 'Fast';
                     useCase = 'Bus';
                 }
-                else if (controlName.startsWith('ARecl') ||
-                    controlName.startsWith('SwgrPos')) {
+                else if (equalsOrWithUnderscore('ARecl', controlName) ||
+                    equalsOrWithUnderscore('SwgrPos', controlName)) {
                     serviceName = '';
                     serviceType = 'InterProt';
                     useCase = 'Bus';
@@ -49743,13 +49751,13 @@ class TPMulticastNaming extends s$3 {
             let useCase;
             let serviceType = control.tagName === 'GSEControl' ? 'GSE' : 'SMV';
             let serviceName;
-            if (controlName.startsWith('ILock') ||
-                controlName.startsWith('TripCBFail') ||
-                controlName.startsWith('SPSStn') ||
-                controlName.startsWith('AdjBusCouplerInd') ||
-                controlName.startsWith('VReg') ||
-                controlName.startsWith('SwydLighting') ||
-                controlName.startsWith('CtlHalfCB')) {
+            if (equalsOrWithUnderscore('ILock', controlName) ||
+                equalsOrWithUnderscore('TripCBFail', controlName) ||
+                equalsOrWithUnderscore('SPSStn', controlName) ||
+                equalsOrWithUnderscore('AdjBusCouplerInd', controlName) ||
+                equalsOrWithUnderscore('VReg', controlName) ||
+                equalsOrWithUnderscore('SwydLighting', controlName) ||
+                equalsOrWithUnderscore('CtlHalfCB', controlName)) {
                 serviceName = '';
                 useCase = 'Station';
             }
@@ -49758,7 +49766,7 @@ class TPMulticastNaming extends s$3 {
                 useCase = 'Station';
             }
             else if (serviceType === 'GSE' &&
-                controlName.startsWith('AdjSwgrPos')) {
+                equalsOrWithUnderscore('AdjSwgrPos', controlName)) {
                 serviceName = '';
                 serviceType = 'InterProt';
                 useCase = 'Station';
