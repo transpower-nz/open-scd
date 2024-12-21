@@ -143,3 +143,7 @@
 	path = plugins/scl-communication-editor-danyill
 	url = https://github.com/danyill/scl-communication-editor
 	branch = gh-pages
+[submodule "plugins/mbg-ied-extractor"]
+	path = plugins/mbg-ied-extractor
+	url = https://github.com/meinberg-sync/mbg-ied-extractor
+	branch = gh-pages
