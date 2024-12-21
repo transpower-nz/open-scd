@@ -63,6 +63,13 @@
       "src": "plugins/oscd-remove-ieds/oscd-remove-ieds.js"
     },
     {
+      "name": "Extract IED",
+      "icon": "code",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/mbg-ied-extractor/mbg-icd-extractor.js"
+    },
+    {
       "name": "Validating",
       "translation": {
         "de": "Validieren"
