@@ -105,6 +105,7 @@ export default class SubscriberLaterBinding extends LitElement {
     extRefListSubscriberSelectedUI?: ListItem;
     fcdaListSelectedUI?: ListItem;
     subscriberExtRefMarkdownSaveButton?: Icon;
+    savePublisherToMarkdownButton?: Icon;
     constructor();
     /**
      * Updates caching of control blocks, used FCDAs and supervision LNs.
@@ -272,6 +273,22 @@ export default class SubscriberLaterBinding extends LitElement {
      */
     renderFCDA(control: Element, fcda: Element): TemplateResult;
     renderReadOnlyIcon(forceIcon: boolean): TemplateResult;
+    /**
+     * Render an FCDA element associated with a control block.
+     * @param control - an SCL control block GSEControl or SampledValueControl.
+     * @param fcda - an SCL FCDA element within a dataset.
+     * @returns A string representing a list element for Markdown copy
+     */
+    renderFCDAtoMarkdown(control: Element, fcda: Element): string;
+    includeFcda(control: Element, fcda: Element): boolean;
+    /**
+     * Render control blocks and their FCDAs.
+     * @param controls - an array of GSEControl or SampledValueControl elements.
+     * @returns - a string composed of a Markdown list
+     */
+    renderControlListToMarkdown(controls: Element[]): string;
+    renderPublisherInfoMarkdown(): string;
+    copyPublisherInfoToMarkdown(): void;
     renderFCDAListTitle(): TemplateResult;
     private sortFcdaSubscriberItems;
     /**

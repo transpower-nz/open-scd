@@ -12434,6 +12434,82 @@ Basic Type: ${(_c = spec === null || spec === void 0 ? void 0 : spec.bType) !== 
         >`
             : ''}`;
     }
+    /**
+     * Render an FCDA element associated with a control block.
+     * @param control - an SCL control block GSEControl or SampledValueControl.
+     * @param fcda - an SCL FCDA element within a dataset.
+     * @returns A string representing a list element for Markdown copy
+     */
+    renderFCDAtoMarkdown(control, fcda) {
+        var _a, _b;
+        const fcdaCount = this.getExtRefCount(fcda, control);
+        const { spec, desc } = this.getFcdaInfo(fcda);
+        const fcdaDesc = Object.values(desc)
+            .flat(Infinity)
+            .join(' > ');
+        return `    * ${getFcdaOrExtRefTitle(fcda)}
+
+      ${fcdaDesc} ${fcdaCount
+            ? `(${fcdaCount} subscription${fcdaCount > 1 ? 's' : ''})`
+            : ''}
+
+      (${(_a = spec === null || spec === void 0 ? void 0 : spec.cdc) !== null && _a !== void 0 ? _a : '?'}, ${(_b = spec === null || spec === void 0 ? void 0 : spec.bType) !== null && _b !== void 0 ? _b : '?'})
+`;
+    }
+    includeFcda(control, fcda) {
+        var _a;
+        const hasWithinSearch = this.searchFcdaRegex.test(`${this.getFcdaSearchString(control, fcda)}`);
+        const subscriptions = this.getExtRefCount(fcda, control);
+        const isQuality = ((_a = fcda.getAttribute('daName')) === null || _a === void 0 ? void 0 : _a.split('.').pop()) === 'q';
+        const hasSubscribed = subscriptions > 0 && this.filterOutSubscribed;
+        const hasNotSubscribed = subscriptions === 0 && this.filterOutNotSubscribed;
+        return (hasWithinSearch &&
+            (!(hasSubscribed && this.filterOutSubscribed) ||
+                !this.filterOutSubscribed) &&
+            (!(hasNotSubscribed && this.filterOutNotSubscribed) ||
+                !this.filterOutNotSubscribed) &&
+            (!(isQuality && this.filterOutQuality) || !this.filterOutQuality) &&
+            !this.isFcdaDisabled(fcda, control, true));
+    }
+    /**
+     * Render control blocks and their FCDAs.
+     * @param controls - an array of GSEControl or SampledValueControl elements.
+     * @returns - a string composed of a Markdown list
+     */
+    renderControlListToMarkdown(controls) {
+        return `${controls
+            .filter(controlCandidate => {
+            const fcdaCandidates = getFcdaElements(controlCandidate);
+            // if disabled (non-matching pXX or DOs) are filtered
+            // then don't show them
+            const onlyHasDisabledItems = fcdaCandidates.every(fcda => this.isFcdaDisabled(fcda, controlCandidate, true));
+            const hasAtLeastOneItem = fcdaCandidates.some(fcda => this.includeFcda(controlCandidate, fcda));
+            return (fcdaCandidates.length && !onlyHasDisabledItems && hasAtLeastOneItem);
+        })
+            .map(control => {
+            const fcdas = getFcdaElements(control)
+                .filter(fcda => this.includeFcda(control, fcda))
+                .sort((a, b) => this.sortFcdaSubscriberItems(a, b));
+            const iedName = control.closest('IED').getAttribute('name');
+            return `* ${iedName} > ${getNameAttribute(control)}
+  
+  ${objectReferenceInIed(control)} ${getDescriptionAttribute(control)
+                ? ` - ${getDescriptionAttribute(control)}`
+                : ''}
+
+${fcdas.map(fcda => this.renderFCDAtoMarkdown(control, fcda)).join('\n')}
+`;
+        })
+            .join('\n')}`;
+    }
+    renderPublisherInfoMarkdown() {
+        const controlElements = this.getControlElements(this.controlTag);
+        return this.renderControlListToMarkdown(controlElements);
+    }
+    copyPublisherInfoToMarkdown() {
+        const markdown = this.renderPublisherInfoMarkdown();
+        navigator.clipboard.writeText(markdown);
+    }
     renderFCDAListTitle() {
         const menuClasses = {
             'title-element': true,
@@ -12463,6 +12539,14 @@ Basic Type: ${(_c = spec === null || spec === void 0 ? void 0 : spec.bType) !== 
                 ? 'Select SV Publisher'
                 : 'Select GOOSE Publisher'}${this.renderReadOnlyIcon(false)}</span
             >`}
+        <mwc-icon-button
+          id="savePublisherToMarkdown"
+          title="Copy to Clipboard as Markdown"
+          icon="content_copy"
+          @click=${() => {
+            this.copyPublisherInfoToMarkdown();
+        }}
+        ></mwc-icon-button>
         <mwc-icon-button
           id="filterFcdaIcon"
           class="${e$a(menuClasses)}"
@@ -14121,6 +14205,9 @@ __decorate([
 __decorate([
     e$c('#saveSubscriberExtRefToMarkdown')
 ], SubscriberLaterBinding.prototype, "subscriberExtRefMarkdownSaveButton", void 0);
+__decorate([
+    e$c('#savePublisherToMarkdown')
+], SubscriberLaterBinding.prototype, "savePublisherToMarkdownButton", void 0);
 
 export { SubscriberLaterBinding as default };
 //# sourceMappingURL=oscd-subscriber-later-binding.js.map

@@ -29,13 +29,13 @@ export default class SubscriberLaterBindingSiemens extends LitElement {
      * Assess ExtRef for being associate with GOOSE value/quality and
      * dispatch subscribe or unsubscribe events.
      *
-     * @param firstExtRef - an ExtRef subject to subscribe/unsubscribe.
+     * @param extRef - an ExtRef subject to subscribe/unsubscribe.
      * @param preEventExtRef - an ExtRef subject to subscribe/unsubscribe.
-     * but prior to the evnet.
-     * @param firstFcda - the matching FCDA to the first ExtRef.
+     * but prior to the event.
+     * @param fcda - the matching FCDA to the first ExtRef.
      * @returns
      */
-    protected modifyValueAndQualityPair(firstExtRef: Element, preEventExtRef: Element | null, firstFcda: Element): void;
+    protected modifyValueAndQualityPair(extRef: Element, preEventExtRef: Element | null, fcda: Element): void;
     /**
      * Assess ExtRef for being associate with SV traffic and dispatch
      * subscribe or unsubscribe events.
