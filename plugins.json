@@ -252,6 +252,13 @@
       "active": true,
       "requireDoc": true,
       "src": "plugins/oscd-description/oscd-description.js"
+    },
+    {
+      "name": "Comparison",
+      "icon": "compare",
+      "active": true,
+      "requireDoc": true,
+      "src": "https://omicronenergyoss.github.io/oscd-diff/oscd-diff.js"
     }
   ]
 }
