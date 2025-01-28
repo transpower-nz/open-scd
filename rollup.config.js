@@ -21,7 +21,7 @@ export default {
   plugins: [
     copy({
       targets: [
-        { src: ['open-scd-core','plugins.json','plugins', 'fonts'], dest: 'dist' },
+        { src: ['open-scd-core-dev','plugins.json','plugins', 'fonts'], dest: 'dist' },
       ]
     }),
     /** Enable using HTML as rollup entrypoint */

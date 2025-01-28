@@ -147,3 +147,6 @@
 	path = plugins/mbg-ied-extractor
 	url = https://github.com/meinberg-sync/mbg-ied-extractor
 	branch = gh-pages
+[submodule "open-scd-core-dev"]
+	path = open-scd-core-dev
+	url = https://github.com/ca-d/open-scd-core
