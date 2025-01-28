@@ -1,4 +1,5 @@
-import { cyrb64 } from '@openscd/open-scd-core';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { cyrb64 } from '@openenergytools/open-scd-core';
 function describeEnumType(element) {
     var _a, _b;
     const vals = {};
