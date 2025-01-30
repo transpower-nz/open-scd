@@ -37357,9 +37357,9 @@ let OpenSCD = class OpenSCD extends s$2 {
         }
     }
     handleOpenDoc({ detail: { docName, doc } }) {
-        this.docs[docName] = doc;
-        if (this.isEditable(docName))
-            this.docName = docName;
+        this.docName = docName;
+        this.docs[this.docName] = doc;
+        this.requestUpdate();
     }
     updateVersion() {
         this.docVersion += 1;
