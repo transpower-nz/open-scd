@@ -24,6 +24,13 @@
       "src": "plugins/oscd-save-as/oscd-save-as.js"
     },
     {
+      "name": "Save Snapshot",
+      "icon": "cloud_sync",
+      "active": true,
+      "requireDoc": true,
+      "src": "plugins/oscd-snapshot/oscd-snapshot.js"
+    },
+    {
       "name": "Add IED",
       "icon": "snippet_folder",
       "active": true,
