@@ -151,3 +151,7 @@
 	path = open-scd-core-dev
 	url = https://github.com/danyill/open-scd-core
 	branch = dev-preview-deploy
+[submodule "plugins/oscd-snapshot"]
+	path = plugins/oscd-snapshot
+	url = https://github.com/danyill/oscd-snapshot
+	branch = gh-pages
