@@ -15190,6 +15190,8 @@ function isSELMessageQuality(extRef) {
     return isSEL && hasNoServiceType && !isSubscribed(extRef);
 }
 function findSELMessageQuality(control, toIedName) {
+    if (control.tagName !== 'GSEControl')
+        return undefined;
     const doc = control.ownerDocument;
     const fromIedName = control.closest('IED').getAttribute('name');
     return Array.from(doc.querySelectorAll(`:root>IED[name="${toIedName}"]>AccessPoint>Server>LDevice>LN0>Inputs>ExtRef[iedName="${fromIedName}"], 
