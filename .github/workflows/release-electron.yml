@@ -1,0 +1,67 @@
+name: Build executables and create release
+
+# for testing
+# on:
+#   push:
+
+# for normal usage
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build executables and create release
+    runs-on: ubuntu-22.04
+    container: electronuserland/builder:22-wine
+    env:
+      RELEASE_ASSETS: |
+        dist/*.exe
+        dist/*.msi
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Take container home folder ownership
+        # necessary to get Wine to work
+        run: chown root:root /github/home
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Update npm
+        run: npm update -g npm
+      - name: Add safe directory for git submodule usage
+        run: git config --global --add safe.directory '*'
+      - name: Install node dependencies
+        run: npm ci
+      - name: Showing wine environment
+        run: env | grep WINE
+      - name: Install mono
+        run: wine msiexec /i https://dl.winehq.org/wine/wine-mono/7.3.0/wine-mono-7.3.0-x86.msi
+      - name: Build
+        run: npm run dist:electron
+      - name: List created files
+        run: ls -la dist
+      - name: Create release and upload assets
+        id: upload_initial
+        continue-on-error: true
+        uses: softprops/action-gh-release@v2
+        with:
+          # draft: true
+          files: ${{ env.RELEASE_ASSETS }}
+      # backup steps
+      - name: Create release and upload assets (retry)
+        id: upload_retry
+        continue-on-error: true
+        if: steps.upload_initial.outcome == 'failure'
+        uses: softprops/action-gh-release@v2
+        with:
+          #  draft: true
+          files: ${{ env.RELEASE_ASSETS }}
+      - name: Upload workflow artifacts as backup
+        if: steps.upload_retry.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          path: ${{ env.RELEASE_ASSETS }}

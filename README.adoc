@@ -45,3 +45,13 @@ Add to the `plugins.json`:
 ----
 
 TIP: Ensure there are commas between plugins but no trailing commas.
+
+== Installing a release
+
+Three difference releases are provided for each release:
+
+* an msi file for Windows users (install with e.g. `msiexec /i openscd-transpower_win_x64_0.1.0_latest.msi`)
+* an NSIS installer (run the installer e.g. `openscd-transpower_win_x64_0.1.0_latest_nsis.exe`)
+* a stand-alone executable (run the executable on x64 machines, e.g. `openscd-transpower_win_x64_0.1.0_latest.exe`)
+
+Code signing is not provided.

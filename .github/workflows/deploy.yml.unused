@@ -1,0 +1,36 @@
+# Not currently in use - preinstall will update branches
+#
+#
+#
+# name: Bundle and Deploy
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+
+#       - name: Use Node.js 20
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: "20"
+
+#       - name: Configure git
+#         run: |
+#           git config user.name "GitHubActions"
+#           git config user.email "<deploy@actions.openscd.github.io>"
+
+#       - name: Install dependencies and update submodules
+#         run: npm ci && npm run preinstall
+
+#       - name: Build
+#         run: npm run-script build
+
+#       - name: Deploy 🚀
+#         uses: JamesIves/github-pages-deploy-action@v4
+#         with:
+#           folder: dist

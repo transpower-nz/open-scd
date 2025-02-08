@@ -82,6 +82,27 @@
   for (const [name, value] of params) {
     editor.setAttribute(name, value);
   }
+
+  const isElectron = !!window?.electronAPI;
+
+  if (isElectron) {
+    window.electronAPI.onFileOpen(async (fileName, filePath) => {
+      try {
+        const text = await window.electronAPI.readFile(filePath);
+        const doc = new DOMParser().parseFromString(text, "application/xml");
+        const openScd = document.querySelector("open-scd");
+        openScd.dispatchEvent(
+          new CustomEvent("oscd-open", {
+            bubbles: true,
+            composed: true,
+            detail: { doc, docName: fileName },
+          })
+        );
+      } catch (err) {
+        console.error("Error reading file:", err);
+      }
+    });
+  }
 </script>
 
 <style>
