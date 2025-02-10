@@ -1,15 +1,20 @@
 import { LitElement, TemplateResult } from 'lit';
-import '@material/mwc-button';
-import '@material/mwc-dialog';
-import type { Button } from '@material/mwc-button';
-import type { Dialog } from '@material/mwc-dialog';
-import '@openscd/oscd-tree-grid';
-import type { TreeGrid } from '@openscd/oscd-tree-grid';
-import '@openenergytools/filterable-lists/dist/action-list.js';
-import '@openenergytools/scl-text-field';
-import type { ActionList } from '@openenergytools/filterable-lists/dist/action-list.js';
+import { ActionList } from '@openenergytools/filterable-lists/dist/ActionList.js';
+import { MdDialog } from '@scopedelement/material-web/dialog/MdDialog.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { MdTextButton } from '@scopedelement/material-web/button/MdTextButton.js';
 import { SclTextField } from '@openenergytools/scl-text-field';
-export declare class DataSetElementEditor extends LitElement {
+import { TreeGrid } from '@openenergytools/tree-grid';
+declare const DataSetElementEditor_base: typeof LitElement & import("@open-wc/scoped-elements/lit-element.js").ScopedElementsHostConstructor;
+export declare class DataSetElementEditor extends DataSetElementEditor_base {
+    static scopedElements: {
+        'action-list': typeof ActionList;
+        'md-text-button': typeof MdTextButton;
+        'md-dialog': typeof MdDialog;
+        'md-icon': typeof MdIcon;
+        'tree-grid': typeof TreeGrid;
+        'scl-text-field': typeof SclTextField;
+    };
     /** The document being edited as provided to plugins by [[`OpenSCD`]]. */
     doc: XMLDocument;
     /** The element being edited */
@@ -21,16 +26,18 @@ export declare class DataSetElementEditor extends LitElement {
     private get fcdaCount();
     private someDiffOnInputs;
     inputs: SclTextField[];
-    saveButton: Button;
+    saveButton: MdTextButton;
     fcdaList: ActionList;
-    daPickerButton: Button;
-    daPickerDialog: Dialog;
+    daPickerButton: MdTextButton;
+    daPickerDialog: MdDialog;
     daPicker: TreeGrid;
-    doPickerButton: Button;
-    doPickerDialog: Dialog;
+    daPickerSaveButton: MdTextButton;
+    doPickerButton: MdTextButton;
+    doPickerDialog: MdDialog;
     doPicker: TreeGrid;
+    doPickerSaveButton: MdTextButton;
     resetInputs(): void;
-    private onInputChange;
+    onInputChange(): void;
     private saveChanges;
     private saveDataObjects;
     private saveDataAttributes;
@@ -46,3 +53,4 @@ export declare class DataSetElementEditor extends LitElement {
     render(): TemplateResult;
     static styles: import("lit").CSSResult;
 }
+export {};

@@ -1,1 +1,1 @@
-import './report-control-editor.js';
+export {};

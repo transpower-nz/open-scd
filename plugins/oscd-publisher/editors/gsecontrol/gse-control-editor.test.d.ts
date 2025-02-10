@@ -1,1 +1,1 @@
-import './gse-control-editor.js';
+export {};
