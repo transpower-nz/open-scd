@@ -21,7 +21,7 @@
 [submodule "plugins/oscd-publisher"]
 	path = plugins/oscd-publisher
 	url = https://github.com/openenergytools/oscd-publisher
-	branch = gh-pages
+	branch = deploy
 [submodule "plugins/scl-import-ied"]
 	path = plugins/scl-import-ied
 	url = https://github.com/openenergytools/scl-import-ied
