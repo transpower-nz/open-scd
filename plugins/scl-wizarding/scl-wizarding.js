@@ -58745,7 +58745,7 @@ function createBayWizard(parent) {
         },
     ];
 }
-function updateAction$l(element) {
+function updateAction$m(element) {
     return (inputs) => {
         const name = inputs.find(i => i.label === 'name').value;
         const desc = getValue(inputs.find(i => i.label === 'desc'));
@@ -58762,7 +58762,7 @@ function editBayWizard(element) {
             primary: {
                 icon: 'edit',
                 label: 'save',
-                action: updateAction$l(element),
+                action: updateAction$m(element),
             },
             content: renderBayWizard({
                 name: element.getAttribute('name'),
@@ -61623,6 +61623,8 @@ const patterns = {
         '|[\uE000-\uFFFD])*',
     normalizedString: '([\u0020-\u007E]|[\u0085]|[\u00A0-\uD7FF]|[\uE000-\uFFFD])*',
     name,
+    tName: '([\u0020-\u007E]|[\u0085]|[\u00A0-\uD7FF]|[\uE000-\uFFFD])' +
+        '([\u0020-\u007E]|[\u0085]|[\u00A0-\uD7FF]|[\uE000-\uFFFD])*',
     nmToken,
     names: `${name}( ${name})*`,
     nmTokens: `${nmToken}( ${nmToken})*`,
@@ -61631,16 +61633,32 @@ const patterns = {
     integer: '[+\\-]?[0-9]+([0-9]*)',
     alphanumericFirstUpperCase: '[A-Z][0-9,A-Z,a-z]*',
     alphanumericFirstLowerCase: '[a-z][0-9,A-Z,a-z]*',
+    alphanumericFirst: '[A-Z,a-z][0-9,A-Z,a-z]*',
+    ldInst: '[A-Za-z0-9][0-9A-Za-z_]*',
+    prefix: '[A-Za-z][0-9A-Za-z_]*',
     lnClass: '(LLN0)|[A-Z]{4,4}',
+    lnInst: '[0-9]{1,12}',
     abstractDataAttributeName: '((T)|(Test)|(Check)|(SIUnit)|(Oper)|(SBO)|(SBOw)|(Cancel)|[a-z][0-9A-Za-z]*)',
     cdc: '(SPS)|(DPS)|(INS)|(ENS)|(ACT)|(ACD)|(SEC)|(BCR)|(HST)|(VSS)|(MV)|(CMV)|(SAV)|' +
         '(WYE)|(DEL)|(SEQ)|(HMV)|(HWYE)|(HDEL)|(SPC)|(DPC)|(INC)|(ENC)|(BSC)|(ISC)|(APC)|(BAC)|' +
         '(SPG)|(ING)|(ENG)|(ORG)|(TSG)|(CUG)|(VSG)|(ASG)|(CURVE)|(CSG)|(DPL)|(LPL)|(CSD)|(CST)|' +
         '(BTS)|(UTS)|(LTS)|(GTS)|(MTS)|(NTS)|(STS)|(CTS)|(OTS)|(VSD)',
+    uuid: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
+    id: '\\S{1,255}',
+    path: '.+(/.+)*',
+    mappedDoName: '(([A-Za-z][0-9A-Za-z_]{0,63})/([A-Za-z][0-9A-Za-z_]{0,63})/((LLN0|([A-Za-z][0-9A-Za-z_]{0,10})?[A-Z]{4}[0-9]{1,12})).)?([A-Z][0-9A-Za-z]{0,11}(.[a-z][0-9A-Za-z]*(([0-9]+))?)?)',
+    vlanid: '[0-9A-F]{3}',
+    vlanPriority: '[0-7]',
+    ipv4: '([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5]).([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5]).([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5]).([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])',
+    ipv6: '([0-9a-f]{1,4}:){7}[0-9a-f]{1,4}',
 };
 const maxLength = {
     cbName: 32,
     abstracDaName: 60,
+    ldInst: 64,
+    prefix: 11,
+    lnInst: 12,
+    dosName: 12,
 };
 const predefinedBasicTypeEnum = [
     'BOOLEAN',
@@ -62215,7 +62233,7 @@ function createConductingEquipmentWizard(parent) {
         },
     ];
 }
-function updateAction$k(element) {
+function updateAction$l(element) {
     return (inputs) => {
         const name = getValue(inputs.find(i => i.label === 'name'));
         const desc = getValue(inputs.find(i => i.label === 'desc'));
@@ -62233,7 +62251,7 @@ function editConductingEquipmentWizard(element) {
             primary: {
                 icon: 'edit',
                 label: 'save',
-                action: updateAction$k(element),
+                action: updateAction$l(element),
             },
             content: renderConductingEquipmentWizard({
                 name: element.getAttribute('name'),
@@ -65711,7 +65729,7 @@ function createConnectedApWizard(element) {
         },
     ];
 }
-function updateAction$j(element) {
+function updateAction$k(element) {
     return (inputs, wizard) => {
         var _a, _b, _c;
         const typeRestriction = (_c = (_b = (_a = wizard.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('#typeRestriction')) === null || _b === void 0 ? void 0 : _b.checked) !== null && _c !== void 0 ? _c : false;
@@ -65732,7 +65750,7 @@ function editConnectedApWizard(element) {
             primary: {
                 icon: 'save',
                 label: 'save',
-                action: updateAction$j(element),
+                action: updateAction$k(element),
             },
             content: [...contentAddress({ element, types: getTypes(element) })],
         },
@@ -66268,7 +66286,7 @@ function createEnumValWizard(parent) {
         },
     ];
 }
-function updateAction$i(element) {
+function updateAction$j(element) {
     return (inputs) => {
         var _a;
         const value = (_a = getValue(inputs.find(i => i.label === 'value'))) !== null && _a !== void 0 ? _a : '';
@@ -66304,7 +66322,7 @@ function editEnumValWizard(element) {
             primary: {
                 icon: '',
                 label: 'Save',
-                action: updateAction$i(element),
+                action: updateAction$j(element),
             },
             content: renderContent$3({ ord, desc, value }),
         },
@@ -66446,7 +66464,7 @@ function createEqFunctionWizard(parent) {
         },
     ];
 }
-function updateAction$h(element) {
+function updateAction$i(element) {
     return (inputs) => {
         const attributes = {};
         const functionKeys = ['name', 'desc', 'type'];
@@ -66469,7 +66487,7 @@ function editEqFunctionWizard(element) {
             primary: {
                 icon: 'save',
                 label: 'save',
-                action: updateAction$h(element),
+                action: updateAction$i(element),
             },
             content: [
                 ...contentFunctionWizard({
@@ -66523,7 +66541,7 @@ function createEqSubFunctionWizard(parent) {
         },
     ];
 }
-function updateAction$g(element) {
+function updateAction$h(element) {
     return (inputs) => {
         const attributes = {};
         const functionKeys = ['name', 'desc', 'type'];
@@ -66546,7 +66564,7 @@ function editEqSubFunctionWizard(element) {
             primary: {
                 icon: 'save',
                 label: 'save',
-                action: updateAction$g(element),
+                action: updateAction$h(element),
             },
             content: [
                 ...contentFunctionWizard({
@@ -66631,7 +66649,7 @@ function createGeneralEquipmentWizard(parent) {
         },
     ];
 }
-function updateAction$f(element) {
+function updateAction$g(element) {
     return (inputs) => {
         const attributes = {};
         const generalEquipmentKeys = ['name', 'desc', 'type', 'virtual'];
@@ -66655,7 +66673,7 @@ function editGeneralEquipmentWizard(element) {
             primary: {
                 icon: 'save',
                 label: 'save',
-                action: updateAction$f(element),
+                action: updateAction$g(element),
             },
             content: [
                 ...contentGeneralEquipmentWizard({
@@ -66703,7 +66721,7 @@ function mxxTimeUpdateAction(gse, oldMxxTime, newTimeValue, option) {
         { node: oldMxxTime },
     ];
 }
-function updateAction$e(element) {
+function updateAction$f(element) {
     return (inputs, wizard) => {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j;
         const action = [];
@@ -66741,7 +66759,7 @@ function editGseWizard(element) {
             primary: {
                 label: 'save',
                 icon: 'save',
-                action: updateAction$e(element),
+                action: updateAction$f(element),
             },
             content: [
                 ...contentAddress({ element, types }),
@@ -66796,7 +66814,7 @@ function render$4(name, iedNames, desc, type, manufacturer, owner) {
     ></scl-wizarding-textfield>`,
     ];
 }
-function updateAction$d(element) {
+function updateAction$e(element) {
     return (inputs) => {
         const name = inputs.find(i => i.label === 'name').value;
         const desc = getValue(inputs.find(i => i.label === 'desc'));
@@ -66820,7 +66838,7 @@ function iEDEditWizard(element) {
             primary: {
                 icon: 'edit',
                 label: 'save',
-                action: updateAction$d(element),
+                action: updateAction$e(element),
             },
             content: render$4((_a = element.getAttribute('name')) !== null && _a !== void 0 ? _a : '', iedNames, element.getAttribute('desc'), element.getAttribute('type'), element.getAttribute('manufacturer'), element.getAttribute('owner')),
         },
@@ -66843,7 +66861,7 @@ function render$3(inst, name, ldNames) {
     ></scl-wizarding-textfield>`,
     ];
 }
-function updateAction$c(element) {
+function updateAction$d(element) {
     return (inputs) => {
         const name = inputs.find(i => i.label === 'name').value;
         if (name === element.getAttribute('name'))
@@ -66865,7 +66883,7 @@ function lDeviceEditWizard(element) {
             primary: {
                 icon: 'edit',
                 label: 'save',
-                action: updateAction$c(element),
+                action: updateAction$d(element),
             },
             content: render$3((_a = element.getAttribute('inst')) !== null && _a !== void 0 ? _a : '', element.getAttribute('name'), ldNames),
         },
@@ -66948,7 +66966,7 @@ function createLineWizard(parent) {
         },
     ];
 }
-function updateAction$b(element) {
+function updateAction$c(element) {
     return (inputs) => {
         const attributes = {};
         const lineKeys = ['name', 'desc', 'type', 'nomFreq', 'numPhases'];
@@ -66969,7 +66987,7 @@ function editLineWizard(element) {
             primary: {
                 icon: 'edit',
                 label: 'save',
-                action: updateAction$b(element),
+                action: updateAction$c(element),
             },
             content: renderContent$2({
                 name: (_a = element.getAttribute('name')) !== null && _a !== void 0 ? _a : '',
@@ -67919,14 +67937,74 @@ function compare(a, b) {
         return b.selected ? -1 : 1;
     return 0;
 }
+function renderLNodeWizard(options) {
+    const iedAssigned = options.iedName !== 'None';
+    return [
+        x `<scl-wizarding-textfield
+      label="iedName"
+      .maybeValue=${options.iedName}
+      helper="Referenced IED"
+      helperPersistent
+      disabled
+    ></scl-wizarding-textfield>`,
+        x `<scl-wizarding-textfield
+      label="desc"
+      .maybeValue=${options.desc}
+      nullable
+    ></scl-wizarding-textfield>`,
+        x `<scl-wizarding-textfield
+      label="ldInst"
+      .maybeValue=${options.ldInst}
+      helper="Referenced Logical Device"
+      maxLength="${maxLength.ldInst}"
+      pattern="${patterns.ldInst}"
+      ?nullable="${!iedAssigned}"
+      ?disabled="${iedAssigned}"
+    ></scl-wizarding-textfield>`,
+        x `<scl-wizarding-textfield
+      label="prefix"
+      .maybeValue=${options.prefix}
+      helper="Logical Node Prefix"
+      maxLength="${maxLength.prefix}"
+      pattern="${patterns.prefix}"
+      ?nullable="${!iedAssigned}"
+      ?disabled="${iedAssigned}"
+    ></scl-wizarding-textfield>`,
+        x `<scl-wizarding-textfield
+      label="lnClass"
+      .maybeValue=${options.lnClass}
+      helper="Logical Node Class"
+      helperPersistent
+      required
+      disabled
+    ></scl-wizarding-textfield>`,
+        x `<scl-wizarding-textfield
+      label="lnInst"
+      .maybeValue=${options.lnInst}
+      helper="Logical Node Instance"
+      maxLength="${maxLength.lnInst}"
+      pattern="${patterns.lnInst}"
+      helperPersistent
+      ?disabled="${iedAssigned}"
+    ></scl-wizarding-textfield>`,
+        x `<scl-wizarding-textfield
+      label="lnType"
+      .maybeValue=${options.lnType}
+      helper="Logical Node Type"
+      helperPersistent
+      disabled
+    ></scl-wizarding-textfield>`,
+    ];
+}
 function logicalNodeParameters(anyLn) {
-    var _a, _b, _c, _d, _e, _f, _g;
+    var _a, _b, _c, _d, _e, _f, _g, _h;
     const prefix = (_a = anyLn.getAttribute('prefix')) !== null && _a !== void 0 ? _a : '';
     const lnClass = (_b = anyLn.getAttribute('lnClass')) !== null && _b !== void 0 ? _b : '';
     const inst = (_c = anyLn.getAttribute('inst')) !== null && _c !== void 0 ? _c : '';
-    const iedName = (_e = (_d = anyLn.closest('IED')) === null || _d === void 0 ? void 0 : _d.getAttribute('name')) !== null && _e !== void 0 ? _e : '';
-    const ldInst = (_g = (_f = anyLn.closest('LDevice')) === null || _f === void 0 ? void 0 : _f.getAttribute('inst')) !== null && _g !== void 0 ? _g : '';
-    return { prefix, lnClass, inst, iedName, ldInst };
+    const lnType = (_d = anyLn.getAttribute('lnType')) !== null && _d !== void 0 ? _d : '';
+    const iedName = (_f = (_e = anyLn.closest('IED')) === null || _e === void 0 ? void 0 : _e.getAttribute('name')) !== null && _f !== void 0 ? _f : '';
+    const ldInst = (_h = (_g = anyLn.closest('LDevice')) === null || _g === void 0 ? void 0 : _g.getAttribute('inst')) !== null && _h !== void 0 ? _h : '';
+    return { prefix, lnClass, inst, iedName, ldInst, lnType };
 }
 function allAnyLNs(doc) {
     return Array.from(doc.querySelectorAll(':root > IED > AccessPoint > Server > LDevice > LN0, :root > IED > AccessPoint > Server > LDevice > LN'));
@@ -68007,13 +68085,14 @@ function createSingleLNode(parent, ln) {
             reference: getReference(parent, 'LNode'),
         };
     }
-    const { iedName, ldInst, prefix, lnClass, inst } = logicalNodeParameters(ln);
+    const { iedName, ldInst, prefix, lnClass, inst, lnType } = logicalNodeParameters(ln);
     const node = createElement(parent.ownerDocument, 'LNode', {
         iedName,
         ldInst,
         prefix,
         lnClass,
         lnInst: inst,
+        lnType,
     });
     return {
         parent,
@@ -68029,7 +68108,7 @@ function createAction$a(parent) {
             .filter(item => !item.disabled)
             .map(item => item.value)
             .map(id => {
-            if (id.endsWith('LLN0'))
+            if (id.endsWith('LN0'))
                 return find(parent.ownerDocument, 'LN0', id);
             if (id.startsWith('#'))
                 return find(parent.ownerDocument, 'LNodeType', id);
@@ -68041,6 +68120,50 @@ function createAction$a(parent) {
             .filter(insert => insert);
     };
 }
+function updateAction$b(element) {
+    return (inputs) => {
+        const attributes = {};
+        const lNodeTypeKeys = [
+            'desc',
+            'iedName',
+            'ldInst',
+            'prefix',
+            'lnInst',
+            'lnType',
+        ];
+        lNodeTypeKeys.forEach(key => {
+            attributes[key] = getValue(inputs.find(i => i.label === key));
+        });
+        if (lNodeTypeKeys.some(key => attributes[key] !== element.getAttribute(key))) {
+            return [{ element, attributes }];
+        }
+        return [];
+    };
+}
+function mapAction(element) {
+    let lnSelector = 'LN';
+    return (_, wizard) => {
+        var _a;
+        const list = (_a = wizard.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('#lnList');
+        if (list.selected.value.endsWith('LN0'))
+            lnSelector = 'LN0';
+        const selectedLN = find(element.ownerDocument, lnSelector, list.selected.value);
+        if (selectedLN) {
+            const { iedName, ldInst, prefix, inst, lnType } = logicalNodeParameters(selectedLN);
+            const attributes = {};
+            const lNodeTypeKeys = ['iedName', 'ldInst', 'prefix', 'lnInst', 'lnType'];
+            attributes.iedName = iedName;
+            attributes.ldInst = ldInst;
+            attributes.prefix = prefix;
+            attributes.lnInst = inst;
+            attributes.lnType = lnType;
+            if (lNodeTypeKeys.some(key => attributes[key] !== element.getAttribute(key))) {
+                return [{ element, attributes }];
+            }
+        }
+        return [];
+    };
+}
 function filterIED(evt, parent) {
     const iedFilterList = evt.target;
     const ieds = iedFilterList.selected.map(selection => selection.value);
@@ -68049,10 +68172,22 @@ function filterIED(evt, parent) {
     selectedIEDs.push(...ieds);
     D(renderInstances(parent), lnFilterList(evt.target));
 }
+function filterIEDLN(evt, parent) {
+    const iedFilterList = evt.target;
+    const ieds = iedFilterList.selected.map(selection => selection.value);
+    // update global array selectedIEDs
+    selectedIEDs.length = 0;
+    selectedIEDs.push(...ieds);
+    D(renderLNodeInstances(parent), lnFilterList(evt.target));
+}
 function renderListItem(value) {
     const { iedName, ldInst, prefix, lnClass, inst } = logicalNodeParameters(value.anyLn);
+    let ln = identity(value.anyLn);
+    if (lnClass === 'LLN0') {
+        ln += '>>LN0';
+    }
     return x `<mwc-check-list-item
-    value="${identity(value.anyLn)}"
+    value="${ln}"
     twoline
     ?disabled=${value.selected}
     ?selected=${value.childLNode}
@@ -68074,6 +68209,19 @@ function renderInstances(parent) {
     const doc = parent.ownerDocument;
     return allAnyLNs(doc)
         .filter(anyLn => { var _a, _b; return selectedIEDs.includes((_b = (_a = anyLn.closest('IED')) === null || _a === void 0 ? void 0 : _a.getAttribute('name')) !== null && _b !== void 0 ? _b : ''); })
+        .map(anyLn => anyLnObject(parent, anyLn))
+        .sort(compare)
+        .map(renderListItem);
+}
+function renderLNodeInstances(parent) {
+    const doc = parent.ownerDocument;
+    const lnClass = parent.getAttribute('lnClass');
+    return allAnyLNs(doc)
+        .filter(anyLn => {
+        var _a, _b;
+        return anyLn.getAttribute('lnClass') === lnClass &&
+            selectedIEDs.includes((_b = (_a = anyLn.closest('IED')) === null || _a === void 0 ? void 0 : _a.getAttribute('name')) !== null && _b !== void 0 ? _b : '');
+    })
         .map(anyLn => anyLnObject(parent, anyLn))
         .sort(compare)
         .map(renderListItem);
@@ -68139,6 +68287,71 @@ function createLNodeWizard(parent) {
           </div>
         </div>`,
             ],
+        },
+    ];
+}
+function editLNodeWizard(element, subWizard) {
+    if (subWizard) {
+        const lnClass = element.getAttribute('lnClass');
+        return [
+            {
+                title: 'Map LN to LNode',
+                primary: {
+                    icon: 'save',
+                    label: 'save',
+                    action: mapAction(element),
+                },
+                content: [
+                    x `<div id="createLNodeWizardContent">
+            <style>
+              .hidden {
+                display: none;
+              }
+            </style>
+            <div style="display: flex; flex-direction: row;">
+              <div id="instanceFilter">
+                <mwc-icon-button-toggle
+                  ?on=${!selectedIEDs.length}
+                  style="position:absolute;top:8px;right:60px;"
+                  onicon="filter_list"
+                  officon="filter_list_off"
+                  @click="${showIEdFilterList}"
+                ></mwc-icon-button-toggle>
+                <oscd-filtered-list
+                  class="${o$1({ hidden: selectedIEDs.length })}"
+                  id="iedList"
+                  multi
+                  @selected="${(evt) => filterIEDLN(evt, element)}"
+                  >${renderIEDItems(element)}</oscd-filtered-list
+                >
+              </div>
+              <oscd-filtered-list
+                id="lnList"
+                searchField.value="${l$1(l$1(lnClass))}"
+              ></oscd-filtered-list>
+            </div>
+          </div>`,
+                ],
+            },
+        ];
+    }
+    return [
+        {
+            title: 'Edit LNode',
+            primary: {
+                icon: 'edit',
+                label: 'Save',
+                action: updateAction$b(element),
+            },
+            content: renderLNodeWizard({
+                desc: element.getAttribute('desc'),
+                iedName: element.getAttribute('iedName'),
+                ldInst: element.getAttribute('ldInst'),
+                prefix: element.getAttribute('prefix'),
+                lnClass: element.getAttribute('lnClass'),
+                lnInst: element.getAttribute('lnInst'),
+                lnType: element.getAttribute('lnType'),
+            }),
         },
     ];
 }
@@ -69489,7 +69702,7 @@ function getVoltageAction(oldVoltage, Voltage, multiplier, voltageLevel) {
             {
                 parent: voltageLevel,
                 node: element,
-                reference: (_a = getReference(voltageLevel, 'VoltageLevel')) !== null && _a !== void 0 ? _a : voltageLevel.firstChild,
+                reference: (_a = getReference(voltageLevel, 'Voltage')) !== null && _a !== void 0 ? _a : voltageLevel.firstChild,
             },
         ];
     }
@@ -69824,7 +70037,10 @@ const wizards = {
         edit: emptyWizard,
         create: emptyWizard,
     },
-    LNode: { edit: emptyWizard, create: createLNodeWizard },
+    LNode: {
+        edit: editLNodeWizard,
+        create: createLNodeWizard
+    },
     LNodeType: {
         edit: emptyWizard,
         create: createLNodeTypeWizard,
@@ -70056,7 +70272,7 @@ let WizardCodeForm = class WizardCodeForm extends s$1 {
             return (_a = wizards[request.tagName]) === null || _a === void 0 ? void 0 : _a.create(request.parent);
         }
         const request = this.wizardRequest;
-        return (_b = wizards[request.element.tagName]) === null || _b === void 0 ? void 0 : _b.edit(request.element);
+        return (_b = wizards[request.element.tagName]) === null || _b === void 0 ? void 0 : _b.edit(request.element, request.subWizard);
     }
     onClosed() {
         this.dispatchEvent(newCloseWizardEvent(this.wizardRequest));

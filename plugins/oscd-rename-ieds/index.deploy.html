@@ -38,8 +38,11 @@
   };
 </script>
 
-<script type="module" src="./openscd.js"></script>
-<script>
+<script type="module">
+  import 'https://openscd.github.io/open-scd-core/open-scd.js';
+  //   import 'open-scd-core/open-scd.js'
+  //   TODO: Could also use: jsdelivr or unpkg
+
   const editor = document.querySelector('open-scd');
   const params = new URL(document.location).searchParams;
   for (const [name, value] of params) {

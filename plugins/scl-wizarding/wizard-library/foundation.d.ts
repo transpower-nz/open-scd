@@ -58,7 +58,7 @@ export type WizardFactory = () => Wizard;
 /** If `wizard === null`, close the current wizard, else queue `wizard`. */
 export interface WizardDetail {
     wizard: WizardFactory | null;
-    subwizard?: boolean;
+    subWizard?: boolean;
 }
 /** @returns a clone of `element` with attributes set to values from `attrs`. */
 export declare function cloneElement(element: Element, attrs: Record<string, string | null>): Element;
