@@ -69691,7 +69691,6 @@ function voltageLevelCreateWizard(parent) {
     ];
 }
 function getVoltageAction(oldVoltage, Voltage, multiplier, voltageLevel) {
-    var _a;
     if (oldVoltage === null) {
         const element = createElement(voltageLevel.ownerDocument, 'Voltage', {
             unit: 'V',
@@ -69702,7 +69701,7 @@ function getVoltageAction(oldVoltage, Voltage, multiplier, voltageLevel) {
             {
                 parent: voltageLevel,
                 node: element,
-                reference: (_a = getReference(voltageLevel, 'Voltage')) !== null && _a !== void 0 ? _a : voltageLevel.firstChild,
+                reference: getReference(voltageLevel, 'Voltage'),
             },
         ];
     }
