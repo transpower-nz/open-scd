@@ -155,3 +155,7 @@
 	path = plugins/oscd-snapshot
 	url = https://github.com/danyill/oscd-snapshot
 	branch = gh-pages
+[submodule "plugins/mbg-ied-editor"]
+	path = plugins/mbg-ied-editor
+	url = https://github.com/meinberg-sync/mbg-ied-editor
+	branch = gh-pages

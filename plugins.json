@@ -205,32 +205,18 @@
       "src": "plugins/scl-communication/scl-communication.js"
     },
     {
-      "name": "Address Multicast",
+      "name": "Address Multicast (TP)",
       "icon": "auto_fix_normal",
       "active": true,
       "requireDoc": true,
       "src": "plugins/oscd-tp-multicast-naming/oscd-tp-multicast-naming.js"
     },
     {
-      "name": "Network",
+      "name": "Network (TP)",
       "icon": "news",
       "active": true,
       "requireDoc": true,
       "src": "plugins/oscd-network-config/oscd-network-config.js"
-    },
-    {
-      "name": "Edit Template",
-      "icon": "copy_all",
-      "active": true,
-      "requireDoc": true,
-      "src": "plugins/scl-template/scl-template.js"
-    },
-    {
-      "name": "Generate Template",
-      "icon": "copy_all",
-      "active": true,
-      "requireDoc": true,
-      "src": "plugins/oscd-template-generator/oscd-template-generator.js"
     },
     {
       "name": "Stencil",
@@ -240,18 +226,11 @@
       "src": "plugins/oscd-stencil/oscd-stencil.js"
     },
     {
-      "name": "Browse IED",
-      "icon": "developer_board",
-      "active": true,
-      "requireDoc": true,
-      "src": "plugins/scl-ied-browser/scl-ied-browser.js"
-    },
-    {
       "name": "Edit IED",
       "icon": "developer_board",
       "active": true,
       "requireDoc": true,
-      "src": "plugins/scl-ied-editor/scl-ied-editor.js"
+      "src": "plugins/mbg-ied-editor/mbg-ied-editor.js"
     },
     {
       "name": "Describe",
