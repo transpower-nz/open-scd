@@ -1,7 +1,7 @@
 {
 	"name": "@oscd-plugins/type-designer",
 	"private": true,
-	"version": "2.2.0",
+	"version": "3.2.0",
 	"type": "module",
 	"source": "src/plugin.ts",
 	"scripts": {
@@ -9,7 +9,7 @@
 		"dev": "vite",
 		"//====== BUILD ======//": "",
 		"build": "vite build",
-		"build:watch": "NODE_ENV=development vite build --watch",
+		"build:watch": "vite build --watch",
 		"preview": "vite preview",
 		"//====== INTEGRATED ======//": "",
 		"integrated": "concurrently 'npm:build:watch' 'npm:preview'",

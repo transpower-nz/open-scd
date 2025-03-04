@@ -34101,6 +34101,8 @@ class SubscriberLaterBinding extends s$h {
         };
         const isSupervision = (element) => {
             var _a, _b, _c;
+            if (!element)
+                return false;
             if (['LN', 'DOI', 'DAI', 'Val'].includes(element.tagName)) {
                 return ((element.tagName === 'LN' &&
                     ['LGOS', 'LSVS'].includes((_a = element.getAttribute('lnClass')) !== null && _a !== void 0 ? _a : '')) ||
@@ -34124,6 +34126,7 @@ class SubscriberLaterBinding extends s$h {
             }
         };
         flatEdits.forEach(edit => {
+            var _a;
             let element;
             if (isUpdate(edit)) {
                 element = edit.element;
@@ -34132,7 +34135,7 @@ class SubscriberLaterBinding extends s$h {
                 edit.node.nodeType === Node.ELEMENT_NODE) {
                 element = edit.node;
             }
-            if (element) {
+            if (element && element.nodeType === Node.ELEMENT_NODE) {
                 if (element.tagName === 'ExtRef')
                     handleExtRef(element);
                 if (element.tagName === 'FCDA')
@@ -34143,6 +34146,17 @@ class SubscriberLaterBinding extends s$h {
                     handleSupervision(element, true);
                 if (isSupervision(element) && when === 'after' && !isRemove(edit))
                     handleSupervision(element);
+            }
+            // handle text content of Val element
+            if ((isRemove(edit) || isInsert(edit)) &&
+                edit.node.nodeType === Node.TEXT_NODE) {
+                const valElement = (_a = edit.node) === null || _a === void 0 ? void 0 : _a.parentElement;
+                if (isSupervision(valElement)) {
+                    if (isSupervision(valElement) && when === 'before' && isRemove(edit))
+                        handleSupervision(valElement, true);
+                    if (isSupervision(valElement) && when === 'after' && !isRemove(edit))
+                        handleSupervision(valElement);
+                }
             }
         });
     }
