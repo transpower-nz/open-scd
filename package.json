@@ -3,7 +3,7 @@
   "description": "Transpower OpenSCD distribution - A System Configuration Tool for managing IEC 61850 digital substations",
   "license": "Apache-2.0",
   "author": "Transpower New Zealand (Daniel Mulholland)",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "main.js",
   "type": "module",
   "scripts": {
