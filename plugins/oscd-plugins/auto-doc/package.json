@@ -1,7 +1,7 @@
 {
 	"name": "@oscd-plugins/auto-doc",
 	"private": true,
-	"version": "1.5.0",
+	"version": "1.7.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite --mode STAND_ALONE",
@@ -23,10 +23,17 @@
 		"@smui/data-table": "^7.0.0",
 		"@smui/icon-button": "^7.0.0",
 		"@smui/textfield": "^7.0.0",
+		"@tiptap/core": "^2.11.5",
+		"@tiptap/extension-list-item": "^2.11.5",
+		"@tiptap/extension-text-style": "^2.11.5",
+		"@tiptap/extension-underline": "^2.11.5",
+		"@tiptap/pm": "^2.11.5",
+		"@tiptap/starter-kit": "^2.11.5",
 		"jspdf": "^2.5.2",
 		"jspdf-autotable": "^3.8.4",
 		"svelte-spa-router": "^4.0.1",
-		"uuid": "^10.0.0"
+		"uuid": "^10.0.0",
+		"zipcelx": "^1.6.2"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",

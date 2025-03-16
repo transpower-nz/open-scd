@@ -6400,6 +6400,21 @@ class ImportIEDsPlugin extends s$5 {
     async run() {
         this.input.click();
     }
+    clearSelection() {
+        if (this.selectionList) {
+            Array.from(this.selectionList.shadowRoot.querySelectorAll('md-list.listitems md-list-item md-checkbox')).forEach((cb) => {
+                if (cb.checked) {
+                    // eslint-disable-next-line no-param-reassign
+                    cb.checked = false;
+                    cb.dispatchEvent(new Event('change'));
+                    cb.requestUpdate();
+                }
+            });
+            const searchField = this.selectionList.shadowRoot.querySelector('md-outlined-text-field[placeholder="search"]');
+            searchField.value = '';
+            searchField.dispatchEvent(new Event('input'));
+        }
+    }
     async importIEDs() {
         const ieds = this.selectionList.selectedElements;
         const scl = this.doc.querySelector('SCL');
@@ -6421,6 +6436,7 @@ class ImportIEDsPlugin extends s$5 {
             this.dispatchEvent(newEditEvent(insertIed(scl, ied, { addCommunicationSection: true })));
             // TODO: Fixme -- ugly timeout that might resolve with newer versions of OpenSCD core
             await setTimeout(() => { }, 100);
+            this.clearSelection();
         }
     }
     /** Loads the file `event.target.files[0]` into [[`src`]] as a `blob:...`. */

@@ -15,6 +15,7 @@ export default class ImportIEDsPlugin extends LitElement {
     dialogUI: Dialog;
     selectionList: SelectionList;
     run(): Promise<void>;
+    clearSelection(): void;
     importIEDs(): Promise<void>;
     /** Loads the file `event.target.files[0]` into [[`src`]] as a `blob:...`. */
     loadIEDs(event: Event): Promise<void>;
