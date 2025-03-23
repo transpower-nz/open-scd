@@ -6,7 +6,15 @@ import '@material/mwc-fab';
 import '@material/mwc-textfield';
 import { Point } from './foundation/sldUtil.js';
 import { IED, Connection } from './foundation/types.js';
-export declare class CommunicationMappingEditor extends LitElement {
+declare const CommunicationMappingEditor_base: typeof LitElement & import("@open-wc/scoped-elements/lit-element.js").ScopedElementsHostConstructor;
+export declare class CommunicationMappingEditor extends CommunicationMappingEditor_base {
+    static scopedElements: {
+        'mwc-fab': CustomElementConstructor | undefined;
+        'mwc-textfield': CustomElementConstructor | undefined;
+        'mwc-button': CustomElementConstructor | undefined;
+        'mwc-icon-button': CustomElementConstructor | undefined;
+        'mwc-icon-button-toggle': CustomElementConstructor | undefined;
+    };
     substation: Element;
     gridSize: number;
     connections: Connection[];
@@ -64,3 +72,4 @@ export declare class CommunicationMappingEditor extends LitElement {
     render(): TemplateResult<1>;
     static styles: import("lit").CSSResult;
 }
+export {};

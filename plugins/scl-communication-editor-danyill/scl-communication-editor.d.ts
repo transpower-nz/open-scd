@@ -1,20 +1,42 @@
 import { LitElement, TemplateResult } from 'lit';
-import '@material/mwc-dialog';
 import '@material/mwc-button';
-import type { Dialog } from '@material/mwc-dialog';
-import '@openenergytools/filterable-lists/dist/action-list.js';
-import './communication-mapping-editor.js';
+import '@material/mwc-icon';
+import '@material/mwc-list';
+import '@material/mwc-list/mwc-list-item';
+import { MdDialog } from '@scopedelement/material-web/dialog/MdDialog.js';
+import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import { MdTextButton } from '@scopedelement/material-web/button/MdTextButton.js';
+import { MdList } from '@scopedelement/material-web/list/MdList.js';
+import { MdListItem } from '@scopedelement/material-web/list/MdListItem.js';
+import { ActionList } from '@openenergytools/filterable-lists/dist/ActionList.js';
 import { Connection } from './foundation/types.js';
-export default class SlcCommunicationEditor extends LitElement {
+import { CommunicationMappingEditor } from './communication-mapping-editor.js';
+declare const SldCommunicationEditor_base: typeof LitElement & import("@open-wc/scoped-elements/lit-element.js").ScopedElementsHostConstructor;
+export default class SldCommunicationEditor extends SldCommunicationEditor_base {
+    static scopedElements: {
+        'md-icon': typeof MdIcon;
+        'md-dialog': typeof MdDialog;
+        'md-text-button': typeof MdTextButton;
+        'md-list': typeof MdList;
+        'md-list-item': typeof MdListItem;
+        'communication-mapping-editor': typeof CommunicationMappingEditor;
+        'action-list': typeof ActionList;
+        'mwc-button': CustomElementConstructor | undefined;
+        'mwc-icon': CustomElementConstructor | undefined;
+        'mwc-list': CustomElementConstructor | undefined;
+        'mwc-list-item': CustomElementConstructor | undefined;
+    };
     doc?: XMLDocument;
     get substation(): Element | null;
     gridSize: number;
     editCount: number;
     selectedConnection?: Connection;
-    removeSelection: Dialog;
+    mappingDetails: MdDialog;
     removeInputs(inputs: Element[]): void;
     removeAllInputs(): void;
-    renderRemoveDialog(): TemplateResult;
+    getCommunicationDetails(connection: Connection | undefined): TemplateResult;
+    renderSubscription(): TemplateResult;
     render(): TemplateResult<1>;
     static styles: import("lit").CSSResult;
 }
+export {};
