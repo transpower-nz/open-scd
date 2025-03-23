@@ -15,6 +15,9 @@ const packageInfo = JSON.parse(
   await fs.readFile(path.join(resourcesPath, "package.json"), "utf8")
 );
 
+let currentZoom = 1.0;
+const zoomFactor = 0.1; // 10% zoom in/out
+
 let mainWindow;
 
 // development vs. production has different process.argv
@@ -58,6 +61,35 @@ function createAppMenu() {
         },
         { type: "separator" },
         { role: "quit" },
+      ],
+    },
+    {
+      label: "View",
+      submenu: [
+        {
+          label: "Zoom In",
+          accelerator: "CommandOrControl+=",
+          click: () => {
+            currentZoom += zoomFactor;
+            mainWindow.webContents.setZoomFactor(currentZoom);
+          },
+        },
+        {
+          label: "Zoom Out",
+          accelerator: "CommandOrControl+-",
+          click: () => {
+            currentZoom = Math.max(0.2, currentZoom - zoomFactor);
+            mainWindow.webContents.setZoomFactor(currentZoom);
+          },
+        },
+        {
+          label: "Reset Zoom",
+          accelerator: "CommandOrControl+0",
+          click: () => {
+            currentZoom = 1.0;
+            mainWindow.webContents.setZoomFactor(currentZoom);
+          },
+        },
       ],
     },
     {
@@ -137,6 +169,18 @@ ipcMain.handle("read-file", async (_, filePath) => {
 });
 
 ipcMain.handle("dialog:openFile", handleFileOpen);
+
+ipcMain.handle("zoom", (event, direction) => {
+  if (direction === "in") {
+    currentZoom += zoomFactor;
+  } else if (direction === "out") {
+    currentZoom = Math.max(0.2, currentZoom - zoomFactor);
+  }
+  if (mainWindow) {
+    mainWindow.webContents.setZoomFactor(currentZoom);
+  }
+  return currentZoom;
+});
 
 app.whenReady().then(() => {
   createWindow();
