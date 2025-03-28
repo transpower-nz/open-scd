@@ -1,7 +1,7 @@
 {
 	"name": "@oscd-plugins/auto-doc",
 	"private": true,
-	"version": "1.7.0",
+	"version": "1.13.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite --mode STAND_ALONE",
@@ -21,7 +21,10 @@
 		"@smui/button": "7.0.0",
 		"@smui/checkbox": "^7.0.0",
 		"@smui/data-table": "^7.0.0",
+		"@smui/dialog": "7.0.0",
 		"@smui/icon-button": "^7.0.0",
+		"@smui/list": "^7.0.0",
+		"@smui/menu": "^7.0.0",
 		"@smui/textfield": "^7.0.0",
 		"@tiptap/core": "^2.11.5",
 		"@tiptap/extension-list-item": "^2.11.5",
@@ -36,6 +39,7 @@
 		"zipcelx": "^1.6.2"
 	},
 	"devDependencies": {
+		"@oscd-plugins/core-api": "workspace:^",
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/vite-plugin-svelte": "^3.1.1",
 		"@tsconfig/svelte": "^5.0.4",
