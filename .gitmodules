@@ -159,3 +159,7 @@
 	path = plugins/mbg-ied-editor
 	url = https://github.com/meinberg-sync/mbg-ied-editor
 	branch = gh-pages
+[submodule "plugins/oscd-diff"]
+	path = plugins/oscd-diff
+	url = https://github.com/OMICRONEnergyOSS/oscd-diff
+	branch = gh-pages
