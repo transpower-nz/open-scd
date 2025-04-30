@@ -40284,7 +40284,9 @@ class CommunicationMappingEditor extends ScopedElementsMixin(r$6) {
                 this.placeElement(element, x, y);
             }} />`
             : E$1;
-        const filteredConnections = this.connections.filter(conn => this.filterConnections(conn));
+        const filteredConnections = this.connections.filter(conn => this.filterConnections(conn) &&
+            conn.source.iedName &&
+            conn.target.iedName);
         const svgConnection = svgConnectionGenerator(this.substation, filteredConnections);
         return x$1 ` ${this.renderInfoBox()}
       <div id="container">

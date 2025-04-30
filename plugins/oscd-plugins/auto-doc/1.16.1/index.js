@@ -54798,7 +54798,7 @@ function RG(r, e, t) {
   gn(() => {
     if (A = i.id ?? c(), t(3, l = gi.getDocumentTemplate(A)), !l)
       return f();
-    window.history.pushState({}, "", "#"), u(l);
+    u(l);
   });
   function u(E) {
     t(0, s = E.getAttribute("title") || ""), t(1, o = E.getAttribute("description") || "");
@@ -54904,7 +54904,7 @@ const PG = {
     asyncComponent: () => Promise.resolve().then(() => z5)
   }),
   [Pu.Not_Found]: F2
-}, HG = "@oscd-plugins/auto-doc", $G = "1.16.2", KG = "module", VG = {
+}, HG = "@oscd-plugins/auto-doc", $G = "1.16.1", KG = "module", VG = {
   dev: "vite --mode STAND_ALONE",
   build: "vite build",
   "_build:watch": "NODE_ENV=development vite build --watch",
