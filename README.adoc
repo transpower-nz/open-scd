@@ -55,3 +55,7 @@ Three difference releases are provided for each release:
 * a stand-alone executable (run the executable on x64 machines, e.g. `openscd-transpower_win_x64_0.1.0_latest.exe`)
 
 Code signing is not provided.
+
+== Updating a single plugin
+
+  git submodule update --init --remote plugins/<plugin name>
