@@ -40473,18 +40473,6 @@ __decorate([
 ], CommunicationMappingEditor.prototype, "placingOffset", void 0);
 __decorate([
     r$4()
-], CommunicationMappingEditor.prototype, "mouseX", void 0);
-__decorate([
-    r$4()
-], CommunicationMappingEditor.prototype, "mouseY", void 0);
-__decorate([
-    r$4()
-], CommunicationMappingEditor.prototype, "mouseX2", void 0);
-__decorate([
-    r$4()
-], CommunicationMappingEditor.prototype, "mouseY2", void 0);
-__decorate([
-    r$4()
 ], CommunicationMappingEditor.prototype, "linkedEquipments", void 0);
 __decorate([
     r$4()
