@@ -1,16 +1,18 @@
-import { LitElement, TemplateResult } from 'lit';
+import { LitElement, PropertyValues, TemplateResult } from 'lit';
 import '@material/mwc-button';
 import '@material/mwc-icon';
 import '@material/mwc-list';
 import '@material/mwc-list/mwc-list-item';
 import { MdDialog } from '@scopedelement/material-web/dialog/MdDialog.js';
 import { MdIcon } from '@scopedelement/material-web/icon/MdIcon.js';
+import '@scopedelement/material-web/switch/switch.js';
 import { MdTextButton } from '@scopedelement/material-web/button/MdTextButton.js';
 import { MdList } from '@scopedelement/material-web/list/MdList.js';
 import { MdListItem } from '@scopedelement/material-web/list/MdListItem.js';
 import { ActionList } from '@openenergytools/filterable-lists/dist/ActionList.js';
 import { Connection } from './foundation/types.js';
 import { CommunicationMappingEditor } from './communication-mapping-editor.js';
+export declare function parseExtRefs(doc: XMLDocument): Connection[];
 declare const SldCommunicationEditor_base: typeof LitElement & import("@open-wc/scoped-elements/lit-element.js").ScopedElementsHostConstructor;
 export default class SldCommunicationEditor extends SldCommunicationEditor_base {
     static scopedElements: {
@@ -19,6 +21,7 @@ export default class SldCommunicationEditor extends SldCommunicationEditor_base 
         'md-text-button': typeof MdTextButton;
         'md-list': typeof MdList;
         'md-list-item': typeof MdListItem;
+        'md-switch': CustomElementConstructor | undefined;
         'communication-mapping-editor': typeof CommunicationMappingEditor;
         'action-list': typeof ActionList;
         'mwc-button': CustomElementConstructor | undefined;
@@ -31,10 +34,16 @@ export default class SldCommunicationEditor extends SldCommunicationEditor_base 
     gridSize: number;
     editCount: number;
     selectedConnection?: Connection;
+    showQuality: boolean;
+    parsedExtRefs: Connection[];
+    private _cachedConnections;
+    get cachedConnections(): Connection[];
+    set cachedConnections(conns: Connection[]);
     mappingDetails: MdDialog;
     removeInputs(inputs: Element[]): void;
     removeAllInputs(): void;
     getCommunicationDetails(connection: Connection | undefined): TemplateResult;
+    protected updated(changedProperties: PropertyValues): void;
     renderSubscription(): TemplateResult;
     render(): TemplateResult<1>;
     static styles: import("lit").CSSResult;
